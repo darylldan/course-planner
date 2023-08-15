@@ -1,0 +1,1 @@
+enum Day { mon, tue, wed, thu, fri, sat}

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timetable/util/enums.dart';
+import '../utils/enums.dart';
 
 class Subject {
   String subjectID;
