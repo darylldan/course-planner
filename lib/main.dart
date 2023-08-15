@@ -1,3 +1,5 @@
+import 'package:course_planner/widgets/timeline/Timeline.dart';
+import 'package:course_planner/widgets/timeline/TimelineCard.dart';
 import 'package:course_planner/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
 import './styles/color_schemes.g.dart';
@@ -30,7 +32,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-    List<Subject> subjects = [
+  List<Subject> subjects = [
     Subject(
         subjectID: "1",
         courseCode: "CMSC 124",
@@ -83,41 +85,17 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Material Theme Builder"),
-        ),
-        body: ListView(
+      appBar: AppBar(
+        title: const Text("Material Theme Builder"),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 17),
+        child: ListView(
           children: [
-            Timetable(subjects: subjects)
+            Timeline()
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.info_outline_rounded),
-                          AlertDialog(
-                            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                            title: const Text("Hello world!!!"),
-                            actions: [
-                              TextButton(onPressed: () {}, child: const Text("Hello!"))
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  });
-
-              setState(() {
-                count++;
-              });
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add)));
+      )
+    );
   }
 }
