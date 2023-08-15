@@ -1,5 +1,8 @@
+import 'package:course_planner/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
 import './styles/color_schemes.g.dart';
+import 'models/Subject.dart';
+import 'utils/enums.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +30,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+    List<Subject> subjects = [
+    Subject(
+        subjectID: "1",
+        courseCode: "CMSC 124",
+        isLaboratory: false,
+        section: "CD",
+        room: "ICS Megahall",
+        termID: "1",
+        frequency: [Day.tue, Day.thu],
+        startDate: DateTime(2021, 8, 15, 8),
+        endDate: DateTime(2021, 8, 15, 9),
+        color: Colors.amber[800]!),
+    Subject(
+        subjectID: "2",
+        courseCode: "CMSC 125",
+        isLaboratory: false,
+        section: "AB",
+        room: "ICS Megahall",
+        termID: "1",
+        frequency: [Day.wed, Day.fri],
+        startDate: DateTime(2021, 8, 15, 9),
+        endDate: DateTime(2021, 8, 15, 15),
+        color: Colors.purple[900]!),
+  ];
+
   var count = 0;
 
   // This widget is the root of your application.
@@ -36,21 +64,10 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: const Text("Material Theme Builder"),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                color: Theme.of(context).colorScheme.tertiaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'Count: $count',
-                  ),
-                ),
-              ),
-            ],
-          ),
+        body: ListView(
+          children: [
+            Timetable(subjects: subjects)
+          ],
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
