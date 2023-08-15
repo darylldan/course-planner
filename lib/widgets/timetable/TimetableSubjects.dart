@@ -7,7 +7,7 @@ import '../../utils/constants.dart' as Constants;
 class TimetableSubjects extends StatelessWidget {
   List<Subject> subjects;
 
-  Map<Day, List<Widget>> _timeslots = {
+  final Map<Day, List<Widget>> _timeslots = {
     Day.mon: [],
     Day.tue: [],
     Day.wed: [],
@@ -51,11 +51,11 @@ class TimetableSubjects extends StatelessWidget {
   }
 
   List<Widget> _timetableColumns() {
-    List<Widget> columns = [SizedBox(width: Constants.timeLabelOffset)];
+    List<Widget> columns = [const SizedBox(width: Constants.timeLabelOffset)];
 
     for (var i in _timeslots.keys) {
       columns.add(
-        Container(
+        SizedBox(
           height: Constants.columnHeight,
           width: Constants.columnWidth,
           child: Stack(

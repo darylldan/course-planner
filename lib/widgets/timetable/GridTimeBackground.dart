@@ -24,10 +24,10 @@ class GridTimeBackground extends StatelessWidget {
       list.addAll([
         _semiTransparentDivider(context),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Text(
             DateFormat.jm().format(date),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
           ),
         )
       ]);

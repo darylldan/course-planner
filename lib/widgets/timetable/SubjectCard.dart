@@ -5,7 +5,7 @@ import '../../models/Subject.dart';
 class SubjectCard extends StatelessWidget {
   final Subject subject;
 
-  SubjectCard({super.key, required this.subject});
+  const SubjectCard({super.key, required this.subject});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class SubjectCard extends StatelessWidget {
       top: _getPositionOffset(),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(6)),
+            borderRadius: const BorderRadius.all(Radius.circular(6)),
             color: subject.color),
         width: Constants.subjectCardWidth,
         height: _computeCardHeight(),
@@ -27,14 +27,14 @@ class SubjectCard extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   subject.courseCode,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
                 ),
               ),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
                   subject.section,
-                  style: TextStyle(fontSize: 9),
+                  style: const TextStyle(fontSize: 9),
                 ),
               ),
               FittedBox(
@@ -42,7 +42,7 @@ class SubjectCard extends StatelessWidget {
                 fit: BoxFit.none,
                 child: Text(
                   subject.room,
-                  style: TextStyle(fontSize: 7),
+                  style: const TextStyle(fontSize: 7),
                   overflow: TextOverflow.fade,
                 ),
               )

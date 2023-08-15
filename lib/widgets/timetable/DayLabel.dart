@@ -20,7 +20,7 @@ class DayLabel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.all(Radius.circular(4))),
+          borderRadius: const BorderRadius.all(Radius.circular(4))),
       width: 53,
       height: 17,
       child: Center(
@@ -43,7 +43,7 @@ class DayLabel extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             strokeAlign: BorderSide.strokeAlignInside
           ),
-          borderRadius: BorderRadius.all(Radius.circular(4))),
+          borderRadius: const BorderRadius.all(Radius.circular(4))),
       width: 53,
       height: 17,
       child: Center(

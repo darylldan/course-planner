@@ -78,12 +78,12 @@ class _HomeState extends State<Home> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.info_outline_rounded),
+                          const Icon(Icons.info_outline_rounded),
                           AlertDialog(
                             backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                            title: Text("Hello world!!!"),
+                            title: const Text("Hello world!!!"),
                             actions: [
-                              TextButton(onPressed: () {}, child: Text("Hello!"))
+                              TextButton(onPressed: () {}, child: const Text("Hello!"))
                             ],
                           ),
                         ],

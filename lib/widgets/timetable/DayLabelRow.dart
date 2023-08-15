@@ -11,7 +11,7 @@ class DayLabelRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(width: 40),
+        const SizedBox(width: 40),
         DayLabel(day: Day.mon, isOpaque: true),
         DayLabel(day: Day.tue, isOpaque: false),
         DayLabel(day: Day.wed, isOpaque: true),

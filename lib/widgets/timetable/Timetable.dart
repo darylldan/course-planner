@@ -14,7 +14,7 @@ class Timetable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DayLabelRow(),
+        const DayLabelRow(),
         Stack(
           children: [
             GridTimeBackground(hours: Constants.gridHours),
