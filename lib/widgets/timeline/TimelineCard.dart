@@ -45,7 +45,7 @@ class TimelineCard extends StatelessWidget {
   Widget _subjectContainer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).colorScheme.surfaceVariant,
       ),
       height: 80,
@@ -133,6 +133,7 @@ class TimelineCard extends StatelessWidget {
         DateFormat.jm().format(subject.startDate),
         style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimaryContainer,
+            fontSize: 12,
             fontWeight: FontWeight.w800),
       ),
     );
