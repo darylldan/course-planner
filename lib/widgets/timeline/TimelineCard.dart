@@ -66,7 +66,7 @@ class TimelineCard extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: subject.color),
+                              color: Color.fromARGB(subject.color[0], subject.color[1], subject.color[2], subject.color[3])),
                           width: 4,
                         ),
                       )
