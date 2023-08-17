@@ -81,7 +81,7 @@ const SubjectSchema = CollectionSchema(
     r'termID': PropertySchema(
       id: 12,
       name: r'termID',
-      type: IsarType.string,
+      type: IsarType.long,
     )
   },
   estimateSize: _subjectEstimateSize,
@@ -134,7 +134,6 @@ int _subjectEstimateSize(
   bytesCount += 3 + object.room.length * 3;
   bytesCount += 3 + object.section.length * 3;
   bytesCount += 3 + object.subjectID.length * 3;
-  bytesCount += 3 + object.termID.length * 3;
   return bytesCount;
 }
 
@@ -157,7 +156,7 @@ void _subjectSerialize(
   writer.writeString(offsets[9], object.section);
   writer.writeDateTime(offsets[10], object.startDate);
   writer.writeString(offsets[11], object.subjectID);
-  writer.writeString(offsets[12], object.termID);
+  writer.writeLong(offsets[12], object.termID);
 }
 
 Subject _subjectDeserialize(
@@ -184,7 +183,7 @@ Subject _subjectDeserialize(
   object.section = reader.readString(offsets[9]);
   object.startDate = reader.readDateTime(offsets[10]);
   object.subjectID = reader.readString(offsets[11]);
-  object.termID = reader.readString(offsets[12]);
+  object.termID = reader.readLong(offsets[12]);
   return object;
 }
 
@@ -224,7 +223,7 @@ P _subjectDeserializeProp<P>(
     case 11:
       return (reader.readString(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -248,7 +247,7 @@ const _SubjectfrequencyValueEnumMap = {
 };
 
 Id _subjectGetId(Subject object) {
-  return object.id;
+  return object.id ?? Isar.autoIncrement;
 }
 
 List<IsarLinkBase<dynamic>> _subjectGetLinks(Subject object) {
@@ -1023,7 +1022,23 @@ extension SubjectQueryFilter
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> idEqualTo(Id? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -1033,7 +1048,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> idGreaterThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1046,7 +1061,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> idLessThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1059,8 +1074,8 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> idBetween(
-    Id lower,
-    Id upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1821,54 +1836,46 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'termID',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDGreaterThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'termID',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDLessThan(
-    String value, {
+    int value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'termID',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDBetween(
-    String lower,
-    String upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1877,75 +1884,6 @@ extension SubjectQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'termID',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'termID',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'termID',
-        value: '',
       ));
     });
   }
@@ -2319,10 +2257,9 @@ extension SubjectQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Subject, Subject, QDistinct> distinctByTermID(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Subject, Subject, QDistinct> distinctByTermID() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'termID', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'termID');
     });
   }
 }
@@ -2407,7 +2344,7 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, String, QQueryOperations> termIDProperty() {
+  QueryBuilder<Subject, int, QQueryOperations> termIDProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'termID');
     });

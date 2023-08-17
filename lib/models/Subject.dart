@@ -5,7 +5,7 @@ part 'Subject.g.dart';
 
 @collection
 class Subject {
-  Id id = Isar.autoIncrement;
+  Id? id = Isar.autoIncrement;
 
   late String subjectID;
   late String courseCode;
@@ -14,7 +14,7 @@ class Subject {
   late String section;
   late String room;
   late String? instructor;
-  late String termID;
+  late int termID;
 
   @Enumerated(EnumType.name)
   late List<Day> frequency;

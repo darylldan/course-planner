@@ -4,9 +4,8 @@ part 'Term.g.dart';
 
 @collection
 class Term {
-  Id id = Isar.autoIncrement;
+  Id? id = Isar.autoIncrement;
 
-  late String termID;
   late String semester;
   late String academicYear;
 }

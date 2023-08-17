@@ -26,11 +26,6 @@ const TermSchema = CollectionSchema(
       id: 1,
       name: r'semester',
       type: IsarType.string,
-    ),
-    r'termID': PropertySchema(
-      id: 2,
-      name: r'termID',
-      type: IsarType.string,
     )
   },
   estimateSize: _termEstimateSize,
@@ -55,7 +50,6 @@ int _termEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.academicYear.length * 3;
   bytesCount += 3 + object.semester.length * 3;
-  bytesCount += 3 + object.termID.length * 3;
   return bytesCount;
 }
 
@@ -67,7 +61,6 @@ void _termSerialize(
 ) {
   writer.writeString(offsets[0], object.academicYear);
   writer.writeString(offsets[1], object.semester);
-  writer.writeString(offsets[2], object.termID);
 }
 
 Term _termDeserialize(
@@ -80,7 +73,6 @@ Term _termDeserialize(
   object.academicYear = reader.readString(offsets[0]);
   object.id = id;
   object.semester = reader.readString(offsets[1]);
-  object.termID = reader.readString(offsets[2]);
   return object;
 }
 
@@ -95,15 +87,13 @@ P _termDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
-    case 2:
-      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
 Id _termGetId(Term object) {
-  return object.id;
+  return object.id ?? Isar.autoIncrement;
 }
 
 List<IsarLinkBase<dynamic>> _termGetLinks(Term object) {
@@ -320,7 +310,23 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<Term, Term, QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> idEqualTo(Id? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -330,7 +336,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
   }
 
   QueryBuilder<Term, Term, QAfterFilterCondition> idGreaterThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -343,7 +349,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
   }
 
   QueryBuilder<Term, Term, QAfterFilterCondition> idLessThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -356,8 +362,8 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
   }
 
   QueryBuilder<Term, Term, QAfterFilterCondition> idBetween(
-    Id lower,
-    Id upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -500,134 +506,6 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
       ));
     });
   }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'termID',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDContains(String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'termID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDMatches(String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'termID',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'termID',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> termIDIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'termID',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension TermQueryObject on QueryBuilder<Term, Term, QFilterCondition> {}
@@ -656,18 +534,6 @@ extension TermQuerySortBy on QueryBuilder<Term, Term, QSortBy> {
   QueryBuilder<Term, Term, QAfterSortBy> sortBySemesterDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'semester', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortByTermID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'termID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortByTermIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'termID', Sort.desc);
     });
   }
 }
@@ -708,18 +574,6 @@ extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
       return query.addSortBy(r'semester', Sort.desc);
     });
   }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenByTermID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'termID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenByTermIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'termID', Sort.desc);
-    });
-  }
 }
 
 extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
@@ -734,13 +588,6 @@ extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'semester', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Term, Term, QDistinct> distinctByTermID(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'termID', caseSensitive: caseSensitive);
     });
   }
 }
@@ -761,12 +608,6 @@ extension TermQueryProperty on QueryBuilder<Term, Term, QQueryProperty> {
   QueryBuilder<Term, String, QQueryOperations> semesterProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'semester');
-    });
-  }
-
-  QueryBuilder<Term, String, QQueryOperations> termIDProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'termID');
     });
   }
 }
