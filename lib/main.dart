@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/terms.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:course_planner/widgets/timeline/TimelineCard.dart';
 import 'package:course_planner/widgets/timetable/Timetable.dart';
@@ -26,38 +27,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Course Planner',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const Home(),
-    );
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-
-  var count = 0;
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Material Theme Builder"),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 17),
-        child: ListView(
-          children: [
-          ],
-        ),
-      )
+      home: Term()
     );
   }
 }

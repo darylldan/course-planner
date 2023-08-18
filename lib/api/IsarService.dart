@@ -1,3 +1,4 @@
+import 'package:course_planner/models/UserSettings.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/Subject.dart';
@@ -111,6 +112,11 @@ class IsarService {
     for (var id in ids) {
       await isar.subjects.filter().termIDEqualTo(id).deleteAll();
     }
+
+    var currentTermID = await getCurrentTerm();
+    if (ids.contains(currentTermID)) {
+      await wipeUserSettings();
+    }
   }
 
   Future<void> wipeDB() async {
@@ -138,5 +144,51 @@ class IsarService {
   Stream<List<Term>> listenToTerms() async* {
     final isar = await db;
     yield* isar.terms.where().watch();
+  }
+
+  // for USER SETTINGS
+
+  Future<List<UserSettings>> getCurrentUserSettings() async {
+    final isar = await db;
+    return isar.userSettings.where().findAll();
+  }
+
+  Future<int?> getCurrentTerm() async {
+    final isar = await db;
+
+    List<UserSettings> queryResult = await getCurrentUserSettings();
+
+    if (queryResult.isEmpty) {
+      return -1;
+    }
+
+    UserSettings currentUserSettings = queryResult[0];
+    return currentUserSettings.currentTerm;
+  }
+
+  Future<void> setCurrentTerm(int termID) async {
+    final isar = await db;
+
+    List<UserSettings> queryResult = await getCurrentUserSettings();
+    UserSettings currentUserSettings;
+
+    if (queryResult.isEmpty) {
+      currentUserSettings = UserSettings()..currentTerm = termID;
+    } else {
+      currentUserSettings = queryResult[0];
+      currentUserSettings.currentTerm = termID;
+    }
+
+    isar.writeTxn(() async {
+      await isar.userSettings.put(currentUserSettings);
+    });
+  }
+
+  Future<void> wipeUserSettings() async {
+    final isar = await db;
+
+    isar.writeTxn(() async {
+      await isar.userSettings.clear();
+    });
   }
 }
