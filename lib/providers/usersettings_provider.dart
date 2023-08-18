@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';

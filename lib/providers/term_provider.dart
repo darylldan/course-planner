@@ -38,4 +38,8 @@ class TermProvider with ChangeNotifier {
     await isarService.wipeDB();
     notifyListeners();
   }
+
+  Stream<List<Term>> listenToTerms() async* {
+    yield* isarService.listenToTerms();
+  }
 }
