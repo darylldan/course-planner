@@ -1,4 +1,5 @@
-import 'package:course_planner/providers/SubjectProvider.dart';
+import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:course_planner/widgets/timeline/TimelineCard.dart';
 import 'package:course_planner/widgets/timetable/Timetable.dart';
@@ -11,7 +12,8 @@ import 'utils/enums.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: ((context) => SubjectProvider()))
+      ChangeNotifierProvider(create: ((context) => SubjectProvider())),
+      ChangeNotifierProvider(create: ((context) => TermProvider()))
     ],
     child: MyApp(),
   ));
