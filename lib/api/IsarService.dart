@@ -52,7 +52,7 @@ class IsarService {
     return await isar.subjects
         .filter()
         .termIDEqualTo(termID)
-        .frequencyElementContains(day.name)
+        .frequencyElementEqualTo(day)
         .findAll();
   }
 
@@ -124,6 +124,15 @@ class IsarService {
   Stream<List<Subject>> listenToSubjectsByTerm(int termID) async* {
     final isar = await db;
     yield* isar.subjects.filter().termIDEqualTo(termID).watch();
+  }
+
+  Stream<List<Subject>> listenToSubjectsByDay(Day day, int termID) async* {
+    final isar = await db;
+    yield* isar.subjects
+        .filter()
+        .termIDEqualTo(termID)
+        .frequencyElementEqualTo(day)
+        .watch();
   }
 
   Stream<List<Term>> listenToTerms() async* {

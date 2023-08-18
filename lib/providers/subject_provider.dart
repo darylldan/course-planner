@@ -4,6 +4,8 @@ import '../api/IsarService.dart';
 import '../models/Subject.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/enums.dart';
+
 class SubjectProvider with ChangeNotifier {
   late IsarService isarService;
 
@@ -16,6 +18,13 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
 
     return subject;
+  }
+
+  Future<List<Subject>> getSubjectsByDay(Day day, int termID) async {
+    List<Subject> subjects = await isarService.getSubjectByDay(day, termID);
+    notifyListeners();
+
+    return subjects;
   }
 
   Future<List<Subject>> getSubjectsByTerm(int termID) async {
