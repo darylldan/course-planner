@@ -1,13 +1,24 @@
+import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/terms.dart';
+import 'package:course_planner/screens/test_screen.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:course_planner/widgets/timeline/TimelineCard.dart';
 import 'package:course_planner/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './styles/color_schemes.g.dart';
 import 'models/Subject.dart';
 import 'utils/enums.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: ((context) => SubjectProvider())),
+      ChangeNotifierProvider(create: ((context) => TermProvider()))
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,85 +28,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Course Planner',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const Home(),
-    );
-  }
-}
-
-class Home extends StatefulWidget {
-  const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  List<Subject> subjects = [
-    Subject(
-        subjectID: "1",
-        courseCode: "CMSC 124",
-        isLaboratory: false,
-        section: "CD",
-        room: "ICS Megahall",
-        termID: "1",
-        frequency: [Day.tue, Day.thu],
-        startDate: DateTime(2021, 8, 15, 8),
-        endDate: DateTime(2021, 8, 15, 9),
-        color: Colors.amber[800]!),
-    Subject(
-        subjectID: "2",
-        courseCode: "CMSC 141",
-        isLaboratory: true,
-        section: "D - 2L",
-        room: "ICS PC Lab 7",
-        termID: "1",
-        frequency: [Day.tue],
-        startDate: DateTime(2021, 8, 15, 10),
-        endDate: DateTime(2021, 8, 15, 13),
-        color: Colors.green[800]!),
-    Subject(
-        subjectID: "3",
-        courseCode: "CMSC 170",
-        isLaboratory: false,
-        section: "X",
-        room: "ICS Megahall",
-        termID: "1",
-        frequency: [Day.tue, Day.thu],
-        startDate: DateTime(2021, 8, 15, 15),
-        endDate: DateTime(2021, 8, 15, 16),
-        color: Colors.blue[800]!),
-    Subject(
-        subjectID: "4",
-        courseCode: "CMSC 124",
-        isLaboratory: true,
-        section: "ST - 3L",
-        room: "ICS PC Lab 8",
-        termID: "1",
-        frequency: [Day.tue],
-        startDate: DateTime(2021, 8, 15, 16),
-        endDate: DateTime(2021, 8, 15, 19),
-        color: Colors.deepOrange[800]!),
-  ];
-
-  var count = 0;
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Material Theme Builder"),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 17),
-        child: ListView(
-          children: [
-            Timeline()
-          ],
-        ),
-      )
+      home: TestScreen()
     );
   }
 }

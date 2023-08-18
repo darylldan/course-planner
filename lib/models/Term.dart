@@ -1,10 +1,11 @@
-class Term {
-  String termID;
-  String semester;
-  String academicYear;
+import 'package:isar/isar.dart';
 
-  Term(
-      {required this.termID,
-      required this.semester,
-      required this.academicYear});
+part 'Term.g.dart';
+
+@collection
+class Term {
+  Id? id = Isar.autoIncrement;
+
+  late String semester;
+  late String academicYear;
 }

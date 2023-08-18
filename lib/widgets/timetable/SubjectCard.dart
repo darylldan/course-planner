@@ -14,7 +14,8 @@ class SubjectCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(6)),
-            color: subject.color),
+            color: Color.fromARGB(subject.color[0], subject.color[1],
+                subject.color[2], subject.color[3])),
         width: Constants.subjectCardWidth,
         height: _computeCardHeight(),
         child: Padding(
@@ -27,7 +28,8 @@ class SubjectCard extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   subject.courseCode,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+                  style:
+                      const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
                 ),
               ),
               FittedBox(

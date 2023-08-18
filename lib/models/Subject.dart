@@ -1,36 +1,27 @@
-import 'package:flutter/material.dart';
 import '../utils/enums.dart';
+import 'package:isar/isar.dart';
 
+part 'Subject.g.dart';
+
+@collection
 class Subject {
-  String subjectID;
-  String courseCode;
-  bool isLaboratory;
+  Id? id = Isar.autoIncrement;
+
+  late String subjectID;
+  late String courseCode;
+  late bool isLaboratory;
   String? description;
-  String section;
-  String room;
-  String? instructor;
-  String termID;
-  List<Day> frequency;
+  late String section;
+  late String room;
+  late String? instructor;
+  late int termID;
+
+  @Enumerated(EnumType.name)
+  late List<Day> frequency;
   String? notes;
 
-  DateTime startDate;
-  DateTime endDate;
+  late DateTime startDate;
+  late DateTime endDate;
 
-  Color color;
-
-  Subject({
-    required this.subjectID,
-    required this.courseCode,
-    required this.isLaboratory,
-    this.description,
-    required this.section,
-    required this.room,
-    this.instructor,
-    required this.termID,
-    required this.frequency,
-    this.notes,
-    required this.startDate,
-    required this.endDate,
-    required this.color,
-  });
+  late List<int> color;
 }
