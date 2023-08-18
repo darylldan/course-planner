@@ -49,6 +49,11 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> wipeDB() async {
+    await isarService.wipeDB();
+    notifyListeners();
+  }
+
   Stream<List<Subject>> listenToSubjectsByTerm(int termID) async* {
     yield* isarService.listenToSubjectsByTerm(termID);
   }
