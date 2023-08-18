@@ -7,16 +7,17 @@ import 'package:course_planner/widgets/elements/current_star.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/Term.dart';
 import '../utils/constants.dart' as Constants;
 
-class Term extends StatefulWidget {
-  const Term({super.key});
+class Terms extends StatefulWidget {
+  const Terms({super.key});
 
   @override
   _TermState createState() => _TermState();
 }
 
-class _TermState extends State<Term> {
+class _TermState extends State<Terms> {
   final screenTitle = "Terms";
   var currentTerm;
 

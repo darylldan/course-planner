@@ -14,7 +14,9 @@ class CurrentTermCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Constants.titleCardPaddingH,
+          vertical: Constants.titleCardPaddingV),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.cardBorderRadius),
           color: Theme.of(context).colorScheme.primaryContainer),
@@ -22,46 +24,26 @@ class CurrentTermCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Icon(
-                  Icons.calendar_today_rounded,
-                  size: Constants.cardIconSize,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
-              Text(
-                onCurrentTerm ? "Current Term" : "Term",
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontSize: 14),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: SizedBox(
-              width: double.infinity,
-              child: Text(
-                term.semester,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    overflow: TextOverflow.ellipsis,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              Text(
-                term.academicYear,
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontSize: 14),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.calendar_today_rounded,
+                      size: Constants.cardIconSize,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  Text(
+                    onCurrentTerm ? "Current Term" : "Term",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        fontSize: Constants.titleCardHeaderFontSize),
+                  ),
+                ],
               ),
               if (onCurrentTerm)
                 const Padding(
@@ -69,6 +51,28 @@ class CurrentTermCard extends StatelessWidget {
                   child: CurrentStar(),
                 )
             ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              term.semester,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Constants.titleCardContentFontSize,
+                  overflow: TextOverflow.ellipsis,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              term.academicYear,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontSize: Constants.titleCardHeaderFontSize),
+            ),
           )
         ],
       ),

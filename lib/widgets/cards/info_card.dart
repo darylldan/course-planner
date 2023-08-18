@@ -11,7 +11,9 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(Constants.cardPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Constants.titleCardPaddingH,
+          vertical: Constants.titleCardPaddingV),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.cardBorderRadius),
           color: Theme.of(context).colorScheme.tertiaryContainer),
@@ -20,16 +22,20 @@ class InfoCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline_rounded,
-                color: Theme.of(context).colorScheme.onTertiaryContainer,
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.info_outline_rounded,
+                  size: Constants.cardIconSize,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
               ),
               Text(
                 "Info",
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Theme.of(context).colorScheme.onTertiaryContainer,
-                    fontSize: 14),
+                    fontSize: Constants.titleCardHeaderFontSize),
               )
             ],
           ),

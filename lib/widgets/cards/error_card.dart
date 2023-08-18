@@ -8,7 +8,9 @@ class ErrorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(Constants.cardPadding),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Constants.titleCardPaddingH,
+          vertical: Constants.titleCardPaddingV),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.cardBorderRadius),
           color: Theme.of(context).colorScheme.errorContainer),
@@ -17,17 +19,20 @@ class ErrorCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline_rounded,
-                color: Theme.of(context).colorScheme.onErrorContainer,
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.cancel_rounded,
+                  size: Constants.cardIconSize,
+                  color: Theme.of(context).colorScheme.onErrorContainer,
+                ),
               ),
               Text(
                 "Info",
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Theme.of(context).colorScheme.onErrorContainer,
-                    fontSize: 14
-                ),
+                    fontSize: Constants.titleCardHeaderFontSize),
               )
             ],
           ),
@@ -35,8 +40,8 @@ class ErrorCard extends StatelessWidget {
             "An error occured.",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Theme.of(context).colorScheme.onTertiaryContainer),
+                fontSize: Constants.titleCardInstructionFontSize,
+                color: Theme.of(context).colorScheme.onErrorContainer),
           )
         ],
       ),
