@@ -1,13 +1,20 @@
+import 'package:course_planner/providers/SubjectProvider.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:course_planner/widgets/timeline/TimelineCard.dart';
 import 'package:course_planner/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './styles/color_schemes.g.dart';
 import 'models/Subject.dart';
 import 'utils/enums.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: ((context) => SubjectProvider()))
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

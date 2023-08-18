@@ -40,7 +40,7 @@ class IsarService {
     return await isar.subjects.get(id);
   }
 
-  Future<List<Subject>> getSubjectByTerm(int termID) async {
+  Future<List<Subject>> getSubjectsByTerm(int termID) async {
     final isar = await db;
 
     return await isar.subjects.filter().termIDEqualTo(termID).findAll();
