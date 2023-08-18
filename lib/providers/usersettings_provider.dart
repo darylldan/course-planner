@@ -19,7 +19,7 @@ class UserSettingsProvider with ChangeNotifier {
     return currentTermID;
   }
 
-  Future<int?> setCurrentTerm(int termID) async {
+  Future<void> setCurrentTerm(int termID) async {
     await isarService.setCurrentTerm(termID);
     notifyListeners();
   }
