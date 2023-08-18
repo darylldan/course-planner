@@ -16,7 +16,8 @@ class IsarService {
     final dir = await getApplicationCacheDirectory();
 
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open([SubjectSchema, TermSchema], directory: dir.path);
+      return await Isar.open([SubjectSchema, TermSchema, UserSettingsSchema],
+          directory: dir.path);
     }
 
     return Future.value(Isar.getInstance());
@@ -59,19 +60,27 @@ class IsarService {
 
   // All WRITE
 
-  Future<void> createTerm(Term term) async {
+  Future<int?> createTerm(Term term) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      isar.terms.put(term);
+      returnID = await isar.terms.put(term);
     });
+
+    var terms = await getAllTerms();
+    if (terms.length == 1) {
+      await setCurrentTerm(returnID!);
+    }
+
+    return returnID;
   }
 
   Future<void> createSubject(Subject subject) async {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      isar.subjects.put(subject);
+      await isar.subjects.put(subject);
     });
   }
 
@@ -80,7 +89,7 @@ class IsarService {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      isar.subjects.put(subject);
+      await isar.subjects.put(subject);
     });
   }
 
@@ -88,7 +97,7 @@ class IsarService {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      isar.terms.put(term);
+      await isar.terms.put(term);
     });
   }
 
@@ -98,7 +107,7 @@ class IsarService {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      isar.subjects.deleteAll(ids);
+      await isar.subjects.deleteAll(ids);
     });
   }
 
@@ -106,7 +115,7 @@ class IsarService {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      isar.terms.deleteAll(ids);
+      await isar.terms.deleteAll(ids);
     });
 
     for (var id in ids) {
@@ -116,6 +125,11 @@ class IsarService {
     var currentTermID = await getCurrentTerm();
     if (ids.contains(currentTermID)) {
       await wipeUserSettings();
+    }
+
+    var terms = await getAllTerms();
+    if (terms.isNotEmpty) {
+      await setCurrentTerm(terms[0].id!);
     }
   }
 
@@ -154,8 +168,6 @@ class IsarService {
   }
 
   Future<int?> getCurrentTerm() async {
-    final isar = await db;
-
     List<UserSettings> queryResult = await getCurrentUserSettings();
 
     if (queryResult.isEmpty) {

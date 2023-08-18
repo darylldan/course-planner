@@ -24,6 +24,13 @@ class TermProvider with ChangeNotifier {
     return terms;
   }
 
+  Future<int?> addTerm(Term term) async {
+    var returnID = await isarService.createTerm(term);
+    notifyListeners();
+
+    return returnID;
+  }
+
   Future<void> editTerm(Term term) async {
     await isarService.editTerm(term);
     notifyListeners();
