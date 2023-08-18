@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/providers/usersettings_provider.dart';
 import 'package:course_planner/screens/terms.dart';
 import 'package:course_planner/screens/test_screen.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
@@ -15,7 +16,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: ((context) => SubjectProvider())),
-      ChangeNotifierProvider(create: ((context) => TermProvider()))
+      ChangeNotifierProvider(create: ((context) => TermProvider())),
+      ChangeNotifierProvider(create: ((context) => UserSettingsProvider()))
     ],
     child: MyApp(),
   ));
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
       title: 'Course Planner',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: TestScreen()
+      home: const TestScreen()
     );
   }
 }
