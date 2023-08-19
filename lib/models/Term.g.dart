@@ -22,8 +22,13 @@ const TermSchema = CollectionSchema(
       name: r'academicYear',
       type: IsarType.string,
     ),
-    r'semester': PropertySchema(
+    r'isCurrentTerm': PropertySchema(
       id: 1,
+      name: r'isCurrentTerm',
+      type: IsarType.bool,
+    ),
+    r'semester': PropertySchema(
+      id: 2,
       name: r'semester',
       type: IsarType.string,
     )
@@ -60,7 +65,8 @@ void _termSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.academicYear);
-  writer.writeString(offsets[1], object.semester);
+  writer.writeBool(offsets[1], object.isCurrentTerm);
+  writer.writeString(offsets[2], object.semester);
 }
 
 Term _termDeserialize(
@@ -72,7 +78,8 @@ Term _termDeserialize(
   final object = Term();
   object.academicYear = reader.readString(offsets[0]);
   object.id = id;
-  object.semester = reader.readString(offsets[1]);
+  object.isCurrentTerm = reader.readBool(offsets[1]);
+  object.semester = reader.readString(offsets[2]);
   return object;
 }
 
@@ -86,6 +93,8 @@ P _termDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
+      return (reader.readBool(offset)) as P;
+    case 2:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -378,6 +387,16 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Term, Term, QAfterFilterCondition> isCurrentTermEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isCurrentTerm',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Term, Term, QAfterFilterCondition> semesterEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -525,6 +544,18 @@ extension TermQuerySortBy on QueryBuilder<Term, Term, QSortBy> {
     });
   }
 
+  QueryBuilder<Term, Term, QAfterSortBy> sortByIsCurrentTerm() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isCurrentTerm', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> sortByIsCurrentTermDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isCurrentTerm', Sort.desc);
+    });
+  }
+
   QueryBuilder<Term, Term, QAfterSortBy> sortBySemester() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'semester', Sort.asc);
@@ -563,6 +594,18 @@ extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Term, Term, QAfterSortBy> thenByIsCurrentTerm() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isCurrentTerm', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> thenByIsCurrentTermDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isCurrentTerm', Sort.desc);
+    });
+  }
+
   QueryBuilder<Term, Term, QAfterSortBy> thenBySemester() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'semester', Sort.asc);
@@ -584,6 +627,12 @@ extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
     });
   }
 
+  QueryBuilder<Term, Term, QDistinct> distinctByIsCurrentTerm() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isCurrentTerm');
+    });
+  }
+
   QueryBuilder<Term, Term, QDistinct> distinctBySemester(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -602,6 +651,12 @@ extension TermQueryProperty on QueryBuilder<Term, Term, QQueryProperty> {
   QueryBuilder<Term, String, QQueryOperations> academicYearProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'academicYear');
+    });
+  }
+
+  QueryBuilder<Term, bool, QQueryOperations> isCurrentTermProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isCurrentTerm');
     });
   }
 

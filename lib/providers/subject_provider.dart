@@ -9,26 +9,38 @@ import '../utils/enums.dart';
 class SubjectProvider with ChangeNotifier {
   late IsarService isarService;
 
+  List<Subject> _subjects = [];
+  List<Subject> get subjects => _subjects;
+
   SubjectProvider() {
     isarService = IsarService();
+    init();
   }
 
-  Future<Subject?> getSubjectByID(int id) async {
-    var subject = await isarService.getSubjetByID(id);
+  void init() async {
+    _subjects = await isarService.getAllSubjects();
+  }
+
+  Subject getSubjectByID(int id) {
+    var subject = _subjects.firstWhere((element) => element.id == id);
     notifyListeners();
 
     return subject;
   }
 
-  Future<List<Subject>> getSubjectsByDay(Day day, int termID) async {
-    List<Subject> subjects = await isarService.getSubjectByDay(day, termID);
+  List<Subject> getSubjectsByDay(Day day, int termID) {
+    List<Subject> subjects = _subjects.where((element) {
+      return element.frequency.contains(day) && element.termID == termID;
+    }).toList();
+
     notifyListeners();
 
     return subjects;
   }
 
-  Future<List<Subject>> getSubjectsByTerm(int termID) async {
-    List<Subject> subjects = await isarService.getSubjectsByTerm(termID);
+  List<Subject> getSubjectsByTerm(int termID) {
+    List<Subject> subjects =
+        _subjects.where((element) => element.termID == termID).toList();
     notifyListeners();
 
     return subjects;
@@ -36,21 +48,35 @@ class SubjectProvider with ChangeNotifier {
 
   Future<void> createSubject(Subject subject) async {
     await isarService.createSubject(subject);
+    _subjects.add(subject);
+
     notifyListeners();
   }
 
   Future<void> editSubject(Subject subject) async {
     await isarService.editSubject(subject);
+    var updatedSubjectIndex =
+        _subjects.indexWhere((element) => element.id == subject.id);
+    _subjects[updatedSubjectIndex] = subject;
+
     notifyListeners();
   }
 
   Future<void> deleteSubjects(List<int> ids) async {
     await isarService.deleteSubjects(ids);
+    _subjects.removeWhere((subject) => ids.contains(subject.id));
+
+    notifyListeners();
+  }
+
+  void deleteSubjectsByTerm(int termID) {
+    _subjects.removeWhere((subject) => subject.termID == termID);
     notifyListeners();
   }
 
   Future<void> wipeDB() async {
     await isarService.wipeDB();
+    _subjects = [];
     notifyListeners();
   }
 

@@ -8,4 +8,5 @@ class Term {
 
   late String semester;
   late String academicYear;
+  late bool isCurrentTerm;
 }
