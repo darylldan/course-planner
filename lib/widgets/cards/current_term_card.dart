@@ -1,4 +1,6 @@
+import 'package:course_planner/providers/term_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../elements/current_star.dart';
@@ -8,10 +10,12 @@ class CurrentTermCard extends StatelessWidget {
   late Term term;
   late bool onCurrentTerm;
 
-  CurrentTermCard({super.key, required this.term, required this.onCurrentTerm});
+  CurrentTermCard(
+      {super.key, required this.term, required this.onCurrentTerm});
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
