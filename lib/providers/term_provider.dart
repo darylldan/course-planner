@@ -34,7 +34,7 @@ class TermProvider with ChangeNotifier {
     return term;
   }
 
-  Future<int?> addTerm(Term term, BuildContext context) async {
+  Future<int?> addTerm(Term term) async {
     if (_terms.isEmpty) {
       term.isCurrentTerm = true;
       _currentTerm = term;

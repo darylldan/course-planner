@@ -1,4 +1,5 @@
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/add_term.dart';
 import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
@@ -34,15 +35,10 @@ class _TermState extends State<Terms> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var id = await context.read<TermProvider>().addTerm(Term()
-            ..semester = "Second Semester"
-            ..academicYear = "A.Y. 2023 - 2024"
-            ..isCurrentTerm = false , context);
-
-          if (context.mounted) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Added lmao. ID: $id")));
-          }
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddTerm())
+          );
         },
         child: const Icon(Icons.add_rounded),
       ),
@@ -51,7 +47,6 @@ class _TermState extends State<Terms> {
 
   Widget _buildTermScreen(BuildContext context) {
     List<Term> terms = context.watch<TermProvider>().terms;
-
 
     if (terms.isEmpty) {
       return Column(
@@ -84,10 +79,8 @@ class _TermState extends State<Terms> {
     );
   }
 
-
   Widget _buildCurrentTerm(BuildContext context) {
     return CurrentTermCard(
-        term: context.watch<TermProvider>().currentTerm!,
-        onCurrentTerm: true);
+        term: context.watch<TermProvider>().currentTerm!, onCurrentTerm: true);
   }
 }

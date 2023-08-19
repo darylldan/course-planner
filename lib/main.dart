@@ -2,6 +2,7 @@ import 'package:course_planner/api/IsarService.dart';
 import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/add_term.dart';
 import 'package:course_planner/screens/terms.dart';
 import 'package:course_planner/screens/test_screen.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'Course Planner',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const TestScreen(),
+      home: const Terms(),
     );
   }
 }
