@@ -33,12 +33,13 @@ class _TermState extends State<Terms> {
           child: _buildTermScreen(context),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AddTerm()));
         },
-        child: const Icon(Icons.add_rounded),
+        icon: const Icon(Icons.add_rounded),
+        label: const Text("Create Term"),
       ),
     );
   }
