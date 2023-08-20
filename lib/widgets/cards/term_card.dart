@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
-import '../../screens/edit_term.dart';
+import '../../screens/terms_module/edit_term.dart';
 
 class TermCard extends StatelessWidget {
   late Term term;

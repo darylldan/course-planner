@@ -4,8 +4,8 @@ import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/Term.dart';
-import '../utils/constants.dart' as Constants;
+import '../../models/Term.dart';
+import '../../utils/constants.dart' as Constants;
 
 class EditTerm extends StatefulWidget {
   final Term term;
