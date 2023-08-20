@@ -69,11 +69,6 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteSubjectsByTerm(int termID) {
-    _subjects.removeWhere((subject) => subject.termID == termID);
-    notifyListeners();
-  }
-
   Future<void> wipeDB() async {
     await isarService.wipeDB();
     _subjects = [];
