@@ -50,6 +50,13 @@ class _AddTermState extends State<AddTerm> {
   Widget _buildForm(BuildContext context) {
     return Form(
       key: _formKey,
+      onWillPop: () async {
+        if (_acadYearCtrl.text.isEmpty && _semesterCtrl.text.isEmpty) {
+          return true;
+        }
+
+        return _onWillPop();
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,17 +124,10 @@ class _AddTermState extends State<AddTerm> {
                         ..academicYear = _acadYearCtrl.text);
 
                       if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Row(
-                              children: [
-                                Icon(Icons.check_rounded),
-                                SizedBox(width: 6,),
-                                Text("Term added.")
-                              ],
-                            ),
-                          )
-                        );
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Term added.")
+                        ));
                         Navigator.of(context).pop();
                       }
                     }
@@ -140,5 +140,26 @@ class _AddTermState extends State<AddTerm> {
         ],
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Discard term creation?"),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text('Discard'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('Cancel'),
+                  )
+                ],
+              );
+            })) ??
+        false;
   }
 }
