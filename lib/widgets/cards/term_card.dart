@@ -116,17 +116,18 @@ class TermCard extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                ListTile(
-                  title: const Text("Set as Current Term"),
-                  leading: const Icon(Icons.star_rounded),
-                  onTap: () {
-                    context.read<TermProvider>().setCurrentTerm(term);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Current term was set."),
-                    ));
-                    Navigator.pop(context);
-                  },
-                ),
+                if (!term.isCurrentTerm)
+                  ListTile(
+                    title: const Text("Set as Current Term"),
+                    leading: const Icon(Icons.star_rounded),
+                    onTap: () {
+                      context.read<TermProvider>().setCurrentTerm(term);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Current term was set."),
+                      ));
+                      Navigator.pop(context);
+                    },
+                  ),
                 ListTile(
                   title: const Text("Edit Term"),
                   leading: const Icon(Icons.edit_rounded),
