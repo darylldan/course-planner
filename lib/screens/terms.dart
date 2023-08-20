@@ -35,10 +35,8 @@ class _TermState extends State<Terms> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddTerm())
-          );
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddTerm()));
         },
         child: const Icon(Icons.add_rounded),
       ),
@@ -81,6 +79,9 @@ class _TermState extends State<Terms> {
 
   Widget _buildCurrentTerm(BuildContext context) {
     return CurrentTermCard(
-        term: context.watch<TermProvider>().currentTerm!, onCurrentTerm: true);
+      term: context.watch<TermProvider>().currentTerm!,
+      onCurrentTerm: true,
+      editMode: false,
+    );
   }
 }

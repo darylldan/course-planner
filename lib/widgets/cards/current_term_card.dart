@@ -9,13 +9,16 @@ import '../../utils/constants.dart' as Constants;
 class CurrentTermCard extends StatelessWidget {
   late Term term;
   late bool onCurrentTerm;
+  late bool editMode;
 
   CurrentTermCard(
-      {super.key, required this.term, required this.onCurrentTerm});
+      {super.key,
+      required this.term,
+      required this.onCurrentTerm,
+      required this.editMode});
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -41,7 +44,7 @@ class CurrentTermCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    onCurrentTerm ? "Current Term" : "Term",
+                    _title(),
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -81,5 +84,17 @@ class CurrentTermCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _title() {
+    if (editMode) {
+      return "Editing Term";
+    }
+
+    if (onCurrentTerm) {
+      return "Current Term";
+    }
+
+    return "Term";
   }
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
+import '../../screens/edit_term.dart';
 
 class TermCard extends StatelessWidget {
   late Term term;
@@ -129,7 +130,15 @@ class TermCard extends StatelessWidget {
                 ListTile(
                   title: const Text("Edit Term"),
                   leading: const Icon(Icons.edit_rounded),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditTerm(
+                                  term: term,
+                                )));
+                  },
                 ),
                 ListTile(
                   title: const Text("Delete Term"),
