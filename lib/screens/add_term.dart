@@ -61,7 +61,7 @@ class _AddTermState extends State<AddTerm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextFormField(
               controller: _semesterCtrl,
               decoration: InputDecoration(
@@ -79,7 +79,7 @@ class _AddTermState extends State<AddTerm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: TextFormField(
               controller: _acadYearCtrl,
               decoration: InputDecoration(
@@ -97,7 +97,7 @@ class _AddTermState extends State<AddTerm> {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Opacity(
               opacity: 0.5,
               child: Divider(),
@@ -124,10 +124,8 @@ class _AddTermState extends State<AddTerm> {
                         ..academicYear = _acadYearCtrl.text);
 
                       if (context.mounted) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Term added.")
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Term added.")));
                         Navigator.of(context).pop();
                       }
                     }
@@ -136,7 +134,7 @@ class _AddTermState extends State<AddTerm> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
