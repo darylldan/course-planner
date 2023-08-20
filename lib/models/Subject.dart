@@ -7,7 +7,6 @@ part 'Subject.g.dart';
 class Subject {
   Id? id = Isar.autoIncrement;
 
-  late String subjectID;
   late String courseCode;
   late bool isLaboratory;
   String? description;

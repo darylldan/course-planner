@@ -73,13 +73,8 @@ const SubjectSchema = CollectionSchema(
       name: r'startDate',
       type: IsarType.dateTime,
     ),
-    r'subjectID': PropertySchema(
-      id: 11,
-      name: r'subjectID',
-      type: IsarType.string,
-    ),
     r'termID': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'termID',
       type: IsarType.long,
     )
@@ -133,7 +128,6 @@ int _subjectEstimateSize(
   }
   bytesCount += 3 + object.room.length * 3;
   bytesCount += 3 + object.section.length * 3;
-  bytesCount += 3 + object.subjectID.length * 3;
   return bytesCount;
 }
 
@@ -155,8 +149,7 @@ void _subjectSerialize(
   writer.writeString(offsets[8], object.room);
   writer.writeString(offsets[9], object.section);
   writer.writeDateTime(offsets[10], object.startDate);
-  writer.writeString(offsets[11], object.subjectID);
-  writer.writeLong(offsets[12], object.termID);
+  writer.writeLong(offsets[11], object.termID);
 }
 
 Subject _subjectDeserialize(
@@ -182,8 +175,7 @@ Subject _subjectDeserialize(
   object.room = reader.readString(offsets[8]);
   object.section = reader.readString(offsets[9]);
   object.startDate = reader.readDateTime(offsets[10]);
-  object.subjectID = reader.readString(offsets[11]);
-  object.termID = reader.readLong(offsets[12]);
+  object.termID = reader.readLong(offsets[11]);
   return object;
 }
 
@@ -221,8 +213,6 @@ P _subjectDeserializeProp<P>(
     case 10:
       return (reader.readDateTime(offset)) as P;
     case 11:
-      return (reader.readString(offset)) as P;
-    case 12:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1705,136 +1695,6 @@ extension SubjectQueryFilter
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'subjectID',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'subjectID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'subjectID',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'subjectID',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> subjectIDIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'subjectID',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterFilterCondition> termIDEqualTo(
       int value) {
     return QueryBuilder.apply(this, (query) {
@@ -2004,18 +1864,6 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortBySubjectID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'subjectID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortBySubjectIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'subjectID', Sort.desc);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByTermID() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'termID', Sort.asc);
@@ -2151,18 +1999,6 @@ extension SubjectQuerySortThenBy
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenBySubjectID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'subjectID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenBySubjectIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'subjectID', Sort.desc);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByTermID() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'termID', Sort.asc);
@@ -2250,13 +2086,6 @@ extension SubjectQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Subject, Subject, QDistinct> distinctBySubjectID(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'subjectID', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QDistinct> distinctByTermID() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'termID');
@@ -2335,12 +2164,6 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, DateTime, QQueryOperations> startDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'startDate');
-    });
-  }
-
-  QueryBuilder<Subject, String, QQueryOperations> subjectIDProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'subjectID');
     });
   }
 
