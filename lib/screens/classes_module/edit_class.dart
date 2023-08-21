@@ -652,6 +652,7 @@ class _EditClassState extends State<EditClass> {
       entries.add(DropdownMenuEntry(
         value: t.id!,
         label: "${t.semester}, ${t.academicYear}",
+        trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null
       ));
     }
 
