@@ -18,8 +18,8 @@ import '../../utils/constants.dart' as C;
 import '../terms_module/terms.dart';
 
 class EditClass extends StatefulWidget {
-  late Subject subject;
-  EditClass({super.key, required this.subject});
+  final Subject subject;
+  const EditClass({super.key, required this.subject});
 
   @override
   State<EditClass> createState() => _EditClassState();
@@ -119,9 +119,7 @@ class _EditClassState extends State<EditClass> {
   }
 
   Widget _buildForm() {
-    if (_courseColor == null) {
-      _courseColor = _colors[Random().nextInt(_colors.length - 1)];
-    }
+    _courseColor ??= _colors[Random().nextInt(_colors.length - 1)];
 
     return Form(
       key: _formKey,
@@ -437,9 +435,9 @@ class _EditClassState extends State<EditClass> {
         context.read<SubjectProvider>().editSubject(_packSubject());
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Subject added."),
+          content: Text("Subject edited."),
         ));
-        Navigator.of(context).pop();
+        Navigator.pop(context);
       }
     }
   }
