@@ -76,7 +76,10 @@ class SubjectProvider with ChangeNotifier {
     };
 
     for (var d in subject.frequency) {
-      _subjects.where((sub) => sub.frequency.contains(d)).any((s) {
+      _subjects
+          .where((sub) =>
+              sub.frequency.contains(d) && sub.termID == subject.termID)
+          .any((s) {
         if (!(subject.endDate.isBefore(s.startDate) ||
             s.endDate.isBefore(subject.startDate))) {
           returnVal['overlapSubjectIDs'].add(s.id);
@@ -87,7 +90,8 @@ class SubjectProvider with ChangeNotifier {
       });
     }
 
-    returnVal['overlapSubjectIDs'] = returnVal['overlapSubjectIDs'].toSet().toList();
+    returnVal['overlapSubjectIDs'] =
+        returnVal['overlapSubjectIDs'].toSet().toList();
     returnVal['overlapSubjectIDs'].remove(subject.id);
 
     if (returnVal['overlapSubjectIDs'].isNotEmpty) {
