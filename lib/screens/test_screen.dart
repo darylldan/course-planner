@@ -5,6 +5,7 @@ import 'package:course_planner/utils/enums.dart';
 import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
+import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
 import 'package:course_planner/widgets/cards/subject_card.dart';
 import 'package:course_planner/widgets/cards/term_card.dart';
 import 'package:flutter/material.dart';
@@ -25,30 +26,36 @@ class _TestScreenState extends State<TestScreen> {
   late int nextIndex;
   int counter = 1;
 
-  Term testTerm = Term()
-    ..academicYear = "A.Y. 2023 - 2024"
-    ..semester = "First Semester";
+  TimeOfDay? selectedTime;
 
-  Subject s = Subject()
-    ..courseCode = "CMSC 143"
-    ..isLaboratory = true
-    ..description = "Test Course"
-    ..section = "ST - 10L"
-    ..room = "ICS PC Lab 7"
-    ..instructor = "Prof. Juan dela Cruz"
-    ..frequency = [Day.tue, Day.thu]
-    ..startDate = DateTime(2023, 8, 20, 8)
-    ..endDate = DateTime(2023, 8, 20, 11)
-    ..termID = 1
-    ..notes = "wla lungz";
+  List<Color?> colors = [
+    Colors.red.shade600,
+    Colors.pink.shade600,
+    Colors.purple.shade600,
+    Colors.deepPurple.shade600,
+    Colors.indigo.shade600,
+    Colors.blue.shade600,
+    Colors.lightBlue.shade600,
+    Colors.cyan.shade600,
+    Colors.teal.shade600,
+    Colors.green.shade600,
+    Colors.lightGreen.shade600,
+    Colors.lime.shade600,
+    Colors.yellow.shade600,
+    Colors.amber.shade600,
+    Colors.orange.shade600,
+    Colors.deepOrange.shade600,
+    Colors.brown.shade600,
+    Colors.grey.shade600,
+    Colors.blueGrey.shade600,
+    Colors.black87,
+  ];
+
+  Color? selectedColor;
+
   @override
   Widget build(BuildContext context) {
-    s.color = [
-      Theme.of(context).colorScheme.primaryContainer.alpha,
-      Theme.of(context).colorScheme.primaryContainer.red,
-      Theme.of(context).colorScheme.primaryContainer.green,
-      Theme.of(context).colorScheme.primaryContainer.blue,
-    ];
+    selectedColor ??= colors.first;
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(),
@@ -59,20 +66,27 @@ class _TestScreenState extends State<TestScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [ClassCard(subject: s)],
+            children: [
+              ElevatedButton(
+                onPressed: _showColorPicker,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(color: selectedColor),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("Select Color")
+                  ],
+                ),
+              ),
+              
+            ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<TermProvider>().addTerm(Term()
-            ..academicYear = "$counter + A Y"
-            ..isCurrentTerm = false
-            ..semester = "$counter Semester");
-
-          key.currentState!.insertItem(nextIndex);
-        },
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -99,128 +113,66 @@ class _TestScreenState extends State<TestScreen> {
     );
   }
 
-  Widget _buildSubject(BuildContext context) {
-    s.color = [
-      Theme.of(context).colorScheme.primaryContainer.alpha,
-      Theme.of(context).colorScheme.primaryContainer.red,
-      Theme.of(context).colorScheme.primaryContainer.green,
-      Theme.of(context).colorScheme.primaryContainer.blue,
-    ];
-
-    return Material(
-      child: Ink(
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
-            borderRadius: BorderRadius.circular(C.cardBorderRadius)),
-        child: InkWell(
-          onTap: () {},
-          borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: C.titleCardPaddingH, vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2, right: 12),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Color.fromARGB(
-                            s.color[0], s.color[1], s.color[2], s.color[3])),
-                    width: 4,
-                    height: 50,
-                  ),
+  void _showColorPicker() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 450,
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 25, bottom: 16),
+                child: Text(
+                  "Select Color",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 275,
-                      child: Text(
-                        "${s.courseCode} - ${s.isLaboratory ? 'Laboratory' : 'Lecture'}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          constraints: BoxConstraints(
-                            maxWidth: 60
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            borderRadius: BorderRadius.circular(4)
-                          ),
-                          child: SizedBox(
-                            child: Center(
-                              child: Text(
-                                s.section,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.surfaceVariant,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 11
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10,),
-                        _buildSubjectSubtitle(context),
-                      ]
-                    )
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.more_vert_rounded),
-                )
-              ],
-            ),
+              ),
+              Flexible(flex: 1, child: _buildColors())
+            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildSubjectSubtitle(BuildContext context) {
-    String subTitle = "";
+  Widget _buildColors() {
+    return GridView.count(
+      padding: EdgeInsets.all(20),
+      mainAxisSpacing: 20,
+      crossAxisSpacing: 30,
+      crossAxisCount: 5,
+      children: colors.map<Widget>((e) => _colorCube(e!)).toList(),
+    );
+  }
 
-    for(var d in s.frequency) {
-      switch (d) {
-        case Day.mon:
-          subTitle = "${subTitle}Mo";
-        case Day.tue:
-          subTitle = "${subTitle}Tu";
-        case Day.wed:
-          subTitle = "${subTitle}We";
-        case Day.thu:
-          subTitle = "${subTitle}Th";
-        case Day.fri:
-          subTitle = "${subTitle}Fr";
-        case Day.sat:
-          subTitle = "${subTitle}Sa";
-      }
-    }
-
-    String startDate = DateFormat.jm().format(s.startDate);
-    String endDate = DateFormat.jm().format(s.endDate);
-
-    subTitle = "$subTitle $startDate - $endDate";
-
-    return SizedBox(
-      width: 200,
-      child: Text(
-        subTitle,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurfaceVariant
+  Widget _colorCube(Color color) {
+    return Material(
+      borderRadius: BorderRadius.circular(15),
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: color,
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {
+            Navigator.pop(context);
+            setState(() {
+              selectedColor = color;
+            });
+          },
+          child: Container(
+            height: 10,
+            width: 10,
+            child: (color == selectedColor)
+                ? Center(
+                    child: Icon(Icons.check),
+                  )
+                : null,
+          ),
         ),
       ),
     );

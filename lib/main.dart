@@ -2,6 +2,7 @@ import 'package:course_planner/api/IsarService.dart';
 import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/terms_module/add_term.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';

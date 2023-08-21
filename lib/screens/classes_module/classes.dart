@@ -1,6 +1,7 @@
 import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/current_term_selected.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
@@ -39,31 +40,12 @@ class _ClassesState extends State<Classes> {
       floatingActionButton: _showFab
           ? FloatingActionButton.extended(
               onPressed: () {
-                Subject s = Subject()
-                  ..courseCode = "CMSC 143"
-                  ..isLaboratory = true
-                  ..description = "Test Course"
-                  ..section = "ST - 10L"
-                  ..room = "ICS PC Lab 7"
-                  ..instructor = "Prof. Juan dela Cruz"
-                  ..frequency = [Day.tue, Day.thu]
-                  ..startDate = DateTime(2023, 8, 20, 8)
-                  ..endDate = DateTime(2023, 8, 20, 11)
-                  ..termID = 1
-                  ..notes = "wla lungz"
-                  ..color = [
-                    Theme.of(context).colorScheme.secondaryContainer.alpha,
-                    Theme.of(context).colorScheme.secondaryContainer.red,
-                    Theme.of(context).colorScheme.secondaryContainer.green,
-                    Theme.of(context).colorScheme.secondaryContainer.blue,
-                  ];
-
-                context.read<SubjectProvider>().createSubject(s);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("Added subject!"),
-                  ));
-                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddClass(
+                              terms: context.read<TermProvider>().terms,
+                            )));
               },
               label: Text("Create Subject"),
               icon: Icon(Icons.add_rounded),
@@ -89,6 +71,7 @@ class _ClassesState extends State<Classes> {
         .subjects
         .where((e) => e.termID == currentTerm!.id)
         .toList();
+
     if (subjects.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,12 +79,12 @@ class _ClassesState extends State<Classes> {
           TitleText(title: _screenTitle),
           _buildCurrentTerm(),
           const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Opacity(
-            opacity: 0.5,
-            child: Divider(),
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Opacity(
+              opacity: 0.5,
+              child: Divider(),
+            ),
           ),
-        ),
           InfoCard(
             content: "No subjects yet. Create one via the Add button below.",
           )
