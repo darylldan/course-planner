@@ -19,6 +19,7 @@ class SubjectProvider with ChangeNotifier {
 
   void init() async {
     _subjects = await isarService.getAllSubjects();
+    notifyListeners();
   }
 
   Subject getSubjectByID(int id) {
@@ -67,6 +68,31 @@ class SubjectProvider with ChangeNotifier {
     _subjects.removeWhere((subject) => ids.contains(subject.id));
 
     notifyListeners();
+  }
+
+  Map<String, dynamic> checkForOverlap(Subject subject) {
+    Map<String, dynamic> returnVal = {
+      'isOverlapping': false,
+      'overlapSubjectIDs': []
+    };
+
+    for (var d in subject.frequency) {
+      _subjects.where((sub) => sub.frequency.contains(d)).any((s) {
+        if (!(subject.endDate.isBefore(s.startDate) ||
+            s.endDate.isBefore(subject.startDate))) {
+          returnVal['overlapSubjectIDs'].add(s.id);
+          return true;
+        }
+
+        return false;
+      });
+    }
+
+    if (returnVal['overlapSubjectIDs'].isNotEmpty) {
+      returnVal['isOverlapping'] = true;
+    }
+
+    return returnVal;
   }
 
   Future<void> wipeDB() async {
