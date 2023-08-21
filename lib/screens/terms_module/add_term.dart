@@ -86,7 +86,7 @@ class _AddTermState extends State<AddTerm> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   hintText: 'Enter A.Y. (Ex. "A.Y. 2023 - 2024")',
-                  labelText: 'Enter Academic Year'),
+                  labelText: 'Academic Year'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Please enter the Academic Year.";
