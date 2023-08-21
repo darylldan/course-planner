@@ -6,6 +6,7 @@ import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/current_term_selected.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/subject_card.dart';
+import 'package:course_planner/widgets/elements/Drawer.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class Classes extends StatefulWidget {
 
 class _ClassesState extends State<Classes> {
   final _screenTitle = "Classes";
+  final _route = "/classes";
   late Term? currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
@@ -33,7 +35,7 @@ class _ClassesState extends State<Classes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(),
+      drawer: SideDrawer(parent: _route),
       body: SingleChildScrollView(
         padding:
             const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),

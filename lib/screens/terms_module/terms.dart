@@ -4,6 +4,7 @@ import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/term_card.dart';
+import 'package:course_planner/widgets/elements/Drawer.dart';
 import 'package:course_planner/widgets/elements/current_star.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +20,14 @@ class Terms extends StatefulWidget {
 }
 
 class _TermState extends State<Terms> {
-  final screenTitle = "Terms";
+  final _screenTitle = "Terms";
+  final _route = "/terms";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: Drawer(),
+      drawer: SideDrawer(parent: _route,),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -51,7 +53,7 @@ class _TermState extends State<Terms> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(title: screenTitle),
+          TitleText(title: _screenTitle),
           InfoCard(
             content: "No terms yet. Create one via the Add button below.",
           ),
@@ -62,7 +64,7 @@ class _TermState extends State<Terms> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: screenTitle),
+        TitleText(title: _screenTitle),
         _buildCurrentTerm(context),
         const Padding(
           padding: EdgeInsets.only(top: 10, bottom: 4),
