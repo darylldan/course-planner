@@ -47,7 +47,9 @@ class _EditTermState extends State<EditTerm> {
                   term: widget.term,
                   onCurrentTerm: widget.term.isCurrentTerm,
                   editMode: true),
-              const SizedBox(height: 14,),
+              const SizedBox(
+                height: 14,
+              ),
               _buildForm(context)
             ],
           )),
@@ -153,11 +155,13 @@ class _EditTermState extends State<EditTerm> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text("Discard term creation?"),
+                              title: const Text("Discard changes?"),
                               actions: [
                                 TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                    Navigator.of(context).pop();
+                                  },
                                   child: const Text('Discard'),
                                 ),
                                 TextButton(
