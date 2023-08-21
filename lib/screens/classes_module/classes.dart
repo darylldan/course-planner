@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as C;
 import '../../utils/enums.dart';
+import '../terms_module/terms.dart';
 
 class Classes extends StatefulWidget {
   const Classes({super.key});
@@ -24,6 +25,7 @@ class Classes extends StatefulWidget {
 class _ClassesState extends State<Classes> {
   final _screenTitle = "Classes";
   late Term? currentTerm;
+  late Term? _termSelectorValue;
   bool onCurrentTerm = true;
   bool _showFab = true;
 
@@ -77,7 +79,7 @@ class _ClassesState extends State<Classes> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TitleText(title: _screenTitle),
-          _buildCurrentTerm(),
+          _buildCurrentTerm(context),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
             child: Opacity(
@@ -96,7 +98,7 @@ class _ClassesState extends State<Classes> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TitleText(title: _screenTitle),
-        _buildCurrentTerm(),
+        _buildCurrentTerm(context),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
           child: Opacity(
@@ -126,7 +128,7 @@ class _ClassesState extends State<Classes> {
     );
   }
 
-  Widget _buildCurrentTerm() {
+  Widget _buildCurrentTerm(BuildContext context) {
     return Material(
       child: Ink(
         decoration: BoxDecoration(
@@ -134,7 +136,9 @@ class _ClassesState extends State<Classes> {
             color: Theme.of(context).colorScheme.primaryContainer),
         child: InkWell(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          onTap: () {},
+          onTap: () {
+            _showTermChanger(context);
+          },
           child: CurrentTermSelectedCard(
             term: currentTerm!,
             editMode: false,
@@ -142,6 +146,103 @@ class _ClassesState extends State<Classes> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showTermChanger(BuildContext context) {
+    _termSelectorValue = currentTerm;
+    List<Term> terms = context.read<TermProvider>().terms;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 400,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: C.screenHorizontalPadding, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    "Select Term",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                _termSelector(context, terms),
+                const SizedBox(
+                  height: 15,
+                ),
+                InfoCard(
+                  content:
+                      "To change the current term, go to the Terms screen.",
+                  fontSize: 14,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _termSelector(BuildContext context, List<Term> terms) {
+    List<DropdownMenuEntry<int>> entries = [];
+
+    for (var t in terms) {
+      entries.add(DropdownMenuEntry(
+          value: t.id!,
+          label: "${t.semester}, ${t.academicYear}",
+          trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null));
+    }
+
+    return Column(
+      children: [
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownMenu<int>(
+            initialSelection: currentTerm!.id,
+            inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12))),
+            label: const Text("Terms"),
+            dropdownMenuEntries: entries,
+            onSelected: (int? termID) {
+              _termSelectorValue =
+                  context.read<TermProvider>().getTermByID(termID!);
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.primaryContainer),
+                foregroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.onPrimaryContainer)),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                currentTerm = _termSelectorValue;
+                onCurrentTerm = _termSelectorValue!.isCurrentTerm;
+              });
+            },
+            child: const Text(
+              "View Term's Classes",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
