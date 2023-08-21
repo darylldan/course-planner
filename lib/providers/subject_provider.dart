@@ -24,7 +24,6 @@ class SubjectProvider with ChangeNotifier {
 
   Subject getSubjectByID(int id) {
     var subject = _subjects.firstWhere((element) => element.id == id);
-    notifyListeners();
 
     return subject;
   }
