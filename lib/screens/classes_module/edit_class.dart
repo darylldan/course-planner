@@ -797,7 +797,7 @@ class _EditClassState extends State<EditClass> {
   }
 
   Subject _packSubject() {
-    return Subject()
+    return widget.subject
       ..courseCode = _courseCodeCtrl.text
       ..color = [
         _courseColor!.alpha,

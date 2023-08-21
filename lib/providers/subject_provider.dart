@@ -88,6 +88,9 @@ class SubjectProvider with ChangeNotifier {
       });
     }
 
+    returnVal['overlapSubjectIDs'] = returnVal['overlapSubjectIDs'].toSet().toList();
+    returnVal['overlapSubjectIDs'].remove(subject.id);
+
     if (returnVal['overlapSubjectIDs'].isNotEmpty) {
       returnVal['isOverlapping'] = true;
     }
