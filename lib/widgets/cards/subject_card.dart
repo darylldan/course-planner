@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/Subject.dart';
+import '../../screens/classes_module/view_class.dart';
 import '../../utils/constants.dart' as C;
 import '../../utils/enums.dart';
 
@@ -24,7 +25,14 @@ class ClassCard extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewClass(
+                                  subjectID: subject.id!,
+                                )));
+            },
             child: _subjectContainer(context),
           ),
         ),
@@ -58,7 +66,7 @@ class ClassCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 275,
+                width: 255,
                 child: Text(
                   "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
                   overflow: TextOverflow.ellipsis,
@@ -132,7 +140,7 @@ class ClassCard extends StatelessWidget {
     subTitle = "$subTitle $startDate - $endDate";
 
     return SizedBox(
-      width: 200,
+      width: 180,
       child: Text(
         subTitle,
         overflow: TextOverflow.ellipsis,
