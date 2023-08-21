@@ -306,7 +306,9 @@ class _AddClassState extends State<AddClass> {
             ],
           ),
 
-          SizedBox(height: 60,)
+          SizedBox(
+            height: 60,
+          )
         ],
       ),
     );
@@ -463,7 +465,11 @@ class _AddClassState extends State<AddClass> {
                         initialTime: TimeOfDay(hour: 7, minute: 0));
 
                     if (context.mounted) {
-                      if (time!.hour < 7 || time.hour > 19) {
+                      if (time == null) {
+                      return;
+                    }
+
+                      if (time.hour < 7 || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -507,7 +513,11 @@ class _AddClassState extends State<AddClass> {
                         initialTime: TimeOfDay(hour: 8, minute: 0));
 
                     if (context.mounted) {
-                      if (time!.hour < 7 || time.hour > 19) {
+                      if (time == null) {
+                        return;
+                      }
+
+                      if (time.hour < 7 || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
