@@ -1,4 +1,5 @@
 import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/screens/classes_module/edit_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +97,7 @@ class ClassCard extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              context.read<SubjectProvider>().deleteSubjects([subject.id!]);
+              _showActions(context);
             },
             icon: Icon(Icons.more_vert_rounded),
           )
@@ -137,6 +138,64 @@ class ClassCard extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
       ),
+    );
+  }
+
+  void _showActions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 350,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: C.screenHorizontalPadding, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    "Actions",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ListTile(
+                  title: const Text("Edit Subject"),
+                  leading: const Icon(Icons.edit_rounded),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditClass(
+                                  subject: subject,
+                                )));
+                  },
+                ),
+                ListTile(
+                  title: const Text("Delete Subject"),
+                  leading: const Icon(Icons.delete_forever_rounded),
+                  onTap: () {
+                    context
+                        .read<SubjectProvider>()
+                        .deleteSubjects([subject.id!]);
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Subject deleted."),
+                      ));
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
