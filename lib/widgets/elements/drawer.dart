@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
+import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 
@@ -136,7 +137,7 @@ class _SideDrawerState extends State<SideDrawer> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         onTap: () {
-          // _navigateTo(context, "/weekly-schedule");
+          _navigateTo(context, "/weekly-schedule", const WeeklySchedule());
         },
       ),
       ListTile(
