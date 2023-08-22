@@ -1,7 +1,10 @@
+import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/widgets/timetable/SubjectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../screens/terms_module/edit_term.dart';
@@ -23,6 +26,9 @@ class TermCard extends StatelessWidget {
                     BorderRadius.circular(Constants.cardBorderRadius)),
             child: InkWell(
               onTap: onTap,
+              onLongPress: () {
+                _showActions(context);
+              },
               borderRadius: BorderRadius.circular(Constants.cardBorderRadius),
               child: _termCardContainer(context),
             ),
@@ -64,29 +70,71 @@ class TermCard extends StatelessWidget {
                               Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                   ),
-                  SizedBox(
-                    width: 250,
-                    child: Text(
-                      term.academicYear,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
-                    ),
+                  Row(
+                    children: [
+                      _subjectCount(context),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 175,
+                        child: Text(
+                          term.academicYear,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w300,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
-              IconButton(
-                onPressed: () {
-                  _showActions(context);
-                },
-                icon: const Icon(Icons.more_vert_rounded),
-              )
             ],
+          ),
+          IconButton(
+            onPressed: () {
+              _showActions(context);
+            },
+            icon: const Icon(Icons.more_vert_rounded),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _subjectCount(BuildContext context) {
+    int subjectCount =
+        context.read<SubjectProvider>().getSubjectsByTerm(term.id!).length;
+    String subjectStr = "";
+
+    if (subjectCount == 0) {
+      subjectStr = "NO CLASSES";
+    } else if (subjectCount == 1) {
+      subjectStr = "$subjectCount SUBJECT";
+    } else {
+      subjectStr = "$subjectCount SUBJECTS";
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Theme.of(context).colorScheme.onSurfaceVariant),
+      child: SizedBox(
+        child: Center(
+          child: Text(
+            subjectStr,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                fontWeight: FontWeight.bold,
+                fontSize: 11),
+          ),
+        ),
       ),
     );
   }

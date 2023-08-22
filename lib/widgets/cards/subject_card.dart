@@ -27,11 +27,14 @@ class ClassCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
             onTap: () {
               Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewClass(
-                                  subjectID: subject.id!,
-                                )));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ViewClass(
+                            subjectID: subject.id!,
+                          )));
+            },
+            onLongPress: () {
+              _showActions(context);
             },
             child: _subjectContainer(context),
           ),
