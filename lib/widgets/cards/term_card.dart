@@ -50,6 +50,7 @@ class TermCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 2, right: 14),
@@ -101,11 +102,14 @@ class TermCard extends StatelessWidget {
               ),
             ],
           ),
-          IconButton(
-            onPressed: () {
-              _showActions(context);
-            },
-            icon: const Icon(Icons.more_vert_rounded),
+          SizedBox(
+            width: 42,
+            child: IconButton(
+              onPressed: () {
+                _showActions(context);
+              },
+              icon: const Icon(Icons.more_vert_rounded),
+            ),
           )
         ],
       ),
