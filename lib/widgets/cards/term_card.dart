@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/terms_module/view_term.dart';
 import 'package:course_planner/widgets/timetable/SubjectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,12 @@ class TermCard extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(Constants.cardBorderRadius)),
             child: InkWell(
-              onTap: onTap,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewTerm(termID: term.id)));
+              },
               onLongPress: () {
                 _showActions(context);
               },
@@ -137,10 +143,6 @@ class TermCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void onTap() {
-    print("tapped!");
   }
 
   void _showActions(BuildContext context) {

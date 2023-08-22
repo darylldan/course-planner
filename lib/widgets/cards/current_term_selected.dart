@@ -88,10 +88,6 @@ class CurrentTermSelectedCard extends StatelessWidget {
       return "Editing Term";
     }
 
-    if (onCurrentTerm) {
-      return "Current Term";
-    }
-
     return "Term";
   }
 }
