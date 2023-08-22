@@ -76,6 +76,24 @@ class _TermState extends State<Terms> {
         ...terms.map<TermCard>((Term term) {
           return TermCard(term: term);
         }).toList(),
+        const Padding(
+          padding: EdgeInsets.only(top: 8),
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
+        Center(
+          child: Text(
+            "${terms.length} ${terms.length == 1 ? "Term" : "Terms"}",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.surfaceVariant
+            ),
+          ),
+        ),
+        const SizedBox(height: 120,)
       ],
     );
   }

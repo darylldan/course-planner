@@ -112,7 +112,25 @@ class _ClassesState extends State<Classes> {
           children: subjects.map<ClassCard>((c) {
             return ClassCard(subject: c);
           }).toList(),
-        )
+        ),
+        const Padding(
+          padding: EdgeInsets.only(top: 8),
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
+        Center(
+          child: Text(
+            "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.surfaceVariant
+            ),
+          ),
+        ),
+        const SizedBox(height: 120,)
       ],
     );
   }
