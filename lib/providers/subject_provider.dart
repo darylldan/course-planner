@@ -39,7 +39,6 @@ class SubjectProvider with ChangeNotifier {
   List<Subject> getSubjectsByTerm(int termID) {
     List<Subject> subjects =
         _subjects.where((element) => element.termID == termID).toList();
-    notifyListeners();
 
     return subjects;
   }
