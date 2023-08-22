@@ -165,7 +165,7 @@ class _ViewClassState extends State<ViewClass> {
                   color: Theme.of(context).colorScheme.onPrimaryContainer),
             ),
           ),
-          if (!(subject.description == null))
+          if (!(subject.description == null || subject.description == ""))
             SizedBox(
               width: double.infinity,
               child: Text(
