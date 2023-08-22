@@ -1,4 +1,5 @@
 import 'package:course_planner/models/Subject.dart';
+import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,7 +16,7 @@ class TimelineCard extends StatelessWidget {
         clipBehavior: Clip.none,
         alignment: AlignmentDirectional.topCenter,
         children: [
-          _subjectContainer(context),
+          _subjectContainerClickable(context),
           Positioned(
             top: -15,
             child: Center(child: _startTimeHat(context)),
@@ -42,12 +43,30 @@ class TimelineCard extends StatelessWidget {
     return durationString;
   }
 
+  Widget _subjectContainerClickable(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(20),
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Theme.of(context).colorScheme.surfaceVariant,
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ViewClass(subjectID: subject.id!))
+            );
+          },
+          child: _subjectContainer(context),
+        ),
+      ),
+    );
+  }
+
   Widget _subjectContainer(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.surfaceVariant,
-      ),
       height: 80,
       width: 350,
       child: Padding(
@@ -66,7 +85,11 @@ class TimelineCard extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Color.fromARGB(subject.color[0], subject.color[1], subject.color[2], subject.color[3])),
+                              color: Color.fromARGB(
+                                  subject.color[0],
+                                  subject.color[1],
+                                  subject.color[2],
+                                  subject.color[3])),
                           width: 4,
                         ),
                       )
