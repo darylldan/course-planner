@@ -124,13 +124,14 @@ class _ClassesState extends State<Classes> {
           child: Text(
             "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
             style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.surfaceVariant
-            ),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.surfaceVariant),
           ),
         ),
-        const SizedBox(height: 120,)
+        const SizedBox(
+          height: 120,
+        )
       ],
     );
   }
@@ -215,27 +216,39 @@ class _ClassesState extends State<Classes> {
     List<DropdownMenuEntry<int>> entries = [];
 
     for (var t in terms) {
-      entries.add(DropdownMenuEntry(
+      String label = "${t.semester}, ${t.academicYear}";
+
+      if (label.length > 36) {
+        label = "${label.substring(0, 37)}...";
+      }
+      entries.add(
+        DropdownMenuEntry(
           value: t.id!,
-          label: "${t.semester}, ${t.academicYear}",
-          trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null));
+          label: label,
+          trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null,
+        ),
+      );
     }
 
     return Column(
       children: [
-        ButtonTheme(
-          alignedDropdown: true,
-          child: DropdownMenu<int>(
-            initialSelection: currentTerm!.id,
-            inputDecorationTheme: InputDecorationTheme(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12))),
-            label: const Text("Terms"),
-            dropdownMenuEntries: entries,
-            onSelected: (int? termID) {
-              _termSelectorValue =
-                  context.read<TermProvider>().getTermByID(termID!);
-            },
+        SizedBox(
+          width: 390,
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownMenu<int>(
+              width: 390,
+              initialSelection: currentTerm!.id,
+              inputDecorationTheme: InputDecorationTheme(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12))),
+              label: const Text("Terms"),
+              dropdownMenuEntries: entries,
+              onSelected: (int? termID) {
+                _termSelectorValue =
+                    context.read<TermProvider>().getTermByID(termID!);
+              },
+            ),
           ),
         ),
         const SizedBox(
