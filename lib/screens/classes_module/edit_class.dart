@@ -68,7 +68,7 @@ class _EditClassState extends State<EditClass> {
     Colors.green.shade600,
     Colors.lightGreen.shade600,
     Colors.lime.shade600,
-    Colors.yellow.shade600,
+    Colors.yellow.shade800,
     Colors.amber.shade600,
     Colors.orange.shade600,
     Colors.deepOrange.shade600,

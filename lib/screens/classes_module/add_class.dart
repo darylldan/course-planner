@@ -64,7 +64,7 @@ class _AddClassState extends State<AddClass> {
     Colors.green.shade600,
     Colors.lightGreen.shade600,
     Colors.lime.shade600,
-    Colors.yellow.shade600,
+    Colors.yellow.shade700,
     Colors.amber.shade600,
     Colors.orange.shade600,
     Colors.deepOrange.shade600,
@@ -573,6 +573,7 @@ class _AddClassState extends State<AddClass> {
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int>(
+        width: 390,
         initialSelection: null,
         inputDecorationTheme: InputDecorationTheme(
             border:
