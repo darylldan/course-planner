@@ -33,8 +33,6 @@ class SubjectProvider with ChangeNotifier {
       return element.frequency.contains(day) && element.termID == termID;
     }).toList();
 
-    notifyListeners();
-
     return subjects;
   }
 
@@ -80,6 +78,10 @@ class SubjectProvider with ChangeNotifier {
           .where((sub) =>
               sub.frequency.contains(d) && sub.termID == subject.termID)
           .any((s) {
+        if (subject.startDate == s.endDate || s.endDate == subject.startDate) {
+          return false;
+        }
+
         if (!(subject.endDate.isBefore(s.startDate) ||
             s.endDate.isBefore(subject.startDate))) {
           returnVal['overlapSubjectIDs'].add(s.id);
