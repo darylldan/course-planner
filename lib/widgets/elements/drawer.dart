@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
+import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
 import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,11 @@ class _SideDrawerState extends State<SideDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextButton(
+                        onLongPress: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Padayon! 🌻"))
+                          );
+                        },
                         onPressed: () {
                           setState(() {
                             SideDrawer._currIndex =
@@ -117,7 +123,7 @@ class _SideDrawerState extends State<SideDrawer> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         onTap: () {
-          // _navigateTo(context, "/overview");
+          _navigateTo(context, "/overview", const Overview());
         },
       ),
       ListTile(
