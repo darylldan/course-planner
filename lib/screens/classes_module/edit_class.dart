@@ -649,9 +649,14 @@ class _EditClassState extends State<EditClass> {
     List<DropdownMenuEntry<int>> entries = [];
 
     for (var t in terms) {
+      String label = "${t.semester}, ${t.academicYear}";
+
+      if (label.length > 36) {
+        label = "${label.substring(0, 37)}...";
+      }
       entries.add(DropdownMenuEntry(
         value: t.id!,
-        label: "${t.semester}, ${t.academicYear}",
+        label: label,
         trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null
       ));
     }
