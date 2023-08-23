@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
@@ -31,8 +33,22 @@ class _OverviewState extends State<Overview> {
   late List<Subject> _subjects;
   late List<Subject> _subjectsToday;
 
+  late Timer _timer;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      setState(() {
+        _rightNow = DateTime.now();
+      });
+    });
+
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(parent: _route),
@@ -63,6 +79,17 @@ class _OverviewState extends State<Overview> {
         .getSubjectsByDay(DayMethods.fromInt(_rightNow.weekday), _term!.id!)
       ..sort((a, b) => a.startDate.compareTo(b.startDate));
 
+    if (_subjectsToday.isEmpty) {
+      return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TitleText(title: _screenTitle),
+        OverviewTodayCard(subjects: []),
+      
+      ],
+    );
+
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
