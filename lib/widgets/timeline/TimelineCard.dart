@@ -104,7 +104,7 @@ class TimelineCard extends StatelessWidget {
                       SizedBox(
                         width: 230,
                         child: Text(
-                          "CMSC 124 ${subject.isLaboratory ? "- Laboratory" : "Lecture"}",
+                          "${subject.courseCode} ${subject.isLaboratory ? "- Laboratory" : "Lecture"}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
