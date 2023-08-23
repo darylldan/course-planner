@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:course_planner/api/IsarService.dart';
 import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/subject_provider.dart';
@@ -35,8 +37,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Course Planner',
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        fontFamily: (Platform.isAndroid) ? "Inter" : null
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        fontFamily: (Platform.isAndroid) ? "Inter" : null
+      ),
       home: const Overview(),
     );
   }
