@@ -4,6 +4,7 @@ import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:course_planner/screens/classes_module/classes.dart';
+import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/add_term.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
 import 'package:course_planner/screens/test_screen.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
       title: 'Course Planner',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const Classes(),
+      home: const Overview(),
     );
   }
 }
