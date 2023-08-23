@@ -122,7 +122,7 @@ class NextClassCard extends StatelessWidget {
           child: SizedBox(
             width: double.infinity,
             child: Text(
-              "${nextClass!.courseCode} - ${nextClass!.isLaboratory ? "Laboratory" : "Lab"}",
+              "${nextClass!.courseCode} - ${nextClass!.isLaboratory ? "Laboratory" : "Lecture"}",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
