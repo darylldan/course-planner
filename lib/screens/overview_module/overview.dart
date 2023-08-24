@@ -81,14 +81,12 @@ class _OverviewState extends State<Overview> {
 
     if (_subjectsToday.isEmpty) {
       return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TitleText(title: _screenTitle),
-        OverviewTodayCard(subjects: []),
-      
-      ],
-    );
-
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TitleText(title: _screenTitle),
+          OverviewTodayCard(subjects: []),
+        ],
+      );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,19 +107,19 @@ class _OverviewState extends State<Overview> {
     int curSubIndex = 0;
 
     for (int i = 0; i < _subjectsToday.length; i++) {
-      if ((_subjectsToday[i].startDate.isAfter(moment) ||
+      if ((moment.isAfter(_subjectsToday[i].startDate) ||
               _subjectsToday[i].startDate == moment) &&
-          (_subjectsToday[i].endDate.isBefore(moment) ||
+          (moment.isBefore(_subjectsToday[i].endDate) ||
               _subjectsToday[i].endDate == moment)) {
         currentSubject = _subjectsToday[i];
         curSubIndex = i;
       }
     }
 
-    bool onSchedule = (_subjectsToday[0].startDate.isAfter(moment) ||
+    bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate) ||
             _subjectsToday[0].startDate == moment) &&
         (_subjectsToday[_subjectsToday.length - 1].endDate == moment ||
-            _subjectsToday[_subjectsToday.length - 1].endDate.isBefore(moment));
+            moment.isBefore(_subjectsToday[_subjectsToday.length - 1].endDate));
 
     TimeOfDay timeLeft;
 
@@ -154,6 +152,9 @@ class _OverviewState extends State<Overview> {
       nextClass = NextClassCard(
           isLastClass: false, nextClass: _subjectsToday[curSubIndex + 1]);
     }
+
+    print("onsched: $onSchedule\ncurr: ${currentSubject?.courseCode ?? "null"}");
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +217,7 @@ class _OverviewState extends State<Overview> {
       content = "On Break";
     } else if (onSchedule) {
       content =
-          "${currentSubject!.courseCode} - ${currentSubject!.isLaboratory ? "Laboratory" : "Lecture"}";
+          "${currentSubject!.courseCode} - ${currentSubject.isLaboratory ? "Laboratory" : "Lecture"}";
     }
 
     return Container(
@@ -274,10 +275,10 @@ class _OverviewState extends State<Overview> {
     } else if (onSchedule) {
       if (_subjectsToday[curSubIndex + 1].startDate !=
           _subjectsToday[curSubIndex].endDate) {
-        subtitle = "${_timeOfDayToString(timeLeft)} until break.";
+        subtitle = "Until break.";
       } else {
         subtitle =
-            "${_timeOfDayToString(timeLeft)} until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate)}).";
+            "Until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate)}).";
       }
     }
 
@@ -311,11 +312,11 @@ class _OverviewState extends State<Overview> {
             ],
           ),
           Text(
-            _timeOfDayToString(timeLeft),
+            _timeOfDayToString(timeLeft).trimLeft(),
             style: TextStyle(
                 color: Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.normal,
-                fontSize: 20),
+                fontWeight: FontWeight.bold,
+                fontSize: 20,),
           ),
           if (onSchedule)
             SizedBox(
@@ -337,12 +338,12 @@ class _OverviewState extends State<Overview> {
     String timeStr = "";
 
     if (time.hour > 0) {
-      timeStr = "${timeStr}${time.hour} ${time.hour == 1 ? "hour" : "hours"}";
+      timeStr = "${timeStr} ${time.hour} ${time.hour == 1 ? "hour" : "hours"}";
     }
 
     if (time.minute > 0) {
       timeStr =
-          "${timeStr}${time.minute} ${time.minute == 1 ? "hour" : "minute"}";
+          "${timeStr} ${time.minute} ${time.minute == 1 ? "minute" : "minutes"}";
     }
 
     if (timeStr == "") {
