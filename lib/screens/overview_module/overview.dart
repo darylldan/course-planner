@@ -36,18 +36,24 @@ class _OverviewState extends State<Overview> {
   late Timer _timer;
 
   @override
-  void dispose() {
-    super.dispose();
-    _timer.cancel();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       setState(() {
         _rightNow = DateTime.now();
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    
 
     return Scaffold(
       appBar: AppBar(),
@@ -162,7 +168,7 @@ class _OverviewState extends State<Overview> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _timeLeft(context, timeLeft, onSchedule, curSubIndex),
+          child: _timeLeft(context, timeLeft, onSchedule, curSubIndex, currentSubject),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -263,15 +269,15 @@ class _OverviewState extends State<Overview> {
   }
 
   Widget _timeLeft(BuildContext context, TimeOfDay timeLeft, bool onSchedule,
-      int curSubIndex) {
+      int curSubIndex, Subject? curSub) {
     bool isLastClass = curSubIndex == _subjectsToday.length - 1;
 
     String subtitle = "";
     if (isLastClass && onSchedule) {
       subtitle = "$timeLeft until free";
     } else if (onSchedule) {
-      if (_subjectsToday[curSubIndex + 1].startDate !=
-          _subjectsToday[curSubIndex].endDate) {
+      if ((_subjectsToday[curSubIndex + 1].startDate !=
+          _subjectsToday[curSubIndex].endDate && curSub != null)) {
         subtitle = "Until break.";
       } else {
         subtitle =
