@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
+import 'package:course_planner/screens/misc/about.dart';
 import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
 import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
@@ -105,7 +106,7 @@ class _SideDrawerState extends State<SideDrawer> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               onTap: () {
-                // _navigateTo(context, "/about");
+                _navigateTo(context, "/about", About());
               },
             ),
           ),
