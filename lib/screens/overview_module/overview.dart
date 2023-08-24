@@ -194,9 +194,9 @@ class _OverviewState extends State<Overview> {
             borderRadius: BorderRadius.circular(C.cardBorderRadius)),
         child: InkWell(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          onTap: onSchedule
+          onTap: onSchedule && currentSubject != null
               ? () {
-                  if (onSchedule && currentSubject != null) {
+                  if (onSchedule) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -357,13 +357,6 @@ class _OverviewState extends State<Overview> {
     return timeStr;
   }
 
-  /**
-   * Three possible states:
-   * - out of sched
-   * - inclass
-   * - on break
-   */
-
   Widget _noTermsYet(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,6 +388,7 @@ class _OverviewState extends State<Overview> {
         _timelineHeader(),
         const SizedBox(height: 10),
         Timeline(subjects: _subjectsToday),
+        const SizedBox(height: 10,),
         GestureDetector(
           onLongPress: () {
             ScaffoldMessenger.of(context)
