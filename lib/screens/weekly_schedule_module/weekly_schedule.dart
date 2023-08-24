@@ -148,7 +148,7 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         ButtonTheme(
           alignedDropdown: true,
           child: DropdownMenu<int>(
-            width: 390,
+            width: 376,
             initialSelection: currentTerm!.id,
             inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(

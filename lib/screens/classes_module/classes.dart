@@ -233,11 +233,11 @@ class _ClassesState extends State<Classes> {
     return Column(
       children: [
         SizedBox(
-          width: 390,
+          width: 376,
           child: ButtonTheme(
             alignedDropdown: true,
             child: DropdownMenu<int>(
-              width: 390,
+              width: 376,
               initialSelection: currentTerm!.id,
               inputDecorationTheme: InputDecorationTheme(
                   border: OutlineInputBorder(

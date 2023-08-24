@@ -204,7 +204,7 @@ class _DailyScheduleState extends State<DailySchedule> {
         ButtonTheme(
           alignedDropdown: true,
           child: DropdownMenu<Day>(
-            width: 390,
+            width: 376,
             initialSelection: _currentDay,
             inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(
@@ -227,7 +227,7 @@ class _DailyScheduleState extends State<DailySchedule> {
           alignedDropdown: true,
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: DropdownMenu<int>(
-            width: 390,
+            width: 376,
             initialSelection: _currentTerm!.id,
             inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(
