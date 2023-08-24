@@ -53,8 +53,6 @@ class _OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(parent: _route),
@@ -168,7 +166,8 @@ class _OverviewState extends State<Overview> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _timeLeft(context, timeLeft, onSchedule, curSubIndex, currentSubject),
+          child: _timeLeft(
+              context, timeLeft, onSchedule, curSubIndex, currentSubject),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -274,10 +273,11 @@ class _OverviewState extends State<Overview> {
 
     String subtitle = "";
     if (isLastClass && onSchedule) {
-      subtitle = "$timeLeft until free";
+      subtitle = "Until free.";
     } else if (onSchedule) {
       if ((_subjectsToday[curSubIndex + 1].startDate !=
-          _subjectsToday[curSubIndex].endDate && curSub != null)) {
+              _subjectsToday[curSubIndex].endDate &&
+          curSub != null)) {
         subtitle = "Until break.";
       } else {
         subtitle =
@@ -388,7 +388,9 @@ class _OverviewState extends State<Overview> {
         _timelineHeader(),
         const SizedBox(height: 10),
         Timeline(subjects: _subjectsToday),
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         GestureDetector(
           onLongPress: () {
             ScaffoldMessenger.of(context)

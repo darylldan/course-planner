@@ -102,13 +102,14 @@ class NextClassCard extends StatelessWidget {
             )
           ],
         ),
-        Text(
-          "${DateFormat.jm().format(nextClass!.startDate)} - ${DateFormat.jm().format(nextClass!.endDate)}",
-          style: TextStyle(
-              fontWeight: FontWeight.w300,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontSize: C.titleCardHeaderFontSize),
-        )
+        if (!isLastClass)
+          Text(
+            "${DateFormat.jm().format(nextClass!.startDate)} - ${DateFormat.jm().format(nextClass!.endDate)}",
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: C.titleCardHeaderFontSize),
+          )
       ],
     );
   }
