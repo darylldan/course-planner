@@ -141,8 +141,8 @@ class _OverviewState extends State<Overview> {
     }
 
     Widget nextClass;
-    if (moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate) ||
-        _subjectsToday.isEmpty) {
+    if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate) ||
+        _subjectsToday.isEmpty)) {
       nextClass = const NextClassCard(
         isLastClass: false,
         emptyMode: true,
