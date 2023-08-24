@@ -153,9 +153,6 @@ class _OverviewState extends State<Overview> {
           isLastClass: false, nextClass: _subjectsToday[curSubIndex + 1]);
     }
 
-    print("onsched: $onSchedule\ncurr: ${currentSubject?.courseCode ?? "null"}");
-
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -314,9 +311,10 @@ class _OverviewState extends State<Overview> {
           Text(
             _timeOfDayToString(timeLeft).trimLeft(),
             style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,),
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
           if (onSchedule)
             SizedBox(
@@ -387,7 +385,21 @@ class _OverviewState extends State<Overview> {
   Widget _timeline() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [_timelineHeader(), Timeline(subjects: _subjectsToday)],
+      children: [
+        _timelineHeader(),
+        const SizedBox(height: 10),
+        Timeline(subjects: _subjectsToday),
+        GestureDetector(
+          onLongPress: () {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("Padayon! 🌻")));
+          },
+          child: const Text(
+            '🌻',
+            style: TextStyle(fontSize: 24),
+          ),
+        )
+      ],
     );
   }
 
