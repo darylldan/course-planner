@@ -29,7 +29,8 @@ class NextClassCard extends StatelessWidget {
             if (nextClass != null && !isLastClass && !emptyMode) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ViewClass(subjectID: nextClass!.id!)),
+                MaterialPageRoute(
+                    builder: (context) => ViewClass(subjectID: nextClass!.id!)),
               );
             }
           },
@@ -62,7 +63,7 @@ class NextClassCard extends StatelessWidget {
       );
     }
 
-    if (isLastClass) {
+    if (isLastClass ) {
       return SizedBox(
         width: double.infinity,
         child: Text(
@@ -102,7 +103,7 @@ class NextClassCard extends StatelessWidget {
             )
           ],
         ),
-        if (!isLastClass)
+        if (!isLastClass && !emptyMode)
           Text(
             "${DateFormat.jm().format(nextClass!.startDate)} - ${DateFormat.jm().format(nextClass!.endDate)}",
             style: TextStyle(
