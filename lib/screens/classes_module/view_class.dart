@@ -421,7 +421,7 @@ class _ViewClassState extends State<ViewClass> {
               freqString = "$freqString Saturday";
           }
 
-          if (i == 1) freqString = "$freqString and";
+          if (i == 0) freqString = "$freqString and";
         }
       default:
         freqString = "$freqString ";
