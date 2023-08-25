@@ -24,4 +24,21 @@ extension DayMethods on Day {
         return "Saturday";
     }
   }
+
+  static String dayToStringShort(Day day) {
+    switch (day) {
+      case Day.mon:
+        return "Mon";
+      case Day.tue:
+        return "Tue";
+      case Day.wed:
+        return "Wed";
+      case Day.thu:
+        return "Thu";
+      case Day.fri:
+        return "Fri";
+      case Day.sat:
+        return "Sat";
+    }
+  }
 }
