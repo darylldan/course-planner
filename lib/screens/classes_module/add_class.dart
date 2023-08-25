@@ -470,7 +470,8 @@ class _AddClassState extends State<AddClass> {
                         return;
                       }
 
-                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
+                      if (time.hour < 7 ||
+                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -494,7 +495,10 @@ class _AddClassState extends State<AddClass> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Text("Start Time: ${_dateTimeToString(_startDate)}"),
+                        Text(
+                          "Start Time: ${_dateTimeToString(_startDate)}",
+                          style: TextStyle(fontSize: 11),
+                        ),
                       ],
                     ),
                   ),
@@ -518,7 +522,8 @@ class _AddClassState extends State<AddClass> {
                         return;
                       }
 
-                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
+                      if (time.hour < 7 ||
+                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -540,7 +545,8 @@ class _AddClassState extends State<AddClass> {
                   },
                   child: Row(
                     children: [
-                      Text("End Time: ${_dateTimeToString(_endDate)}")
+                      Text("End Time: ${_dateTimeToString(_endDate)}",
+                          style: TextStyle(fontSize: 11))
                     ],
                   ),
                 ),
@@ -565,7 +571,7 @@ class _AddClassState extends State<AddClass> {
 
     for (var t in widget.terms) {
       String label = "${t.semester}, ${t.academicYear}";
-      
+
       // Needed because the new dropdown menu does not catch text overflows
       if (label.length > 36) {
         label = "${label.substring(0, 37)}...";
@@ -573,14 +579,15 @@ class _AddClassState extends State<AddClass> {
       entries.add(DropdownMenuEntry(
           value: t.id!,
           label: label,
-          trailingIcon: t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
+          trailingIcon:
+              t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
     }
 
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int>(
         // needed the width because there are no way to set the width so that it takes up the entire width of parent
-        width: 376,
+        width: 343,
         initialSelection: null,
         inputDecorationTheme: InputDecorationTheme(
             border:

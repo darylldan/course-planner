@@ -549,7 +549,7 @@ class _EditClassState extends State<EditClass> {
             child: Text(
               "Please enter a valid timeslot.",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.error, fontSize: 12),
+                  color: Theme.of(context).colorScheme.error, fontSize: 11),
             ),
           ),
         Row(
@@ -566,7 +566,7 @@ class _EditClassState extends State<EditClass> {
                             minute: _startDate!.minute));
                     if (context.mounted && time != null) {
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0)) {
+                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -590,7 +590,8 @@ class _EditClassState extends State<EditClass> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       children: [
-                        Text("Start Time: ${_dateTimeToString(_startDate)}"),
+                        Text("Start Time: ${_dateTimeToString(_startDate)}",
+                            style: TextStyle(fontSize: 11)),
                       ],
                     ),
                   ),
@@ -611,7 +612,8 @@ class _EditClassState extends State<EditClass> {
                             hour: _endDate!.hour, minute: _endDate!.minute));
 
                     if (context.mounted && time != null) {
-                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
+                      if (time.hour < 7 ||
+                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -633,7 +635,8 @@ class _EditClassState extends State<EditClass> {
                   },
                   child: Row(
                     children: [
-                      Text("End Time: ${_dateTimeToString(_endDate)}")
+                      Text("End Time: ${_dateTimeToString(_endDate)}",
+                          style: TextStyle(fontSize: 12))
                     ],
                   ),
                 ),
@@ -673,7 +676,7 @@ class _EditClassState extends State<EditClass> {
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int>(
-        width: 376,
+        width: 343,
         initialSelection: _selectedTermID,
         inputDecorationTheme: InputDecorationTheme(
             border:
