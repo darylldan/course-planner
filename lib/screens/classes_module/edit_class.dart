@@ -95,7 +95,14 @@ class _EditClassState extends State<EditClass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: _submitChanges,
+            icon: const Icon(Icons.save_rounded),
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding:
@@ -566,7 +573,8 @@ class _EditClassState extends State<EditClass> {
                             minute: _startDate!.minute));
                     if (context.mounted && time != null) {
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
+                          (time.hour >= 19 && time.minute > 0) ||
+                          time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -613,7 +621,8 @@ class _EditClassState extends State<EditClass> {
 
                     if (context.mounted && time != null) {
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
+                          (time.hour >= 19 && time.minute > 0) ||
+                          time.hour > 19) {
                         showDialog(
                           context: context,
                           builder: (context) {
