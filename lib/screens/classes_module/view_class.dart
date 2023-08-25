@@ -96,7 +96,7 @@ class _ViewClassState extends State<ViewClass> {
           child: _section(context),
         ),
         const SizedBox(
-          width: 20,
+          width: 10,
         ),
         Flexible(
           flex: 2,

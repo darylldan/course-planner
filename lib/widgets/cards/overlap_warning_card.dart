@@ -36,7 +36,7 @@ class OverlapWarningCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Overlapping classes detected".toUpperCase(),
+                    "Overlap detected".toUpperCase(),
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).colorScheme.onErrorContainer,

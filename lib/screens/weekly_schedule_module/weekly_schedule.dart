@@ -68,7 +68,9 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
           ),
         ),
         Timetable(subjects: subjects),
-        const SizedBox(height: 120,)
+        const SizedBox(
+          height: 120,
+        )
       ],
     );
   }
@@ -148,7 +150,7 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         ButtonTheme(
           alignedDropdown: true,
           child: DropdownMenu<int>(
-            width: 376,
+            width: 343,
             initialSelection: currentTerm!.id,
             inputDecorationTheme: InputDecorationTheme(
                 border: OutlineInputBorder(

@@ -69,7 +69,7 @@ class ClassCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 255,
+                width: 229,
                 child: Text(
                   "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
                   overflow: TextOverflow.ellipsis,
@@ -143,11 +143,11 @@ class ClassCard extends StatelessWidget {
     subTitle = "$subTitle $startDate - $endDate";
 
     return SizedBox(
-      width: 180,
+      width: 155,
       child: Text(
         subTitle,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
       ),
     );
   }

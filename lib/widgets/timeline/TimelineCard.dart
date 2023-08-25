@@ -102,7 +102,7 @@ class TimelineCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(
-                        width: 230,
+                        width: 220,
                         child: Text(
                           "${subject.courseCode} ${subject.isLaboratory ? "- Laboratory" : "Lecture"}",
                           maxLines: 1,
@@ -114,7 +114,7 @@ class TimelineCard extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 230,
+                        width: 220,
                         child: Text(
                           subject.room,
                           style: TextStyle(
