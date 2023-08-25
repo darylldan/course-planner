@@ -88,7 +88,8 @@ class SubjectProvider with ChangeNotifier {
           .where((sub) =>
               sub.frequency.contains(d) && sub.termID == subject.termID)
           .any((s) {
-        if (subject.startDate == s.endDate || s.endDate == subject.startDate) {
+        print(s.startDate);
+        if (subject.endDate == s.startDate || s.endDate == subject.startDate) {
           return false;
         }
 
