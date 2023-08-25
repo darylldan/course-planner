@@ -37,7 +37,7 @@ class TimelineCard extends StatelessWidget {
 
     if (duration.inMinutes % 60 > 0) {
       durationString =
-          "$durationString ${duration.inMinutes % 60} ${duration.inMinutes & 60 == 1 ? 'mins' : 'mins'}";
+          "$durationString ${duration.inMinutes % 60} m";
     }
 
     return durationString;
