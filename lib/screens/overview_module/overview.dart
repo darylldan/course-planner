@@ -33,12 +33,13 @@ class _OverviewState extends State<Overview> {
   late List<Subject> _subjects;
   late List<Subject> _subjectsToday;
 
+  Timer? _initTimer;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 60 - DateTime.now().second), () {
+    _initTimer = Timer(Duration(seconds: 60 - DateTime.now().second), () {
       setState(() {
         _rightNow = DateTime.now();
       });
@@ -57,6 +58,9 @@ class _OverviewState extends State<Overview> {
 
   @override
   void dispose() {
+    if (_initTimer!.isActive) {
+      _initTimer!.cancel();
+    }
     if (_timer != null) _timer!.cancel();
     super.dispose();
   }
