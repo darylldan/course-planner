@@ -155,6 +155,8 @@ class _OverviewState extends State<Overview> {
       }
     }
 
+    curSubIndex ??= 0;
+
     /*
      * Checks if moment is in schedule (equal to or after the first subject's startDate AND
      * equal to or before the last subject's endDate)
