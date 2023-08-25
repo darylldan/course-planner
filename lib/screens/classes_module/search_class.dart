@@ -421,7 +421,7 @@ class _SearchClassState extends State<SearchClass> {
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int?>(
-        width: 376,
+        width: 343,
         inputDecorationTheme: InputDecorationTheme(
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
@@ -444,7 +444,7 @@ class _SearchClassState extends State<SearchClass> {
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<bool?>(
-        width: 376,
+        width: 343,
         inputDecorationTheme: InputDecorationTheme(
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
