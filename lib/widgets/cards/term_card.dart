@@ -84,7 +84,7 @@ class TermCard extends StatelessWidget {
                         width: 10,
                       ),
                       SizedBox(
-                        width: 132,
+                        width: 128,
                         child: Text(
                           term.academicYear,
                           overflow: TextOverflow.ellipsis,
