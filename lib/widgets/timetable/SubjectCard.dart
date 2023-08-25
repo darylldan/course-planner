@@ -1,3 +1,4 @@
+import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../models/Subject.dart';
@@ -10,46 +11,67 @@ class SubjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _getPositionOffset(),
-      child: Container(
+        top: _getPositionOffset(), child: _subjectCardClickable(context));
+  }
+
+  Widget _subjectCardClickable(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(6),
+      child: Ink(
         decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(6)),
-            color: Color.fromARGB(subject.color[0], subject.color[1],
-                subject.color[2], subject.color[3])),
-        width: Constants.subjectCardWidth,
-        height: _computeCardHeight(),
-        child: Padding(
-          padding: const EdgeInsets.all(2),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  subject.courseCode,
-                  style:
-                      const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
-                ),
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          color: Color.fromARGB(subject.color[0], subject.color[1],
+              subject.color[2], subject.color[3]),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(6),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ViewClass(subjectID: subject.id!)));
+          },
+          child: _subjectCardContainer(),
+        ),
+      ),
+    );
+  }
+
+  Widget _subjectCardContainer() {
+    return Container(
+      width: Constants.subjectCardWidth,
+      height: _computeCardHeight(),
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                subject.courseCode,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
               ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  subject.section,
-                  style: const TextStyle(fontSize: 9),
-                ),
+            ),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                subject.section,
+                style: const TextStyle(fontSize: 9),
               ),
-              FittedBox(
-                clipBehavior: Clip.hardEdge,
-                fit: BoxFit.none,
-                child: Text(
-                  subject.room,
-                  style: const TextStyle(fontSize: 7),
-                  overflow: TextOverflow.fade,
-                ),
-              )
-            ],
-          ),
+            ),
+            FittedBox(
+              clipBehavior: Clip.hardEdge,
+              fit: BoxFit.none,
+              child: Text(
+                subject.room,
+                style: const TextStyle(fontSize: 7),
+                overflow: TextOverflow.fade,
+              ),
+            )
+          ],
         ),
       ),
     );

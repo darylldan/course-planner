@@ -1,4 +1,6 @@
+import 'package:course_planner/providers/term_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../elements/current_star.dart';
@@ -7,8 +9,13 @@ import '../../utils/constants.dart' as Constants;
 class CurrentTermCard extends StatelessWidget {
   late Term term;
   late bool onCurrentTerm;
+  late bool editMode;
 
-  CurrentTermCard({super.key, required this.term, required this.onCurrentTerm});
+  CurrentTermCard(
+      {super.key,
+      required this.term,
+      required this.onCurrentTerm,
+      required this.editMode});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class CurrentTermCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    onCurrentTerm ? "Current Term" : "Term",
+                    _title(),
                     style: TextStyle(
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -77,5 +84,17 @@ class CurrentTermCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _title() {
+    if (editMode) {
+      return "Editing Term";
+    }
+
+    if (onCurrentTerm) {
+      return "Current Term";
+    }
+
+    return "Term";
   }
 }

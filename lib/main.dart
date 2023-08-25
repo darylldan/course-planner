@@ -1,23 +1,17 @@
+import 'dart:io';
+
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/providers/usersettings_provider.dart';
-import 'package:course_planner/screens/terms.dart';
-import 'package:course_planner/screens/test_screen.dart';
-import 'package:course_planner/widgets/timeline/Timeline.dart';
-import 'package:course_planner/widgets/timeline/TimelineCard.dart';
-import 'package:course_planner/widgets/timetable/Timetable.dart';
+import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './styles/color_schemes.g.dart';
-import 'models/Subject.dart';
-import 'utils/enums.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: ((context) => SubjectProvider())),
       ChangeNotifierProvider(create: ((context) => TermProvider())),
-      ChangeNotifierProvider(create: ((context) => UserSettingsProvider()))
     ],
     child: MyApp(),
   ));
@@ -31,9 +25,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Course Planner',
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: const TestScreen()
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        fontFamily: (Platform.isAndroid) ? "Inter" : null
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        fontFamily: (Platform.isAndroid) ? "Inter" : null
+      ),
+      home: const Overview(),
     );
   }
 }
