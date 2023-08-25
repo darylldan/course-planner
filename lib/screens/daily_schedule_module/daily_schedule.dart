@@ -24,7 +24,8 @@ class _DailyScheduleState extends State<DailySchedule> {
   final String _screenTitle = "Daily Schedule";
   final String _route = "/daily-schedule";
 
-  final Day _today = DayMethods.fromInt(DateTime.now().weekday);
+  int _momentDay = DateTime.now().weekday;
+  late Day _today;
   Day? _daySelectorValue;
   Day? _currentDay;
   late Term? _currentTerm;
@@ -36,6 +37,11 @@ class _DailyScheduleState extends State<DailySchedule> {
 
   @override
   Widget build(BuildContext context) {
+    if (_momentDay == 7) {
+      _today = Day.mon;
+    } else {
+      _today = DayMethods.fromInt(_momentDay);
+    }
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(
@@ -43,7 +49,8 @@ class _DailyScheduleState extends State<DailySchedule> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          padding:
+              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
           child: _buildTimeline(context),
         ),
       ),
@@ -75,9 +82,8 @@ class _DailyScheduleState extends State<DailySchedule> {
     // Sorts the subject by their startDate in an ascending manner
     _subjects = context
         .watch<SubjectProvider>()
-        .getSubjectsByDay(_currentDay!, _currentTerm!.id!)..sort(
-          (a, b) => a.startDate.compareTo(b.startDate)
-        );
+        .getSubjectsByDay(_currentDay!, _currentTerm!.id!)
+      ..sort((a, b) => a.startDate.compareTo(b.startDate));
 
     if (_subjects.isEmpty) {
       return Column(
@@ -117,7 +123,9 @@ class _DailyScheduleState extends State<DailySchedule> {
           ),
         ),
         Center(child: Timeline(subjects: _subjects)),
-        const SizedBox(height: 120,)
+        const SizedBox(
+          height: 120,
+        )
       ],
     );
   }
@@ -190,7 +198,8 @@ class _DailyScheduleState extends State<DailySchedule> {
       entries.add(DropdownMenuEntry(
           value: t.id!,
           label: label,
-          trailingIcon: t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
+          trailingIcon:
+              t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
     }
 
     for (var d in Day.values) {
