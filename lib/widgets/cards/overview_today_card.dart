@@ -274,7 +274,7 @@ class OverviewTodayCard extends StatelessWidget {
           style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontWeight: isBold ? FontWeight.bold : FontWeight.w300,
-              fontSize: 10),
+              fontSize: 9),
         )
       ],
     );

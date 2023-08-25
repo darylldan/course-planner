@@ -82,7 +82,8 @@ class _ViewClassState extends State<ViewClass> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _notesWrapper(context),
-        )
+        ),
+        const SizedBox(height: 150,)
       ],
     );
   }
@@ -96,7 +97,7 @@ class _ViewClassState extends State<ViewClass> {
           child: _section(context),
         ),
         const SizedBox(
-          width: 20,
+          width: 10,
         ),
         Flexible(
           flex: 2,
@@ -447,6 +448,7 @@ class _ViewClassState extends State<ViewClass> {
       child: Text(
         freqString,
         overflow: TextOverflow.ellipsis,
+        maxLines: 2,
         style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.bold,

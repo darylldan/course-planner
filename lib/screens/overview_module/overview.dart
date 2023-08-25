@@ -81,6 +81,16 @@ class _OverviewState extends State<Overview> {
   }
 
   Widget _buildOverview(BuildContext context) {
+    if (_rightNow.weekday == 7) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TitleText(title: _screenTitle),
+          OverviewTodayCard(subjects: []),
+        ],
+      );
+    }
+
     _term = context.watch<TermProvider>().currentTerm;
 
     if (_term == null) {
@@ -144,6 +154,8 @@ class _OverviewState extends State<Overview> {
         }
       }
     }
+
+    curSubIndex ??= 0;
 
     /*
      * Checks if moment is in schedule (equal to or after the first subject's startDate AND

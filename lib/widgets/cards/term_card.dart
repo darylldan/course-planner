@@ -66,7 +66,7 @@ class TermCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 250,
+                    width: 230,
                     child: Text(
                       term.semester,
                       overflow: TextOverflow.ellipsis,
@@ -84,7 +84,7 @@ class TermCard extends StatelessWidget {
                         width: 10,
                       ),
                       SizedBox(
-                        width: 170,
+                        width: 128,
                         child: Text(
                           term.academicYear,
                           overflow: TextOverflow.ellipsis,
