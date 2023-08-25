@@ -470,7 +470,7 @@ class _AddClassState extends State<AddClass> {
                         return;
                       }
 
-                      if (time.hour < 7 || time.hour > 19) {
+                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -518,7 +518,7 @@ class _AddClassState extends State<AddClass> {
                         return;
                       }
 
-                      if (time.hour < 7 || time.hour > 19) {
+                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -580,7 +580,7 @@ class _AddClassState extends State<AddClass> {
       alignedDropdown: true,
       child: DropdownMenu<int>(
         // needed the width because there are no way to set the width so that it takes up the entire width of parent
-        width: 390,
+        width: 376,
         initialSelection: null,
         inputDecorationTheme: InputDecorationTheme(
             border:

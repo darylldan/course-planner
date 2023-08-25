@@ -561,10 +561,12 @@ class _EditClassState extends State<EditClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: const TimeOfDay(hour: 7, minute: 0));
-
-                    if (context.mounted) {
-                      if (time!.hour < 7 || time.hour > 19) {
+                        initialTime: TimeOfDay(
+                            hour: _startDate!.hour,
+                            minute: _startDate!.minute));
+                    if (context.mounted && time != null) {
+                      if (time.hour < 7 ||
+                          (time.hour >= 19 && time.minute > 0)) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -605,10 +607,11 @@ class _EditClassState extends State<EditClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: const TimeOfDay(hour: 8, minute: 0));
+                        initialTime: TimeOfDay(
+                            hour: _endDate!.hour, minute: _endDate!.minute));
 
-                    if (context.mounted) {
-                      if (time!.hour < 7 || time.hour > 19) {
+                    if (context.mounted && time != null) {
+                      if (time.hour < 7 || (time.hour >= 19 && time.minute > 0)) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -670,6 +673,7 @@ class _EditClassState extends State<EditClass> {
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int>(
+        width: 376,
         initialSelection: _selectedTermID,
         inputDecorationTheme: InputDecorationTheme(
             border:

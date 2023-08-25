@@ -33,11 +33,21 @@ class _OverviewState extends State<Overview> {
   late List<Subject> _subjects;
   late List<Subject> _subjectsToday;
 
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    Timer(Duration(seconds: 60 - DateTime.now().second), () {
+      setState(() {
+        _rightNow = DateTime.now();
+      });
+      _initPeriodicUpdate();
+    });
+  }
+
+  void _initPeriodicUpdate() {
+    // Updates the state of overview every minute
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       setState(() {
         _rightNow = DateTime.now();
@@ -47,7 +57,7 @@ class _OverviewState extends State<Overview> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    if (_timer != null) _timer!.cancel();
     super.dispose();
   }
 
@@ -58,7 +68,8 @@ class _OverviewState extends State<Overview> {
       drawer: SideDrawer(parent: _route),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          padding:
+              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
           child: _buildOverview(context),
         ),
       ),
@@ -108,18 +119,32 @@ class _OverviewState extends State<Overview> {
   Widget _content(BuildContext context) {
     DateTime moment = DateTime(2024, 8, 20, _rightNow.hour, _rightNow.minute);
     Subject? currentSubject;
-    int curSubIndex = 0;
+    int? curSubIndex;
 
+    // This loops gets the current subject. currentSubject is null if there are no subject at the moment,
     for (int i = 0; i < _subjectsToday.length; i++) {
       if ((moment.isAfter(_subjectsToday[i].startDate) ||
-              _subjectsToday[i].startDate == moment) &&
+              moment.isAtSameMomentAs(_subjectsToday[i].startDate)) &&
           (moment.isBefore(_subjectsToday[i].endDate) ||
-              _subjectsToday[i].endDate == moment)) {
+              moment.isAtSameMomentAs(_subjectsToday[i].endDate))) {
         currentSubject = _subjectsToday[i];
         curSubIndex = i;
+        break; // No need to continue looping
       }
     }
 
+    if (curSubIndex == null) {
+      for (int i = 0; i < _subjectsToday.length; i++) {
+        if (moment.isAfter(_subjectsToday[i].endDate)) {
+          curSubIndex = i;
+        }
+      }
+    }
+
+    /*
+     * Checks if moment is in schedule (equal to or after the first subject's startDate AND
+     * equal to or before the last subject's endDate)
+     */
     bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate) ||
             _subjectsToday[0].startDate == moment) &&
         (_subjectsToday[_subjectsToday.length - 1].endDate == moment ||
@@ -127,10 +152,11 @@ class _OverviewState extends State<Overview> {
 
     TimeOfDay timeLeft;
 
+    // This clause computes for the time left of current subject or break
     if (onSchedule && currentSubject == null) {
       // On break
       Duration diff =
-          _subjectsToday[curSubIndex + 1].startDate.difference(moment);
+          _subjectsToday[curSubIndex! + 1].startDate.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else if (onSchedule) {
       // On class
@@ -140,7 +166,10 @@ class _OverviewState extends State<Overview> {
       timeLeft = TimeOfDay(hour: 0, minute: 0);
     }
 
+    // Composes the next class widget
     Widget nextClass;
+
+    // Checks if moment is past today's schedule
     if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate) ||
         _subjectsToday.isEmpty)) {
       nextClass = const NextClassCard(
@@ -148,13 +177,14 @@ class _OverviewState extends State<Overview> {
         emptyMode: true,
       );
     } else if (moment.isBefore(_subjectsToday[0].startDate)) {
+      // moment is before the schedule, show first class
       nextClass =
           NextClassCard(isLastClass: false, nextClass: _subjectsToday[0]);
     } else if (curSubIndex == _subjectsToday.length - 1) {
       nextClass = const NextClassCard(isLastClass: true);
     } else {
       nextClass = NextClassCard(
-          isLastClass: false, nextClass: _subjectsToday[curSubIndex + 1]);
+          isLastClass: false, nextClass: _subjectsToday[curSubIndex! + 1]);
     }
 
     return Column(
@@ -167,7 +197,7 @@ class _OverviewState extends State<Overview> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _timeLeft(
-              context, timeLeft, onSchedule, curSubIndex, currentSubject),
+              context, timeLeft, onSchedule, curSubIndex!, currentSubject),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -415,7 +445,7 @@ class _OverviewState extends State<Overview> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             "TODAY'S SCHEDULE",
             style: TextStyle(
