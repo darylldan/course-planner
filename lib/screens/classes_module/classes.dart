@@ -2,6 +2,7 @@ import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:course_planner/screens/classes_module/search_class.dart';
 import 'package:course_planner/widgets/cards/current_term_selected.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/subject_card.dart';
@@ -31,7 +32,19 @@ class _ClassesState extends State<Classes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchClass()),
+              );
+            },
+            icon: Icon(Icons.search_rounded),
+          )
+        ],
+      ),
       drawer: SideDrawer(parent: _route),
       body: SingleChildScrollView(
         padding:
