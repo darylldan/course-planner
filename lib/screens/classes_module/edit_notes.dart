@@ -6,6 +6,10 @@ import 'package:provider/provider.dart';
 import '../../models/Subject.dart';
 import '../../utils/constants.dart' as C;
 
+/*
+ * Custom note editor that takes up the whole screen, like the Notes app from iOS
+ */
+
 class EditNotes extends StatefulWidget {
   final Subject subject;
   const EditNotes({super.key, required this.subject});

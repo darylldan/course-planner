@@ -1,10 +1,13 @@
-import 'package:course_planner/providers/subject_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../api/IsarService.dart';
 import '../models/Term.dart';
+
+/*
+ * Same thing is done here, data is fetched from the db first and then stored in
+ * a local array. Subsequent modifications are done both in the db and in the local array.
+ */
 
 class TermProvider with ChangeNotifier {
   late IsarService isarService;
@@ -12,6 +15,7 @@ class TermProvider with ChangeNotifier {
   List<Term> _terms = [];
   List<Term> get terms => _terms;
 
+  // Current term will only be empty if there are no terms.
   Term? _currentTerm;
   Term? get currentTerm => _currentTerm;
 
@@ -62,6 +66,7 @@ class TermProvider with ChangeNotifier {
     await isarService.deleteTerm(term.id!);
     _terms.removeWhere((e) => e.id == term.id);
 
+    // Sets the first element of _terms as current term if not empty
     if (term.isCurrentTerm && _terms.isNotEmpty) {
       _terms.first.isCurrentTerm = true;
       _currentTerm = _terms.first;

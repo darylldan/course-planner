@@ -23,7 +23,6 @@ class ViewClass extends StatefulWidget {
 class _ViewClassState extends State<ViewClass> {
   final _screenTitle = "View Class";
   late Subject subject;
-  bool _listening = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _ViewClassState extends State<ViewClass> {
                             subject: subject,
                           ),));
             },
-            icon: Icon(Icons.edit_rounded),
+            icon: const Icon(Icons.edit_rounded),
           )
         ],
       ),

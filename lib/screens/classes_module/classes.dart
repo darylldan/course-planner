@@ -2,7 +2,6 @@ import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
-import 'package:course_planner/widgets/cards/current_term_card.dart';
 import 'package:course_planner/widgets/cards/current_term_selected.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/subject_card.dart';
@@ -13,8 +12,6 @@ import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as C;
-import '../../utils/enums.dart';
-import '../terms_module/terms.dart';
 
 class Classes extends StatefulWidget {
   const Classes({super.key});
@@ -51,8 +48,8 @@ class _ClassesState extends State<Classes> {
                               terms: context.read<TermProvider>().terms,
                             )));
               },
-              label: Text("Create Subject"),
-              icon: Icon(Icons.add_rounded),
+              label: const Text("Create Subject"),
+              icon: const Icon(Icons.add_rounded),
             )
           : null,
     );
@@ -216,6 +213,7 @@ class _ClassesState extends State<Classes> {
     List<DropdownMenuEntry<int>> entries = [];
 
     for (var t in terms) {
+      // Needed because the new dropdown menu does not catch text overflows
       String label = "${t.semester}, ${t.academicYear}";
 
       if (label.length > 36) {

@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/constants.dart' as C;
 
-/**
+/*
  *  Credits: https://stackoverflow.com/questions/60906358/how-create-animation-emoji-rain-with-flutter
  */
 
@@ -18,15 +18,16 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: View(
-        numberOfItems: 30,
+        numberOfItems: 40,
       ),
     );
   }
 }
 
+// The item that will rain
 class Item {
   static final random = Random();
-  double _size = 40;
+  final double _size = 40;
   late Text _sunflower;
 
   late Alignment _alignment;
@@ -34,7 +35,6 @@ class Item {
   Item() {
     _alignment =
         Alignment(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
-    // _size = random.nextDouble() * 40 + 1;
     _sunflower = Text(
       "🌻",
       style: TextStyle(fontSize: _size - 10),
@@ -42,6 +42,7 @@ class Item {
   }
 }
 
+// Main view
 class View extends StatefulWidget {
   late final int numberOfItems;
 
@@ -309,7 +310,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           ),
           const SizedBox(height: 10),
           _devContacts(context,
-              platform: "darylldancc",
+              platform: "darylldan",
               content: "https://github.com/darylldan",
               assetLink: 'assets/images/github-logo.png',
               isWeb: true),
@@ -336,7 +337,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           ),
           _devContacts(context,
               platform: "Email",
-              content: "daryllcaponpon@gmail.cpm",
+              content: "dccaponpon@up.edu.ph",
               isWeb: false,
               useIconsInstead: true,
               iconData: Icons.alternate_email_rounded)
@@ -464,6 +465,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
   }
 
+  // starts the sunflower rain
   void makeItems() {
     setState(() {
       items.clear();

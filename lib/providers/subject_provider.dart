@@ -2,9 +2,18 @@ import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';
 import '../models/Subject.dart';
-import 'package:provider/provider.dart';
 
 import '../utils/enums.dart';
+
+/*
+ * Basically it fetches the subjects from db, then the modifications that occured 
+ * on db is done first in the database, then the local array, to prevent fetching
+ * them around. GET methods are mostly from the local array.
+ * 
+ * Justification:
+ *  - The data is never being modified by entities other than the user, so there
+ *    are for other entities to modify the database.
+ */
 
 class SubjectProvider with ChangeNotifier {
   late IsarService isarService;
@@ -66,6 +75,8 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // A handy method that checks if the subject param is conflicting with other subjects
+  // in temrs of schedule.
   Map<String, dynamic> checkForOverlap(Subject subject) {
     Map<String, dynamic> returnVal = {
       'isOverlapping': false,
@@ -91,6 +102,10 @@ class SubjectProvider with ChangeNotifier {
       });
     }
 
+    /*
+     * Can result to same id being placed in the array, (because a subject can
+     * have multiple days in frequency)
+     */
     returnVal['overlapSubjectIDs'] =
         returnVal['overlapSubjectIDs'].toSet().toList();
     returnVal['overlapSubjectIDs'].remove(subject.id);

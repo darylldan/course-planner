@@ -91,6 +91,7 @@ class IsarService {
       await isar.terms.deleteAll(ids);
     });
 
+    // Also deletes the subjects in that term
     for (var id in ids) {
       await isar.writeTxn(() async {
         await isar.subjects.filter().termIDEqualTo(id).deleteAll();

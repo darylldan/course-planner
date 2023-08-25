@@ -15,7 +15,10 @@ import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/enums.dart';
 import '../../utils/constants.dart' as C;
-import '../terms_module/terms.dart';
+
+/*
+ * Same as add_class, except for editing
+ */
 
 class EditClass extends StatefulWidget {
   final Subject subject;
@@ -95,7 +98,8 @@ class _EditClassState extends State<EditClass> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          padding:
+              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -144,10 +148,12 @@ class _EditClassState extends State<EditClass> {
                       if (value == null || value.isEmpty) {
                         return "Please enter course code.";
                       }
+
+                      return null;
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 SizedBox(
@@ -241,7 +247,7 @@ class _EditClassState extends State<EditClass> {
 
           // Term selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _termSelector(context),
           ),
 
@@ -255,13 +261,13 @@ class _EditClassState extends State<EditClass> {
 
           // Class time selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _classTimeSelector(),
           ),
 
           // Frequency selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _frequencySelector(),
           ),
 
@@ -346,7 +352,7 @@ class _EditClassState extends State<EditClass> {
             ],
           ),
 
-          SizedBox(
+          const SizedBox(
             height: 60,
           )
         ],
@@ -555,7 +561,7 @@ class _EditClassState extends State<EditClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay(hour: 7, minute: 0));
+                        initialTime: const TimeOfDay(hour: 7, minute: 0));
 
                     if (context.mounted) {
                       if (time!.hour < 7 || time.hour > 19) {
@@ -589,7 +595,7 @@ class _EditClassState extends State<EditClass> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             Expanded(
@@ -599,7 +605,7 @@ class _EditClassState extends State<EditClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay(hour: 8, minute: 0));
+                        initialTime: const TimeOfDay(hour: 8, minute: 0));
 
                     if (context.mounted) {
                       if (time!.hour < 7 || time.hour > 19) {
@@ -655,10 +661,10 @@ class _EditClassState extends State<EditClass> {
         label = "${label.substring(0, 37)}...";
       }
       entries.add(DropdownMenuEntry(
-        value: t.id!,
-        label: label,
-        trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null
-      ));
+          value: t.id!,
+          label: label,
+          trailingIcon:
+              t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
     }
 
     return ButtonTheme(
@@ -724,8 +730,8 @@ class _EditClassState extends State<EditClass> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 16),
+              const Padding(
+                padding: EdgeInsets.only(top: 25, bottom: 16),
                 child: Text(
                   "Select Color",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
@@ -741,7 +747,7 @@ class _EditClassState extends State<EditClass> {
 
   Widget _buildColors() {
     return GridView.count(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       mainAxisSpacing: 20,
       crossAxisSpacing: 30,
       crossAxisCount: 5,
@@ -769,7 +775,7 @@ class _EditClassState extends State<EditClass> {
             height: 10,
             width: 10,
             child: (color == _courseColor)
-                ? Center(
+                ? const Center(
                     child: Icon(Icons.check),
                   )
                 : null,

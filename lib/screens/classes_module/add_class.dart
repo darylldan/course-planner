@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
@@ -85,7 +84,8 @@ class _AddClassState extends State<AddClass> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          padding:
+              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -109,9 +109,7 @@ class _AddClassState extends State<AddClass> {
   }
 
   Widget _buildForm() {
-    if (_courseColor == null) {
-      _courseColor = _colors[Random().nextInt(_colors.length - 1)];
-    }
+    _courseColor ??= _colors[Random().nextInt(_colors.length - 1)];
 
     return Form(
       key: _formKey,
@@ -143,10 +141,12 @@ class _AddClassState extends State<AddClass> {
                       if (value == null || value.isEmpty) {
                         return "Please enter course code.";
                       }
+
+                      return null;
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 SizedBox(
@@ -240,7 +240,7 @@ class _AddClassState extends State<AddClass> {
 
           // Term selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _termSelector(),
           ),
 
@@ -254,13 +254,13 @@ class _AddClassState extends State<AddClass> {
 
           // Class time selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _classTimeSelector(),
           ),
 
           // Frequency selector
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: _frequencySelector(),
           ),
 
@@ -306,7 +306,7 @@ class _AddClassState extends State<AddClass> {
             ],
           ),
 
-          SizedBox(
+          const SizedBox(
             height: 60,
           )
         ],
@@ -349,6 +349,7 @@ class _AddClassState extends State<AddClass> {
     }
   }
 
+  // Custom validation for frequency selector, term selector, and date selector
   bool _validateOtherFields() {
     bool isValidForm = true;
 
@@ -389,7 +390,7 @@ class _AddClassState extends State<AddClass> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8),
           child: Text(
             "Frequency",
             style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
@@ -438,7 +439,7 @@ class _AddClassState extends State<AddClass> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8),
           child: Text(
             "Timeslot",
             style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
@@ -462,12 +463,12 @@ class _AddClassState extends State<AddClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay(hour: 7, minute: 0));
+                        initialTime: const TimeOfDay(hour: 7, minute: 0));
 
                     if (context.mounted) {
                       if (time == null) {
-                      return;
-                    }
+                        return;
+                      }
 
                       if (time.hour < 7 || time.hour > 19) {
                         showDialog(
@@ -500,7 +501,7 @@ class _AddClassState extends State<AddClass> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             Expanded(
@@ -510,7 +511,7 @@ class _AddClassState extends State<AddClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: TimeOfDay(hour: 8, minute: 0));
+                        initialTime: const TimeOfDay(hour: 8, minute: 0));
 
                     if (context.mounted) {
                       if (time == null) {
@@ -564,20 +565,21 @@ class _AddClassState extends State<AddClass> {
 
     for (var t in widget.terms) {
       String label = "${t.semester}, ${t.academicYear}";
-
+      
+      // Needed because the new dropdown menu does not catch text overflows
       if (label.length > 36) {
         label = "${label.substring(0, 37)}...";
       }
       entries.add(DropdownMenuEntry(
-        value: t.id!,
-        label: label,
-        trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null
-      ));
+          value: t.id!,
+          label: label,
+          trailingIcon: t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
     }
 
     return ButtonTheme(
       alignedDropdown: true,
       child: DropdownMenu<int>(
+        // needed the width because there are no way to set the width so that it takes up the entire width of parent
         width: 390,
         initialSelection: null,
         inputDecorationTheme: InputDecorationTheme(
@@ -629,6 +631,7 @@ class _AddClassState extends State<AddClass> {
     );
   }
 
+  // Custom color picker
   void _showColorPicker() {
     showModalBottomSheet(
       context: context,
@@ -639,8 +642,8 @@ class _AddClassState extends State<AddClass> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 16),
+              const Padding(
+                padding: EdgeInsets.only(top: 25, bottom: 16),
                 child: Text(
                   "Select Color",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
@@ -656,7 +659,7 @@ class _AddClassState extends State<AddClass> {
 
   Widget _buildColors() {
     return GridView.count(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       mainAxisSpacing: 20,
       crossAxisSpacing: 30,
       crossAxisCount: 5,
@@ -684,7 +687,7 @@ class _AddClassState extends State<AddClass> {
             height: 10,
             width: 10,
             child: (color == _courseColor)
-                ? Center(
+                ? const Center(
                     child: Icon(Icons.check),
                   )
                 : null,
@@ -694,6 +697,7 @@ class _AddClassState extends State<AddClass> {
     );
   }
 
+  // Responsible for "Discard creation?"
   Future<bool> _onWillPop() async {
     return (await showDialog(
             context: context,

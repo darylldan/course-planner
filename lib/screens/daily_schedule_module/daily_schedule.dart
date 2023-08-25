@@ -43,7 +43,7 @@ class _DailyScheduleState extends State<DailySchedule> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          padding: const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
           child: _buildTimeline(context),
         ),
       ),
@@ -72,6 +72,7 @@ class _DailyScheduleState extends State<DailySchedule> {
       );
     }
 
+    // Sorts the subject by their startDate in an ascending manner
     _subjects = context
         .watch<SubjectProvider>()
         .getSubjectsByDay(_currentDay!, _currentTerm!.id!)..sort(
@@ -189,14 +190,14 @@ class _DailyScheduleState extends State<DailySchedule> {
       entries.add(DropdownMenuEntry(
           value: t.id!,
           label: label,
-          trailingIcon: t.isCurrentTerm ? Icon(Icons.star_rounded) : null));
+          trailingIcon: t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
     }
 
     for (var d in Day.values) {
       dayEntries.add(DropdownMenuEntry(
           value: d,
           label: DayMethods.dayToString(d),
-          trailingIcon: d == _today ? Icon(Icons.star_rounded) : null));
+          trailingIcon: d == _today ? const Icon(Icons.star_rounded) : null));
     }
 
     return Column(
@@ -225,7 +226,7 @@ class _DailyScheduleState extends State<DailySchedule> {
         ),
         ButtonTheme(
           alignedDropdown: true,
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: DropdownMenu<int>(
             width: 376,
             initialSelection: _currentTerm!.id,
