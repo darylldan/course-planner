@@ -44,12 +44,9 @@ Choose one of the following methods to install the app:
    Download the latest `apk` from the releases page.
   > Minimum Android version: v4.1 (Jellybean)
 
-- **For iOS (Note: Requires Extra Steps):**
+- **For iOS:**
 
-  Since I don't have an Apple Developer account (they cost a lot!!!), I am unable to upload this app to App Store and installing the app on iOS requires a few extra steps. You can sideload the app using the provided `ipa` on the releases page. Alternatively, run the project on your iOS device in release mode using Flutter CLI.
-
-
-  Please keep in mind that this method might be trickier due to Apple's limitations on sideloading apps.
+  Since I don't have an Apple Developer account (they cost a lot!!!), I am unable to upload this app to App Store and the only way to install the app on iOS is to run the project on your iOS device in release mode using Flutter CLI.
 
 <h2>
   Contribute
