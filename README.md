@@ -41,7 +41,7 @@ Choose one of the following methods to install the app:
 
 - **For Android:**
 
-   Download the latest `apk` from the releases page.
+   Download the latest `apk` from the [releases](https://github.com/darylldan/course-planner/releases/tag/v1.0) page.
   > Minimum Android version: v4.1 (Jellybean)
 
 - **For iOS:**
