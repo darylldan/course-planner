@@ -10,8 +10,8 @@ class OverviewTodayCard extends StatelessWidget {
   OverviewTodayCard({super.key, required this.subjects});
 
   final DateTime _now = DateTime.now();
-  late final int lecClass;
-  late final int labClass;
+  int? lecClass;
+  int? labClass;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class OverviewTodayCard extends StatelessWidget {
         )
         .toList()
         .length;
-    lecClass = subjects.length - labClass;
+    lecClass = subjects.length - labClass!;
 
     return Container(
       padding: const EdgeInsets.symmetric(
