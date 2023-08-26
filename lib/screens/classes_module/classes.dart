@@ -61,7 +61,7 @@ class _ClassesState extends State<Classes> {
                               terms: context.read<TermProvider>().terms,
                             )));
               },
-              label: const Text("Create Subject"),
+              label: const Text("Create Class"),
               icon: const Icon(Icons.add_rounded),
             )
           : null,
