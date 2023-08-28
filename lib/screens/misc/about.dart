@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:course_planner/widgets/cards/error_card.dart';
@@ -170,7 +171,10 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
             String url = "https://github.com/darylldan/course-planner";
             var urlLaunchable = await canLaunchUrlString(url);
             if (urlLaunchable) {
-              await launchUrlString(url);
+              await launchUrlString(url,
+                  mode: Platform.isAndroid
+                      ? LaunchMode.externalApplication
+                      : LaunchMode.platformDefault);
             } else {
               if (context.mounted) {
                 showDialog(
@@ -213,7 +217,12 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           String url = "https://forms.gle/DwKwhx2G12tZ2DB69";
           var urlLaunchable = await canLaunchUrlString(url);
           if (urlLaunchable) {
-            await launchUrlString(url);
+            await launchUrlString(
+              url,
+              mode: Platform.isAndroid
+                  ? LaunchMode.externalApplication
+                  : LaunchMode.platformDefault,
+            );
           } else {
             if (context.mounted) {
               showDialog(
@@ -365,7 +374,10 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
                   String url = content;
                   var urlLaunchable = await canLaunchUrlString(url);
                   if (urlLaunchable) {
-                    await launchUrlString(url);
+                    await launchUrlString(url,
+                        mode: Platform.isAndroid
+                            ? LaunchMode.externalApplication
+                            : LaunchMode.platformDefault);
                   } else {
                     if (context.mounted) {
                       showDialog(
