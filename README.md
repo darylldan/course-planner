@@ -4,7 +4,7 @@
   <p>A course planner that helps you plan your courses.</p>
 </div>
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-1.0.1-blue?style=for-the-badge">
   <img src="https://img.shields.io/badge/Made_With_Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
   <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white">
@@ -52,4 +52,4 @@ Choose one of the following methods to install the app:
   Contribute
 </h2>
 
-Feel free to contribute to my terrible code! Just submit a PR and I will review them whenever I am available.
+Feel free to contribute to my terrible code! Just submit a PR to `dev` branch and I will review them whenever I am available.
