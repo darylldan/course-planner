@@ -53,3 +53,5 @@ Choose one of the following methods to install the app:
 </h2>
 
 Feel free to contribute to my terrible code! Just submit a PR to `dev` branch and I will review them whenever I am available.
+
+[Link](https://www.figma.com/file/QTETttMa7UlVkCQTof1Ret/Course-Planner?type=design&node-id=0%3A1&mode=design&t=BNRJdFKncQpnlUCf-1) to the Figma file I used when creating mock ups of screens.
