@@ -463,7 +463,11 @@ class _AddClassState extends State<AddClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: const TimeOfDay(hour: 7, minute: 0));
+                        initialTime: _startDate == null
+                            ? const TimeOfDay(hour: 7, minute: 0)
+                            : TimeOfDay(
+                                hour: _startDate!.hour,
+                                minute: _startDate!.minute));
 
                     if (context.mounted) {
                       if (time == null) {
@@ -471,7 +475,8 @@ class _AddClassState extends State<AddClass> {
                       }
 
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
+                          (time.hour >= 21 && time.minute > 0) ||
+                          time.hour > 21) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -479,7 +484,7 @@ class _AddClassState extends State<AddClass> {
                               child: ErrorCard(
                                   title: "Invalid Time",
                                   content:
-                                      "The class only supports time from 7am to 7pm."),
+                                      "The class only supports time from 7am to 9pm."),
                             );
                           },
                         );
@@ -515,7 +520,11 @@ class _AddClassState extends State<AddClass> {
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
                         context: context,
-                        initialTime: const TimeOfDay(hour: 8, minute: 0));
+                        initialTime: _endDate == null
+                            ? const TimeOfDay(hour: 7, minute: 0)
+                            : TimeOfDay(
+                                hour: _endDate!.hour,
+                                minute: _endDate!.minute));
 
                     if (context.mounted) {
                       if (time == null) {
@@ -523,7 +532,8 @@ class _AddClassState extends State<AddClass> {
                       }
 
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) || time.hour > 19) {
+                          (time.hour >= 21 && time.minute > 0) ||
+                          time.hour > 21) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -531,7 +541,7 @@ class _AddClassState extends State<AddClass> {
                               child: ErrorCard(
                                   title: "Invalid Time",
                                   content:
-                                      "The class only supports time from 7am to 7pm."),
+                                      "The class only supports time from 7am to 9pm."),
                             );
                           },
                         );
