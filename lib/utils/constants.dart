@@ -5,9 +5,9 @@ const oneHourHeight = 54.0;
 
 // For use in Timetable
 const timeLabelOffset = 43.0;
-const columnHeight = 700.0;
+const columnHeight = 900.0;
 const columnWidth = 48.0;
-const gridHours = 12;
+const gridHours = 16;
 
 // Styling
 const cardIconSize = 18.0;
