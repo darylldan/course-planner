@@ -18,16 +18,21 @@ class GridTimeBackground extends StatelessWidget {
 
   List<Widget> _getLineWithTime(BuildContext context, int hourCount) {
     List<Widget> list = [];
-    DateTime date = DateTime(2023, 8, 14, 7, 0);
+    DateTime date = DateTime(2023, 8, 14, 6, 0);
 
     for (int i = 0; i < hourCount; i++) {
       list.addAll([
         _semiTransparentDivider(context),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Text(
-            DateFormat.jm().format(date),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+        SizedBox(
+          height: 37,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                DateFormat.jm().format(date),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+              ),
+            ],
           ),
         )
       ]);

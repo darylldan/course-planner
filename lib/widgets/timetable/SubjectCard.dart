@@ -90,16 +90,18 @@ class SubjectCard extends StatelessWidget {
       return (Constants.oneHourHeight * remainingMinutesPercentage);
     }
 
-    return 54 * hoursDuration -
-        (hoursDuration - 1) +
-        (Constants.oneHourHeight * remainingMinutesPercentage);
+    var minuteHeight = remainingMinutesPercentage == 0
+        ? 0
+        : Constants.oneHourHeight * remainingMinutesPercentage - 1;
+
+    return 54 * hoursDuration - (hoursDuration - 1) + minuteHeight * 1.0;
   }
 
   double _getPositionOffset() {
     var minutesDuration = _getMinutesDuration() % 60;
-    var hourOffset = subject.startDate.hour - 7;
+    var hourOffset = subject.startDate.hour - 6;
 
-    if (subject.startDate.hour == 7) {
+    if (subject.startDate.hour == 6) {
       return 7.5;
     }
 

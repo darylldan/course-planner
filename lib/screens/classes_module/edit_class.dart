@@ -573,8 +573,8 @@ class _EditClassState extends State<EditClass> {
                             minute: _startDate!.minute));
                     if (context.mounted && time != null) {
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) ||
-                          time.hour > 19) {
+                          (time.hour >= 21 && time.minute > 0) ||
+                          time.hour > 21) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -582,7 +582,7 @@ class _EditClassState extends State<EditClass> {
                               child: ErrorCard(
                                   title: "Invalid Time",
                                   content:
-                                      "The class only supports time from 7am to 7pm."),
+                                      "The class only supports time from 7am to 9pm."),
                             );
                           },
                         );
@@ -621,8 +621,8 @@ class _EditClassState extends State<EditClass> {
 
                     if (context.mounted && time != null) {
                       if (time.hour < 7 ||
-                          (time.hour >= 19 && time.minute > 0) ||
-                          time.hour > 19) {
+                          (time.hour >= 21 && time.minute > 0) ||
+                          time.hour > 21) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -630,7 +630,7 @@ class _EditClassState extends State<EditClass> {
                               child: ErrorCard(
                                   title: "Invalid Time",
                                   content:
-                                      "The class only supports time from 7am to 7pm."),
+                                      "The class only supports time from 7am to 9pm."),
                             );
                           },
                         );

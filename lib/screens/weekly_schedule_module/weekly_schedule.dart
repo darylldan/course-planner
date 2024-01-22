@@ -25,6 +25,7 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
   late Term? currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
+  bool includeSun = false;
 
   @override
   Widget build(BuildContext context) {
