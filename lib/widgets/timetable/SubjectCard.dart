@@ -101,6 +101,10 @@ class SubjectCard extends StatelessWidget {
     var minutesDuration = _getMinutesDuration() % 60;
     var hourOffset = subject.startDate.hour - 6;
 
+    if (subject.startDate.minute == 0) {
+      minutesDuration = 0;
+    }
+
     if (subject.startDate.hour == 6) {
       return 7.5;
     }
