@@ -24,6 +24,6 @@ const titleCardInstructionFontSize = 18.0;
 
 // App Info
 const appName = "Course Planner";
-const appVersion = "v 1.0";
+const appVersion = "v 1.0.2";
 const appDescription = "A course planner that helps you plan your courses.";
 const devGithubName = "darylldan";
