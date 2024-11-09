@@ -44,7 +44,7 @@ const TermSchema = CollectionSchema(
   getId: _termGetId,
   getLinks: _termGetLinks,
   attach: _termAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _termEstimateSize(
