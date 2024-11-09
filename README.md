@@ -4,7 +4,7 @@
   <p>A course planner that helps you plan your courses.</p>
 </div>
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0.1-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Version-1.0.3-blue?style=for-the-badge">
   <img src="https://img.shields.io/badge/Made_With_Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
   <img src="https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white">
@@ -41,7 +41,7 @@ Choose one of the following methods to install the app:
 
 - **For Android:**
 
-   Download the latest `apk` from the [releases](https://github.com/darylldan/course-planner/releases/tag/v1.0) page.
+   Download the latest `apk` from the [releases](https://github.com/darylldan/course-planner/releases) page.
   > Minimum Android version: v4.1 (Jellybean)
 
 - **For iOS:**
