@@ -8,5 +8,5 @@ class Note {
 
   late int courseId;
   late String title;
-  late String noteUUID;
+  late String content;
 }
