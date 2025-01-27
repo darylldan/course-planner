@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'Term.dart';
+part of 'User.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,95 +9,92 @@ part of 'Term.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetTermCollection on Isar {
-  IsarCollection<Term> get terms => this.collection();
+extension GetUserCollection on Isar {
+  IsarCollection<User> get users => this.collection();
 }
 
-const TermSchema = CollectionSchema(
-  name: r'Term',
-  id: -456369751537271858,
+const UserSchema = CollectionSchema(
+  name: r'User',
+  id: -7838171048429979076,
   properties: {
-    r'academicYear': PropertySchema(
+    r'bio': PropertySchema(
       id: 0,
-      name: r'academicYear',
+      name: r'bio',
       type: IsarType.string,
     ),
-    r'endDate': PropertySchema(
+    r'name': PropertySchema(
       id: 1,
-      name: r'endDate',
-      type: IsarType.dateTime,
-    ),
-    r'isCurrentTerm': PropertySchema(
-      id: 2,
-      name: r'isCurrentTerm',
-      type: IsarType.bool,
-    ),
-    r'semester': PropertySchema(
-      id: 3,
-      name: r'semester',
+      name: r'name',
       type: IsarType.string,
     ),
-    r'startDate': PropertySchema(
-      id: 4,
-      name: r'startDate',
-      type: IsarType.dateTime,
+    r'school': PropertySchema(
+      id: 2,
+      name: r'school',
+      type: IsarType.string,
     )
   },
-  estimateSize: _termEstimateSize,
-  serialize: _termSerialize,
-  deserialize: _termDeserialize,
-  deserializeProp: _termDeserializeProp,
+  estimateSize: _userEstimateSize,
+  serialize: _userSerialize,
+  deserialize: _userDeserialize,
+  deserializeProp: _userDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {},
   embeddedSchemas: {},
-  getId: _termGetId,
-  getLinks: _termGetLinks,
-  attach: _termAttach,
+  getId: _userGetId,
+  getLinks: _userGetLinks,
+  attach: _userAttach,
   version: '3.1.8',
 );
 
-int _termEstimateSize(
-  Term object,
+int _userEstimateSize(
+  User object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.academicYear.length * 3;
-  bytesCount += 3 + object.semester.length * 3;
+  {
+    final value = object.bio;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.name.length * 3;
+  {
+    final value = object.school;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
-void _termSerialize(
-  Term object,
+void _userSerialize(
+  User object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.academicYear);
-  writer.writeDateTime(offsets[1], object.endDate);
-  writer.writeBool(offsets[2], object.isCurrentTerm);
-  writer.writeString(offsets[3], object.semester);
-  writer.writeDateTime(offsets[4], object.startDate);
+  writer.writeString(offsets[0], object.bio);
+  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[2], object.school);
 }
 
-Term _termDeserialize(
+User _userDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Term();
-  object.academicYear = reader.readString(offsets[0]);
-  object.endDate = reader.readDateTime(offsets[1]);
+  final object = User();
+  object.bio = reader.readStringOrNull(offsets[0]);
   object.id = id;
-  object.isCurrentTerm = reader.readBool(offsets[2]);
-  object.semester = reader.readString(offsets[3]);
-  object.startDate = reader.readDateTime(offsets[4]);
+  object.name = reader.readString(offsets[1]);
+  object.school = reader.readStringOrNull(offsets[2]);
   return object;
 }
 
-P _termDeserializeProp<P>(
+P _userDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -105,42 +102,38 @@ P _termDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readDateTime(offset)) as P;
-    case 2:
-      return (reader.readBool(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
-    case 4:
-      return (reader.readDateTime(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Id _termGetId(Term object) {
+Id _userGetId(User object) {
   return object.id ?? Isar.autoIncrement;
 }
 
-List<IsarLinkBase<dynamic>> _termGetLinks(Term object) {
+List<IsarLinkBase<dynamic>> _userGetLinks(User object) {
   return [];
 }
 
-void _termAttach(IsarCollection<dynamic> col, Id id, Term object) {
+void _userAttach(IsarCollection<dynamic> col, Id id, User object) {
   object.id = id;
 }
 
-extension TermQueryWhereSort on QueryBuilder<Term, Term, QWhere> {
-  QueryBuilder<Term, Term, QAfterWhere> anyId() {
+extension UserQueryWhereSort on QueryBuilder<User, User, QWhere> {
+  QueryBuilder<User, User, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
-  QueryBuilder<Term, Term, QAfterWhereClause> idEqualTo(Id id) {
+extension UserQueryWhere on QueryBuilder<User, User, QWhereClause> {
+  QueryBuilder<User, User, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -149,7 +142,7 @@ extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<User, User, QAfterWhereClause> idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -171,7 +164,7 @@ extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterWhereClause> idGreaterThan(Id id,
+  QueryBuilder<User, User, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -180,7 +173,7 @@ extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterWhereClause> idLessThan(Id id,
+  QueryBuilder<User, User, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -189,7 +182,7 @@ extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterWhereClause> idBetween(
+  QueryBuilder<User, User, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -206,60 +199,76 @@ extension TermQueryWhere on QueryBuilder<Term, Term, QWhereClause> {
   }
 }
 
-extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearEqualTo(
-    String value, {
+extension UserQueryFilter on QueryBuilder<User, User, QFilterCondition> {
+  QueryBuilder<User, User, QAfterFilterCondition> bioIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'bio',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> bioIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'bio',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> bioEqualTo(
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearGreaterThan(
-    String value, {
+  QueryBuilder<User, User, QAfterFilterCondition> bioGreaterThan(
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearLessThan(
-    String value, {
+  QueryBuilder<User, User, QAfterFilterCondition> bioLessThan(
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearBetween(
-    String lower,
-    String upper, {
+  QueryBuilder<User, User, QAfterFilterCondition> bioBetween(
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'academicYear',
+        property: r'bio',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -269,128 +278,73 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearStartsWith(
+  QueryBuilder<User, User, QAfterFilterCondition> bioStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearEndsWith(
+  QueryBuilder<User, User, QAfterFilterCondition> bioEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearContains(
-      String value,
+  QueryBuilder<User, User, QAfterFilterCondition> bioContains(String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'academicYear',
+        property: r'bio',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearMatches(
-      String pattern,
+  QueryBuilder<User, User, QAfterFilterCondition> bioMatches(String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'academicYear',
+        property: r'bio',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearIsEmpty() {
+  QueryBuilder<User, User, QAfterFilterCondition> bioIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'academicYear',
+        property: r'bio',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> academicYearIsNotEmpty() {
+  QueryBuilder<User, User, QAfterFilterCondition> bioIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'academicYear',
+        property: r'bio',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> endDateEqualTo(
-      DateTime value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'endDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> endDateGreaterThan(
-    DateTime value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'endDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> endDateLessThan(
-    DateTime value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'endDate',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> endDateBetween(
-    DateTime lower,
-    DateTime upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'endDate',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> idIsNull() {
+  QueryBuilder<User, User, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'id',
@@ -398,7 +352,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idIsNotNull() {
+  QueryBuilder<User, User, QAfterFilterCondition> idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'id',
@@ -406,7 +360,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idEqualTo(Id? value) {
+  QueryBuilder<User, User, QAfterFilterCondition> idEqualTo(Id? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -415,7 +369,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<User, User, QAfterFilterCondition> idGreaterThan(
     Id? value, {
     bool include = false,
   }) {
@@ -428,7 +382,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idLessThan(
+  QueryBuilder<User, User, QAfterFilterCondition> idLessThan(
     Id? value, {
     bool include = false,
   }) {
@@ -441,7 +395,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> idBetween(
+  QueryBuilder<User, User, QAfterFilterCondition> idBetween(
     Id? lower,
     Id? upper, {
     bool includeLower = true,
@@ -458,30 +412,20 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> isCurrentTermEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isCurrentTerm',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterEqualTo(
+  QueryBuilder<User, User, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterGreaterThan(
+  QueryBuilder<User, User, QAfterFilterCondition> nameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -489,14 +433,14 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterLessThan(
+  QueryBuilder<User, User, QAfterFilterCondition> nameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -504,14 +448,14 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterBetween(
+  QueryBuilder<User, User, QAfterFilterCondition> nameBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -520,7 +464,7 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'semester',
+        property: r'name',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -530,335 +474,354 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterStartsWith(
+  QueryBuilder<User, User, QAfterFilterCondition> nameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterEndsWith(
+  QueryBuilder<User, User, QAfterFilterCondition> nameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterContains(String value,
+  QueryBuilder<User, User, QAfterFilterCondition> nameContains(String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'semester',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterMatches(
-      String pattern,
+  QueryBuilder<User, User, QAfterFilterCondition> nameMatches(String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'semester',
+        property: r'name',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterIsEmpty() {
+  QueryBuilder<User, User, QAfterFilterCondition> nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'semester',
+        property: r'name',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> semesterIsNotEmpty() {
+  QueryBuilder<User, User, QAfterFilterCondition> nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'semester',
+        property: r'name',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> startDateEqualTo(
-      DateTime value) {
+  QueryBuilder<User, User, QAfterFilterCondition> schoolIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'startDate',
-        value: value,
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'school',
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> startDateGreaterThan(
-    DateTime value, {
+  QueryBuilder<User, User, QAfterFilterCondition> schoolIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'school',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'school',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolGreaterThan(
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'startDate',
+        property: r'school',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> startDateLessThan(
-    DateTime value, {
+  QueryBuilder<User, User, QAfterFilterCondition> schoolLessThan(
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'startDate',
+        property: r'school',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Term, Term, QAfterFilterCondition> startDateBetween(
-    DateTime lower,
-    DateTime upper, {
+  QueryBuilder<User, User, QAfterFilterCondition> schoolBetween(
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'startDate',
+        property: r'school',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'school',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'school',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'school',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'school',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'school',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<User, User, QAfterFilterCondition> schoolIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'school',
+        value: '',
       ));
     });
   }
 }
 
-extension TermQueryObject on QueryBuilder<Term, Term, QFilterCondition> {}
+extension UserQueryObject on QueryBuilder<User, User, QFilterCondition> {}
 
-extension TermQueryLinks on QueryBuilder<Term, Term, QFilterCondition> {}
+extension UserQueryLinks on QueryBuilder<User, User, QFilterCondition> {}
 
-extension TermQuerySortBy on QueryBuilder<Term, Term, QSortBy> {
-  QueryBuilder<Term, Term, QAfterSortBy> sortByAcademicYear() {
+extension UserQuerySortBy on QueryBuilder<User, User, QSortBy> {
+  QueryBuilder<User, User, QAfterSortBy> sortByBio() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'academicYear', Sort.asc);
+      return query.addSortBy(r'bio', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> sortByAcademicYearDesc() {
+  QueryBuilder<User, User, QAfterSortBy> sortByBioDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'academicYear', Sort.desc);
+      return query.addSortBy(r'bio', Sort.desc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> sortByEndDate() {
+  QueryBuilder<User, User, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'endDate', Sort.asc);
+      return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> sortByEndDateDesc() {
+  QueryBuilder<User, User, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'endDate', Sort.desc);
+      return query.addSortBy(r'name', Sort.desc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> sortByIsCurrentTerm() {
+  QueryBuilder<User, User, QAfterSortBy> sortBySchool() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isCurrentTerm', Sort.asc);
+      return query.addSortBy(r'school', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> sortByIsCurrentTermDesc() {
+  QueryBuilder<User, User, QAfterSortBy> sortBySchoolDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isCurrentTerm', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortBySemester() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'semester', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortBySemesterDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'semester', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortByStartDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'startDate', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> sortByStartDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'startDate', Sort.desc);
+      return query.addSortBy(r'school', Sort.desc);
     });
   }
 }
 
-extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
-  QueryBuilder<Term, Term, QAfterSortBy> thenByAcademicYear() {
+extension UserQuerySortThenBy on QueryBuilder<User, User, QSortThenBy> {
+  QueryBuilder<User, User, QAfterSortBy> thenByBio() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'academicYear', Sort.asc);
+      return query.addSortBy(r'bio', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenByAcademicYearDesc() {
+  QueryBuilder<User, User, QAfterSortBy> thenByBioDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'academicYear', Sort.desc);
+      return query.addSortBy(r'bio', Sort.desc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenByEndDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'endDate', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenByEndDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'endDate', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenById() {
+  QueryBuilder<User, User, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<User, User, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenByIsCurrentTerm() {
+  QueryBuilder<User, User, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isCurrentTerm', Sort.asc);
+      return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenByIsCurrentTermDesc() {
+  QueryBuilder<User, User, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isCurrentTerm', Sort.desc);
+      return query.addSortBy(r'name', Sort.desc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenBySemester() {
+  QueryBuilder<User, User, QAfterSortBy> thenBySchool() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'semester', Sort.asc);
+      return query.addSortBy(r'school', Sort.asc);
     });
   }
 
-  QueryBuilder<Term, Term, QAfterSortBy> thenBySemesterDesc() {
+  QueryBuilder<User, User, QAfterSortBy> thenBySchoolDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'semester', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenByStartDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'startDate', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Term, Term, QAfterSortBy> thenByStartDateDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'startDate', Sort.desc);
+      return query.addSortBy(r'school', Sort.desc);
     });
   }
 }
 
-extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
-  QueryBuilder<Term, Term, QDistinct> distinctByAcademicYear(
+extension UserQueryWhereDistinct on QueryBuilder<User, User, QDistinct> {
+  QueryBuilder<User, User, QDistinct> distinctByBio(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'academicYear', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'bio', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Term, Term, QDistinct> distinctByEndDate() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'endDate');
-    });
-  }
-
-  QueryBuilder<Term, Term, QDistinct> distinctByIsCurrentTerm() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isCurrentTerm');
-    });
-  }
-
-  QueryBuilder<Term, Term, QDistinct> distinctBySemester(
+  QueryBuilder<User, User, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'semester', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Term, Term, QDistinct> distinctByStartDate() {
+  QueryBuilder<User, User, QDistinct> distinctBySchool(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'startDate');
+      return query.addDistinctBy(r'school', caseSensitive: caseSensitive);
     });
   }
 }
 
-extension TermQueryProperty on QueryBuilder<Term, Term, QQueryProperty> {
-  QueryBuilder<Term, int, QQueryOperations> idProperty() {
+extension UserQueryProperty on QueryBuilder<User, User, QQueryProperty> {
+  QueryBuilder<User, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Term, String, QQueryOperations> academicYearProperty() {
+  QueryBuilder<User, String?, QQueryOperations> bioProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'academicYear');
+      return query.addPropertyName(r'bio');
     });
   }
 
-  QueryBuilder<Term, DateTime, QQueryOperations> endDateProperty() {
+  QueryBuilder<User, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'endDate');
+      return query.addPropertyName(r'name');
     });
   }
 
-  QueryBuilder<Term, bool, QQueryOperations> isCurrentTermProperty() {
+  QueryBuilder<User, String?, QQueryOperations> schoolProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isCurrentTerm');
-    });
-  }
-
-  QueryBuilder<Term, String, QQueryOperations> semesterProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'semester');
-    });
-  }
-
-  QueryBuilder<Term, DateTime, QQueryOperations> startDateProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'startDate');
+      return query.addPropertyName(r'school');
     });
   }
 }
