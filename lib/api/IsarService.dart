@@ -95,6 +95,53 @@ class IsarService {
     });
   }
 
+  Future<void> createBuilding(Building building) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.buildings.put(building);
+    });
+  }
+
+  Future<void> createDeadlineEvent(DeadlineEvent deadlineEvent) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.deadlineEvents.put(deadlineEvent);
+    });
+  }
+
+  Future<void> createNote(Note note) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.notes.put(note);
+    });
+  }
+
+  Future<void> createRoom(Room room) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.rooms.put(room);
+    });
+  }
+
+  Future<void> createTodo(Todo todo) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.todos.put(todo);
+    });
+  }
+
+  Future<void> createUser(User user) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.users.put(user);
+    });
+  }
 
   // All EDIT
   Future<void> editSubject(Subject subject) async {
