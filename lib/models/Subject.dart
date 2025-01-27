@@ -14,6 +14,7 @@ class Subject {
   late String room;
   late String? instructor;
   late int termID;
+  late int? roomID;
 
   @Enumerated(EnumType.name)
   late List<Day> frequency;
@@ -22,5 +23,9 @@ class Subject {
   late DateTime startDate;
   late DateTime endDate;
 
+  late double units;
+  late double? grade;
+
+  // List because the Color class is not serializable
   late List<int> color;
 }

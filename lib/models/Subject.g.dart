@@ -43,40 +43,55 @@ const SubjectSchema = CollectionSchema(
       type: IsarType.stringList,
       enumMap: _SubjectfrequencyEnumValueMap,
     ),
-    r'instructor': PropertySchema(
+    r'grade': PropertySchema(
       id: 5,
+      name: r'grade',
+      type: IsarType.double,
+    ),
+    r'instructor': PropertySchema(
+      id: 6,
       name: r'instructor',
       type: IsarType.string,
     ),
     r'isLaboratory': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isLaboratory',
       type: IsarType.bool,
     ),
     r'notes': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'notes',
       type: IsarType.string,
     ),
     r'room': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'room',
       type: IsarType.string,
     ),
+    r'roomID': PropertySchema(
+      id: 10,
+      name: r'roomID',
+      type: IsarType.long,
+    ),
     r'section': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'section',
       type: IsarType.string,
     ),
     r'startDate': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'startDate',
       type: IsarType.dateTime,
     ),
     r'termID': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'termID',
       type: IsarType.long,
+    ),
+    r'units': PropertySchema(
+      id: 14,
+      name: r'units',
+      type: IsarType.double,
     )
   },
   estimateSize: _subjectEstimateSize,
@@ -143,13 +158,16 @@ void _subjectSerialize(
   writer.writeDateTime(offsets[3], object.endDate);
   writer.writeStringList(
       offsets[4], object.frequency.map((e) => e.name).toList());
-  writer.writeString(offsets[5], object.instructor);
-  writer.writeBool(offsets[6], object.isLaboratory);
-  writer.writeString(offsets[7], object.notes);
-  writer.writeString(offsets[8], object.room);
-  writer.writeString(offsets[9], object.section);
-  writer.writeDateTime(offsets[10], object.startDate);
-  writer.writeLong(offsets[11], object.termID);
+  writer.writeDouble(offsets[5], object.grade);
+  writer.writeString(offsets[6], object.instructor);
+  writer.writeBool(offsets[7], object.isLaboratory);
+  writer.writeString(offsets[8], object.notes);
+  writer.writeString(offsets[9], object.room);
+  writer.writeLong(offsets[10], object.roomID);
+  writer.writeString(offsets[11], object.section);
+  writer.writeDateTime(offsets[12], object.startDate);
+  writer.writeLong(offsets[13], object.termID);
+  writer.writeDouble(offsets[14], object.units);
 }
 
 Subject _subjectDeserialize(
@@ -168,14 +186,17 @@ Subject _subjectDeserialize(
           ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
           .toList() ??
       [];
+  object.grade = reader.readDoubleOrNull(offsets[5]);
   object.id = id;
-  object.instructor = reader.readStringOrNull(offsets[5]);
-  object.isLaboratory = reader.readBool(offsets[6]);
-  object.notes = reader.readStringOrNull(offsets[7]);
-  object.room = reader.readString(offsets[8]);
-  object.section = reader.readString(offsets[9]);
-  object.startDate = reader.readDateTime(offsets[10]);
-  object.termID = reader.readLong(offsets[11]);
+  object.instructor = reader.readStringOrNull(offsets[6]);
+  object.isLaboratory = reader.readBool(offsets[7]);
+  object.notes = reader.readStringOrNull(offsets[8]);
+  object.room = reader.readString(offsets[9]);
+  object.roomID = reader.readLongOrNull(offsets[10]);
+  object.section = reader.readString(offsets[11]);
+  object.startDate = reader.readDateTime(offsets[12]);
+  object.termID = reader.readLong(offsets[13]);
+  object.units = reader.readDouble(offsets[14]);
   return object;
 }
 
@@ -201,19 +222,25 @@ P _subjectDeserializeProp<P>(
               .toList() ??
           []) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 6:
-      return (reader.readBool(offset)) as P;
-    case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 9:
       return (reader.readString(offset)) as P;
     case 10:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
+      return (reader.readDateTime(offset)) as P;
+    case 13:
       return (reader.readLong(offset)) as P;
+    case 14:
+      return (reader.readDouble(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1012,6 +1039,84 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'grade',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'grade',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'grade',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'grade',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'grade',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'grade',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1512,6 +1617,75 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'roomID',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'roomID',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'roomID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'roomID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'roomID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'roomID',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> sectionEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1747,6 +1921,68 @@ extension SubjectQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'units',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'units',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'units',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'units',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
 }
 
 extension SubjectQueryObject
@@ -1789,6 +2025,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByEndDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByGrade() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'grade', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByGradeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'grade', Sort.desc);
     });
   }
 
@@ -1840,6 +2088,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoomID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'roomID', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoomIDDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'roomID', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> sortBySection() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'section', Sort.asc);
@@ -1873,6 +2133,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByTermIDDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'termID', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByUnitsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.desc);
     });
   }
 }
@@ -1912,6 +2184,18 @@ extension SubjectQuerySortThenBy
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByEndDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByGrade() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'grade', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByGradeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'grade', Sort.desc);
     });
   }
 
@@ -1975,6 +2259,18 @@ extension SubjectQuerySortThenBy
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoomID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'roomID', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoomIDDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'roomID', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> thenBySection() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'section', Sort.asc);
@@ -2008,6 +2304,18 @@ extension SubjectQuerySortThenBy
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByTermIDDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'termID', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByUnitsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.desc);
     });
   }
 }
@@ -2046,6 +2354,12 @@ extension SubjectQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Subject, Subject, QDistinct> distinctByGrade() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'grade');
+    });
+  }
+
   QueryBuilder<Subject, Subject, QDistinct> distinctByInstructor(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2073,6 +2387,12 @@ extension SubjectQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Subject, Subject, QDistinct> distinctByRoomID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'roomID');
+    });
+  }
+
   QueryBuilder<Subject, Subject, QDistinct> distinctBySection(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2089,6 +2409,12 @@ extension SubjectQueryWhereDistinct
   QueryBuilder<Subject, Subject, QDistinct> distinctByTermID() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'termID');
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QDistinct> distinctByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'units');
     });
   }
 }
@@ -2131,6 +2457,12 @@ extension SubjectQueryProperty
     });
   }
 
+  QueryBuilder<Subject, double?, QQueryOperations> gradeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'grade');
+    });
+  }
+
   QueryBuilder<Subject, String?, QQueryOperations> instructorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'instructor');
@@ -2155,6 +2487,12 @@ extension SubjectQueryProperty
     });
   }
 
+  QueryBuilder<Subject, int?, QQueryOperations> roomIDProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'roomID');
+    });
+  }
+
   QueryBuilder<Subject, String, QQueryOperations> sectionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'section');
@@ -2170,6 +2508,12 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, int, QQueryOperations> termIDProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'termID');
+    });
+  }
+
+  QueryBuilder<Subject, double, QQueryOperations> unitsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'units');
     });
   }
 }
