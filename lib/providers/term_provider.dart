@@ -99,8 +99,4 @@ class TermProvider with ChangeNotifier {
     _terms = [];
     notifyListeners();
   }
-
-  Stream<List<Term>> listenToTerms() async* {
-    yield* isarService.listenToTerms();
-  }
 }

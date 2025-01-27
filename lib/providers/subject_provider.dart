@@ -123,8 +123,4 @@ class SubjectProvider with ChangeNotifier {
     _subjects = [];
     notifyListeners();
   }
-
-  Stream<List<Subject>> listenToSubjectsByTerm(int termID) async* {
-    yield* isarService.listenToSubjectsByTerm(termID);
-  }
 }

@@ -9,7 +9,6 @@ class IsarService {
 
   IsarService() {
     db = openDB();
-  
   }
 
   Future<Isar> openDB() async {
@@ -112,26 +111,4 @@ class IsarService {
 
     await isar.writeTxn(() => isar.clear());
   }
-
-  // All STREAMS
-
-  Stream<List<Subject>> listenToSubjectsByTerm(int termID) async* {
-    final isar = await db;
-    yield* isar.subjects.filter().termIDEqualTo(termID).watch();
-  }
-
-  Stream<List<Subject>> listenToSubjectsByDay(Day day, int termID) async* {
-    final isar = await db;
-    yield* isar.subjects
-        .filter()
-        .termIDEqualTo(termID)
-        .frequencyElementEqualTo(day)
-        .watch();
-  }
-
-  Stream<List<Term>> listenToTerms() async* {
-    final isar = await db;
-    yield* isar.terms.where().watch(fireImmediately: true);
-  }
-
 }
