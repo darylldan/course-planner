@@ -1,3 +1,9 @@
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/DeadlineEvent.dart';
+import 'package:course_planner/models/Note.dart';
+import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/models/Todo.dart';
+import 'package:course_planner/models/User.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/Subject.dart';
@@ -15,13 +21,11 @@ class IsarService {
     final dir = await getApplicationCacheDirectory();
 
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open([SubjectSchema, TermSchema],
-          directory: dir.path);
+      return await Isar.open([SubjectSchema, TermSchema], directory: dir.path);
     }
 
     return Future.value(Isar.getInstance());
   }
-
 
   // All GET
   Future<List<Term>> getAllTerms() async {
@@ -36,8 +40,43 @@ class IsarService {
     return await isar.subjects.where().findAll();
   }
 
-  // All WRITE
+  Future<List<Note>> getAllNotes() async {
+    final isar = await db;
 
+    return isar.notes.where().findAll();
+  }
+
+  Future<List<Building>> getAllBuildings() async {
+    final isar = await db;
+
+    return isar.buildings.where().findAll();
+  }
+
+  Future<List<DeadlineEvent>> getAllDeadlineEvents() async {
+    final isar = await db;
+
+    return isar.deadlineEvents.where().findAll();
+  }
+
+  Future<List<Room>> getAllRooms() async {
+    final isar = await db;
+
+    return isar.rooms.where().findAll();
+  }
+
+  Future<List<Todo>> getAllTodos() async {
+    final isar = await db;
+
+    return isar.todos.where().findAll();
+  }
+
+  Future<List<User>> getAllUsers() async {
+    final isar = await db;
+
+    return isar.users.where().findAll();
+  }
+
+  // All WRITE
   Future<int?> createTerm(Term term) async {
     final isar = await db;
     int? returnID;
@@ -55,6 +94,7 @@ class IsarService {
       await isar.subjects.put(subject);
     });
   }
+
 
   // All EDIT
   Future<void> editSubject(Subject subject) async {
