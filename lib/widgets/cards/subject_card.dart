@@ -201,7 +201,7 @@ class ClassCard extends StatelessWidget {
                   onTap: () {
                     context
                         .read<SubjectProvider>()
-                        .deleteSubjects([subject.id!]);
+                        .deleteSubject(subject.id!);
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

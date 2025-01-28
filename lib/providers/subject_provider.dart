@@ -68,9 +68,9 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteSubjects(List<int> ids) async {
-    await isarService.deleteSubjects(ids);
-    _subjects.removeWhere((subject) => ids.contains(subject.id));
+  Future<void> deleteSubject(int id) async {
+    await isarService.deleteSubject(id);
+    _subjects.removeWhere((subject) => id == subject.id);
 
     notifyListeners();
   }
