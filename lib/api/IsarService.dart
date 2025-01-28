@@ -168,7 +168,7 @@ class IsarService {
     });
   }
 
-    Future<void> editDeadlineEvent(DeadlineEvent deadlineEvent) async {
+  Future<void> editDeadlineEvent(DeadlineEvent deadlineEvent) async {
     final isar = await db;
 
     await isar.writeTxn(() async {
@@ -210,34 +210,88 @@ class IsarService {
 
   // All DELETE
 
-  Future<void> deleteSubjects(List<int> ids) async {
+  Future<void> deleteSubject(int id) async {
     final isar = await db;
 
     await isar.writeTxn(() async {
-      await isar.subjects.deleteAll(ids);
+      await isar.subjects.delete(id);
+      await isar.deadlineEvents.filter().courseIdEqualTo(id).deleteAll();
+      await isar.notes.filter().courseIdEqualTo(id).deleteAll();
+      await isar.todos.filter().courseIdEqualTo(id).deleteAll();
     });
-  }
-
-  Future<void> deleteTerms(List<int> ids) async {
-    final isar = await db;
-
-    await isar.writeTxn(() async {
-      await isar.terms.deleteAll(ids);
-    });
-
-    // Also deletes the subjects in that term
-    for (var id in ids) {
-      await isar.writeTxn(() async {
-        await isar.subjects.filter().termIDEqualTo(id).deleteAll();
-      });
-    }
   }
 
   Future<void> deleteTerm(int id) async {
     final isar = await db;
     await isar.writeTxn(() async {
       await isar.terms.delete(id);
-      await isar.subjects.filter().termIDEqualTo(id).deleteAll();
+
+      List<Subject> affectedSubjects =
+          await isar.subjects.filter().termIDEqualTo(id).findAll();
+
+      for (Subject s in affectedSubjects) {
+        await deleteSubject(s.id!);
+      }
+    });
+  }
+
+  Future<void> deleteRoom(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.rooms.delete(id);
+
+      List<Subject> affectedSubjects =
+          await isar.subjects.filter().roomIDEqualTo(id).findAll();
+
+      for (Subject s in affectedSubjects) {
+        s.roomID = null;
+      }
+
+      for (Subject s in affectedSubjects) {
+        await editSubject(s);
+      }
+    });
+  }
+
+  Future<void> deleteBuilding(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.buildings.delete(id);
+      await isar.rooms.filter().buildingIdEqualTo(id).deleteAll();
+    });
+  }
+
+  Future<void> deleteDeadlineEvent(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.deadlineEvents.delete(id);
+    });
+  }
+
+  Future<void> deleteNote(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.notes.delete(id);
+    });
+  }
+
+  Future<void> deleteTodo(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.todos.delete(id);
+    });
+  }
+
+  Future<void> deleteUser(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.todos.delete(id);
     });
   }
 
