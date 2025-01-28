@@ -21,7 +21,16 @@ class IsarService {
     final dir = await getApplicationCacheDirectory();
 
     if (Isar.instanceNames.isEmpty) {
-      return await Isar.open([SubjectSchema, TermSchema], directory: dir.path);
+      return await Isar.open([
+        SubjectSchema,
+        TermSchema,
+        BuildingSchema,
+        DeadlineEventSchema,
+        NoteSchema,
+        RoomSchema,
+        TodoSchema,
+        UserSchema
+      ], directory: dir.path);
     }
 
     return Future.value(Isar.getInstance());
