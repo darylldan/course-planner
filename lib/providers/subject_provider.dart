@@ -52,6 +52,10 @@ class SubjectProvider with ChangeNotifier {
     return subjects;
   }
 
+  List<Subject> getSubjectsByRoom(int roomID) {
+    return _subjects.where((element) => element.roomID == roomID).toList();
+  }
+
   Future<void> createSubject(Subject subject) async {
     int? newID = await isarService.createSubject(subject);
     subject.id = newID;
