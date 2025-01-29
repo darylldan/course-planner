@@ -1,3 +1,4 @@
+import 'package:course_planner/models/Room.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';
@@ -54,6 +55,16 @@ class SubjectProvider with ChangeNotifier {
 
   List<Subject> getSubjectsByRoom(int roomID) {
     return _subjects.where((element) => element.roomID == roomID).toList();
+  }
+
+  Future<List<Subject>> getSubjectByBuilding(int buildingID) async {
+    List<Room> rooms = await isarService.getAllRooms();
+
+    return _subjects.where((e) {
+      Room retrievedRoom = rooms.firstWhere((r) => r.id == e.roomID);
+
+      return retrievedRoom.buildingId == buildingID;
+    }).toList();
   }
 
   Future<void> createSubject(Subject subject) async {
