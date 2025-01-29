@@ -96,60 +96,81 @@ class IsarService {
     return returnID;
   }
 
-  Future<void> createSubject(Subject subject) async {
+  Future<int?> createSubject(Subject subject) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.subjects.put(subject);
+      returnID = await isar.subjects.put(subject);
     });
+
+    return returnID;
   }
 
-  Future<void> createBuilding(Building building) async {
+  Future<int?> createBuilding(Building building) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.buildings.put(building);
+      returnID = await isar.buildings.put(building);
     });
+
+    return returnID;
   }
 
-  Future<void> createDeadlineEvent(DeadlineEvent deadlineEvent) async {
+  Future<int?> createDeadlineEvent(DeadlineEvent deadlineEvent) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.deadlineEvents.put(deadlineEvent);
+      returnID = await isar.deadlineEvents.put(deadlineEvent);
     });
+
+    return returnID;
   }
 
-  Future<void> createNote(Note note) async {
+  Future<int?> createNote(Note note) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.notes.put(note);
+      returnID = await isar.notes.put(note);
     });
+
+    return returnID;
   }
 
-  Future<void> createRoom(Room room) async {
+  Future<int?> createRoom(Room room) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.rooms.put(room);
+      returnID = await isar.rooms.put(room);
     });
+
+    return returnID;
   }
 
-  Future<void> createTodo(Todo todo) async {
+  Future<int?> createTodo(Todo todo) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.todos.put(todo);
+      returnID = await isar.todos.put(todo);
     });
+
+    return returnID;
   }
 
-  Future<void> createUser(User user) async {
+  Future<int?> createUser(User user) async {
     final isar = await db;
+    int? returnID;
 
     await isar.writeTxn(() async {
-      await isar.users.put(user);
+      returnID = await isar.users.put(user);
     });
+
+    return returnID;
   }
 
   // All EDIT

@@ -53,7 +53,8 @@ class SubjectProvider with ChangeNotifier {
   }
 
   Future<void> createSubject(Subject subject) async {
-    await isarService.createSubject(subject);
+    int? newID = await isarService.createSubject(subject);
+    subject.id = newID;
     _subjects.add(subject);
 
     notifyListeners();
