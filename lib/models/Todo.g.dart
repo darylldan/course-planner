@@ -31,6 +31,11 @@ const TodoSchema = CollectionSchema(
       id: 2,
       name: r'task',
       type: IsarType.string,
+    ),
+    r'termId': PropertySchema(
+      id: 3,
+      name: r'termId',
+      type: IsarType.long,
     )
   },
   estimateSize: _todoEstimateSize,
@@ -66,6 +71,7 @@ void _todoSerialize(
   writer.writeLong(offsets[0], object.courseId);
   writer.writeBool(offsets[1], object.isDone);
   writer.writeString(offsets[2], object.task);
+  writer.writeLong(offsets[3], object.termId);
 }
 
 Todo _todoDeserialize(
@@ -79,6 +85,7 @@ Todo _todoDeserialize(
   object.id = id;
   object.isDone = reader.readBool(offsets[1]);
   object.task = reader.readString(offsets[2]);
+  object.termId = reader.readLong(offsets[3]);
   return object;
 }
 
@@ -95,6 +102,8 @@ P _todoDeserializeProp<P>(
       return (reader.readBool(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
+    case 3:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -444,6 +453,58 @@ extension TodoQueryFilter on QueryBuilder<Todo, Todo, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Todo, Todo, QAfterFilterCondition> termIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterFilterCondition> termIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterFilterCondition> termIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterFilterCondition> termIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'termId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension TodoQueryObject on QueryBuilder<Todo, Todo, QFilterCondition> {}
@@ -484,6 +545,18 @@ extension TodoQuerySortBy on QueryBuilder<Todo, Todo, QSortBy> {
   QueryBuilder<Todo, Todo, QAfterSortBy> sortByTaskDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'task', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterSortBy> sortByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterSortBy> sortByTermIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.desc);
     });
   }
 }
@@ -536,6 +609,18 @@ extension TodoQuerySortThenBy on QueryBuilder<Todo, Todo, QSortThenBy> {
       return query.addSortBy(r'task', Sort.desc);
     });
   }
+
+  QueryBuilder<Todo, Todo, QAfterSortBy> thenByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QAfterSortBy> thenByTermIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.desc);
+    });
+  }
 }
 
 extension TodoQueryWhereDistinct on QueryBuilder<Todo, Todo, QDistinct> {
@@ -555,6 +640,12 @@ extension TodoQueryWhereDistinct on QueryBuilder<Todo, Todo, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'task', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Todo, Todo, QDistinct> distinctByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'termId');
     });
   }
 }
@@ -581,6 +672,12 @@ extension TodoQueryProperty on QueryBuilder<Todo, Todo, QQueryProperty> {
   QueryBuilder<Todo, String, QQueryOperations> taskProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'task');
+    });
+  }
+
+  QueryBuilder<Todo, int, QQueryOperations> termIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'termId');
     });
   }
 }

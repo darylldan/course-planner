@@ -8,6 +8,7 @@ class Note {
 
   // -1 courseId for unassigned notes
   late int courseId;
+  late int termId; // incase the note is unassigned
   late String title;
   late String content;
 }

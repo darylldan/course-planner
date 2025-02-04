@@ -27,8 +27,13 @@ const NoteSchema = CollectionSchema(
       name: r'courseId',
       type: IsarType.long,
     ),
-    r'title': PropertySchema(
+    r'termId': PropertySchema(
       id: 2,
+      name: r'termId',
+      type: IsarType.long,
+    ),
+    r'title': PropertySchema(
+      id: 3,
       name: r'title',
       type: IsarType.string,
     )
@@ -66,7 +71,8 @@ void _noteSerialize(
 ) {
   writer.writeString(offsets[0], object.content);
   writer.writeLong(offsets[1], object.courseId);
-  writer.writeString(offsets[2], object.title);
+  writer.writeLong(offsets[2], object.termId);
+  writer.writeString(offsets[3], object.title);
 }
 
 Note _noteDeserialize(
@@ -79,7 +85,8 @@ Note _noteDeserialize(
   object.content = reader.readString(offsets[0]);
   object.courseId = reader.readLong(offsets[1]);
   object.id = id;
-  object.title = reader.readString(offsets[2]);
+  object.termId = reader.readLong(offsets[2]);
+  object.title = reader.readString(offsets[3]);
   return object;
 }
 
@@ -95,6 +102,8 @@ P _noteDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
+      return (reader.readLong(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -437,6 +446,58 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterFilterCondition> termIdEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> termIdGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> termIdLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'termId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> termIdBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'termId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -595,6 +656,18 @@ extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByTermIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -645,6 +718,18 @@ extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByTermIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'termId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
@@ -672,6 +757,12 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
     });
   }
 
+  QueryBuilder<Note, Note, QDistinct> distinctByTermId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'termId');
+    });
+  }
+
   QueryBuilder<Note, Note, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -696,6 +787,12 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
   QueryBuilder<Note, int, QQueryOperations> courseIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'courseId');
+    });
+  }
+
+  QueryBuilder<Note, int, QQueryOperations> termIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'termId');
     });
   }
 

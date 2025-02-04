@@ -6,7 +6,9 @@ part 'Todo.g.dart';
 class Todo {
   Id? id = Isar.autoIncrement;
 
+  // Unassigned todo courseId: -1
   late int courseId;
+  late int termId; // incase the todo is unassigned
   late String task;
   late bool isDone;
 }
