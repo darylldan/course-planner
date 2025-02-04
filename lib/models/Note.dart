@@ -6,6 +6,7 @@ part 'Note.g.dart';
 class Note {
   Id? id = Isar.autoIncrement;
 
+  // -1 courseId for unassigned notes
   late int courseId;
   late String title;
   late String content;
