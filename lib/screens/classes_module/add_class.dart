@@ -41,7 +41,7 @@ class _AddClassState extends State<AddClass> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  Map<Day, bool> _frequency = {
+  final Map<Day, bool> _frequency = {
     Day.mon: false,
     Day.tue: false,
     Day.wed: false,
@@ -50,7 +50,7 @@ class _AddClassState extends State<AddClass> {
     Day.sat: false,
   };
 
-  List<Color?> _colors = [
+  final List<Color?> _colors = [
     Colors.red.shade600,
     Colors.pink.shade600,
     Colors.purple.shade600,
@@ -100,7 +100,7 @@ class _AddClassState extends State<AddClass> {
                   child: Divider(),
                 ),
               ),
-              _buildForm(),
+              _buildForm(context),
             ],
           ),
         ),
@@ -108,208 +108,219 @@ class _AddClassState extends State<AddClass> {
     );
   }
 
-  Widget _buildForm() {
+  bool get _canPop {
+    return _courseCodeCtrl.text.isEmpty &&
+        _sectionCtrl.text.isEmpty &&
+        _roomCtrl.text.isEmpty &&
+        _instructorCtrl.text.isEmpty &&
+        _notesCtrl.text.isEmpty;
+  }
+
+  Widget _buildForm(BuildContext context) {
     _courseColor ??= _colors[Random().nextInt(_colors.length - 1)];
 
-    return Form(
-      key: _formKey,
-      onWillPop: () async {
-        if (_courseCodeCtrl.text.isEmpty &&
-            _sectionCtrl.text.isEmpty &&
-            _roomCtrl.text.isEmpty &&
-            _instructorCtrl.text.isEmpty &&
-            _notesCtrl.text.isEmpty) return true;
-        return _onWillPop();
-      },
-      child: Column(
-        children: [
-          // Course code and course color
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: _courseCodeCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        hintText: 'Enter Course Code (Ex. CMSC 12)',
-                        labelText: 'Course Code'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter course code.";
-                      }
+    return PopScope(
+      canPop: _canPop,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
 
-                      return null;
-                    },
+        var shouldExit = await _onWillPop();
+        if (shouldExit) {
+          if (context.mounted) Navigator.of(context).pop();
+        }
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            // Course code and course color
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: _courseCodeCtrl,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          hintText: 'Enter Course Code (Ex. CMSC 12)',
+                          labelText: 'Course Code'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter course code.";
+                        }
+
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 30,
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(_courseColor)),
+                      onPressed: () {
+                        _showColorPicker();
+                      },
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            // isLaboratory
+            _classTypeRadio(),
+
+            // Class descrpition
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _descCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: '"Foundations of Computer Science"',
+                    labelText: 'Description (Optional)'),
+              ),
+            ),
+
+            // Section
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _sectionCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter section ("ST - 4L")',
+                    labelText: 'Section'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter section.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            // Room
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _roomCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter room ("ICS Megahall")',
+                    labelText: 'Room'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter room.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            // Instructor
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _instructorCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Prof. Juan Dela Cruz',
+                    labelText: 'Instructor (Optional)'),
+              ),
+            ),
+
+            // Term selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _termSelector(),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+
+            // Class time selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _classTimeSelector(context),
+            ),
+
+            // Frequency selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _frequencySelector(),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                controller: _notesCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: '"Enter notes here (Optional)"',
+                    labelText: 'Notes (Optional)'),
+              ),
+            ),
+
+            Row(
+              children: [
+                Expanded(
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(_courseColor)),
-                    onPressed: () {
-                      _showColorPicker();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.primaryContainer)),
+                    onPressed: _submit,
+                    child: Text(
+                      "Save",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer),
                     ),
                   ),
                 )
               ],
             ),
-          ),
 
-          // isLaboratory
-          _classTypeRadio(),
-
-          // Class descrpition
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _descCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: '"Foundations of Computer Science"',
-                  labelText: 'Description (Optional)'),
-            ),
-          ),
-
-          // Section
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _sectionCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter section ("ST - 4L")',
-                  labelText: 'Section'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter section.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-
-          // Room
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _roomCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter room ("ICS Megahall")',
-                  labelText: 'Room'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter room.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-
-          // Instructor
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _instructorCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Prof. Juan Dela Cruz',
-                  labelText: 'Instructor (Optional)'),
-            ),
-          ),
-
-          // Term selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _termSelector(),
-          ),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-
-          // Class time selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _classTimeSelector(),
-          ),
-
-          // Frequency selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _frequencySelector(),
-          ),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              controller: _notesCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: '"Enter notes here (Optional)"',
-                  labelText: 'Notes (Optional)'),
-            ),
-          ),
-
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primaryContainer)),
-                  onPressed: _submit,
-                  child: Text(
-                    "Save",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          const SizedBox(
-            height: 60,
-          )
-        ],
+            const SizedBox(
+              height: 60,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -412,7 +423,7 @@ class _AddClassState extends State<AddClass> {
               });
             },
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -434,7 +445,7 @@ class _AddClassState extends State<AddClass> {
     }
   }
 
-  Widget _classTimeSelector() {
+  Widget _classTimeSelector(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -716,18 +727,19 @@ class _AddClassState extends State<AddClass> {
 
   // Responsible for "Discard creation?"
   Future<bool> _onWillPop() async {
+    final dialogContext = context;
     return (await showDialog(
-            context: context,
+            context: dialogContext,
             builder: (context) {
               return AlertDialog(
                 title: const Text("Discard class creation?"),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(true),
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
                     child: const Text('Discard'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
                     child: const Text('Cancel'),
                   )
                 ],
