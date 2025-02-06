@@ -8,7 +8,6 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/Subject.dart';
 import '../models/Term.dart';
-import '../utils/enums.dart';
 
 class IsarService {
   late Future<Isar> db;
