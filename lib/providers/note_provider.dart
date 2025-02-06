@@ -23,8 +23,10 @@ class NoteProvider extends ChangeNotifier {
     return _notes.where((n) => n.courseId == courseId).toList();
   }
 
-  List<Note> getAllUnassignedNotes() {
-    return _notes.where((n) => n.courseId == -1).toList();
+  List<Note> getAllUnassignedNotes(int termId) {
+    return _notes
+    .where((n) => n.termId == termId)
+    .where((n) => n.courseId == -1).toList();
   }
 
   Future<void> createNote(Note note) async {
