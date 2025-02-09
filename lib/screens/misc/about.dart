@@ -100,7 +100,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _feedback(),
+          child: _feedback(context),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -108,7 +108,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _nerdContent(),
+          child: _nerdContent(context),
         ),
         const SizedBox(
           height: 150,
@@ -131,7 +131,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           child: Text(
             "NERD SECTION",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -147,7 +147,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _nerdContent() {
+  Widget _nerdContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -209,7 +209,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _feedback() {
+  Widget _feedback(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
