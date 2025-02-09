@@ -257,9 +257,9 @@ class _DailyScheduleState extends State<DailySchedule> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
+                backgroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.primaryContainer),
-                foregroundColor: MaterialStatePropertyAll(
+                foregroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.onPrimaryContainer)),
             onPressed: () {
               Navigator.pop(context);
