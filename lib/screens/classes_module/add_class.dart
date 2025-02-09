@@ -124,7 +124,7 @@ class _AddClassState extends State<AddClass> {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
-        var shouldExit = await _onWillPop();
+        var shouldExit = await _onWillPop(context);
         if (shouldExit) {
           if (context.mounted) Navigator.of(context).pop();
         }
@@ -726,20 +726,19 @@ class _AddClassState extends State<AddClass> {
   }
 
   // Responsible for "Discard creation?"
-  Future<bool> _onWillPop() async {
-    final dialogContext = context;
+  Future<bool> _onWillPop(BuildContext context) async {
     return (await showDialog(
-            context: dialogContext,
+            context: context,
             builder: (context) {
               return AlertDialog(
                 title: const Text("Discard class creation?"),
                 actions: [
                   TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                    onPressed: () => Navigator.of(context).pop(true),
                     child: const Text('Discard'),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                    onPressed: () => Navigator.of(context).pop(false),
                     child: const Text('Cancel'),
                   )
                 ],

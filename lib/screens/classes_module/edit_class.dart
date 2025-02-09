@@ -49,7 +49,7 @@ class _EditClassState extends State<EditClass> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  Map<Day, bool> _frequency = {
+  final Map<Day, bool> _frequency = {
     Day.mon: false,
     Day.tue: false,
     Day.wed: false,
@@ -58,7 +58,7 @@ class _EditClassState extends State<EditClass> {
     Day.sat: false,
   };
 
-  List<Color?> _colors = [
+  final List<Color?> _colors = [
     Colors.red.shade600,
     Colors.pink.shade600,
     Colors.purple.shade600,
@@ -121,7 +121,7 @@ class _EditClassState extends State<EditClass> {
                   child: Divider(),
                 ),
               ),
-              _buildForm(),
+              _buildForm(context),
             ],
           ),
         ),
@@ -129,245 +129,262 @@ class _EditClassState extends State<EditClass> {
     );
   }
 
-  Widget _buildForm() {
+  bool get _canPop {
+    return _courseCodeCtrl.text.isEmpty &&
+        _sectionCtrl.text.isEmpty &&
+        _roomCtrl.text.isEmpty &&
+        _instructorCtrl.text.isEmpty &&
+        _notesCtrl.text.isEmpty;
+  }
+
+  Widget _buildForm(BuildContext context) {
     _courseColor ??= _colors[Random().nextInt(_colors.length - 1)];
 
-    return Form(
-      key: _formKey,
-      onWillPop: _willPop,
-      child: Column(
-        children: [
-          // Course code and course color
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: _courseCodeCtrl,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        hintText: 'Enter Course Code (Ex. CMSC 12)',
-                        labelText: 'Course Code'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter course code.";
-                      }
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
 
-                      return null;
-                    },
+        final shouldExit = await _willPop(context);
+        if (shouldExit) {
+          if (context.mounted) Navigator.of(context).pop();
+        }
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            // Course code and course color
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: _courseCodeCtrl,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          hintText: 'Enter Course Code (Ex. CMSC 12)',
+                          labelText: 'Course Code'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter course code.";
+                        }
+
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                SizedBox(
-                  width: 30,
-                  height: 30,
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(_courseColor)),
+                      onPressed: () {
+                        _showColorPicker();
+                      },
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            // isLaboratory
+            _classTypeRadio(),
+
+            // Class descrpition
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _descCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: '"Foundations of Computer Science"',
+                    labelText: 'Description (Optional)'),
+              ),
+            ),
+
+            // Section
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _sectionCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter section ("ST - 4L")',
+                    labelText: 'Section'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter section.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            // Room
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _roomCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter room ("ICS Megahall")',
+                    labelText: 'Room'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter room.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+
+            // Instructor
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _instructorCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Prof. Juan Dela Cruz',
+                    labelText: 'Instructor (Optional)'),
+              ),
+            ),
+
+            // Term selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _termSelector(context),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+
+            // Class time selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _classTimeSelector(context),
+            ),
+
+            // Frequency selector
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _frequencySelector(),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                controller: _notesCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: '"Enter notes here (Optional)"',
+                    labelText: 'Notes (Optional)'),
+              ),
+            ),
+
+            Row(
+              children: [
+                Expanded(
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(_courseColor)),
-                    onPressed: () {
-                      _showColorPicker();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primaryContainer)),
+                    onPressed: _submitChanges,
+                    child: Text(
+                      "Save Changes",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer),
                     ),
                   ),
                 )
               ],
             ),
-          ),
 
-          // isLaboratory
-          _classTypeRadio(),
-
-          // Class descrpition
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _descCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: '"Foundations of Computer Science"',
-                  labelText: 'Description (Optional)'),
-            ),
-          ),
-
-          // Section
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _sectionCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter section ("ST - 4L")',
-                  labelText: 'Section'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter section.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-
-          // Room
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _roomCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter room ("ICS Megahall")',
-                  labelText: 'Room'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter room.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-
-          // Instructor
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _instructorCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Prof. Juan Dela Cruz',
-                  labelText: 'Instructor (Optional)'),
-            ),
-          ),
-
-          // Term selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _termSelector(context),
-          ),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-
-          // Class time selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _classTimeSelector(),
-          ),
-
-          // Frequency selector
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: _frequencySelector(),
-          ),
-
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              controller: _notesCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: '"Enter notes here (Optional)"',
-                  labelText: 'Notes (Optional)'),
-            ),
-          ),
-
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primaryContainer)),
-                  onPressed: _submitChanges,
-                  child: Text(
-                    "Save Changes",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Discard changes?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Discard'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('Cancel'),
+                                )
+                              ],
+                            );
+                          });
+                    },
+                    child: Text(
+                      "Discard Changes",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
+                )
+              ],
+            ),
 
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text("Discard changes?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Discard'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: const Text('Cancel'),
-                              )
-                            ],
-                          );
-                        });
-                  },
-                  child: Text(
-                    "Discard Changes",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          const SizedBox(
-            height: 60,
-          )
-        ],
+            const SizedBox(
+              height: 60,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Future<bool> _willPop() async {
+  Future<bool> _willPop(BuildContext context) async {
     bool isCourseColorSame = (_courseColor!.alpha == widget.subject.color[0] &&
         _courseColor!.red == widget.subject.color[1] &&
         _courseColor!.green == widget.subject.color[2] &&
@@ -390,7 +407,7 @@ class _EditClassState extends State<EditClass> {
       return true;
     }
 
-    return _onWillPop();
+    return _onWillPop(context);
   }
 
   void _retrieveData() {
@@ -517,7 +534,7 @@ class _EditClassState extends State<EditClass> {
               });
             },
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -539,12 +556,12 @@ class _EditClassState extends State<EditClass> {
     }
   }
 
-  Widget _classTimeSelector() {
+  Widget _classTimeSelector(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 8),
           child: Text(
             "Timeslot",
             style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
@@ -801,7 +818,7 @@ class _EditClassState extends State<EditClass> {
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(BuildContext context) async {
     return (await showDialog(
             context: context,
             builder: (context) {
