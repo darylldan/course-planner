@@ -55,8 +55,8 @@ class _EditNotesState extends State<EditNotes> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+            padding: const EdgeInsets.symmetric(
+                horizontal: C.screenHorizontalPadding),
             child: _buildNotesEditor(context, size),
           ),
         ),
@@ -83,28 +83,34 @@ class _EditNotesState extends State<EditNotes> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      onWillPop: () async {
-        if (_notesCtrl.text == (widget.subject.notes ?? "")) {
-          return true;
-        }
+    return PopScope(
+      canPop: () {
+        return _notesCtrl.text == (widget.subject.notes ?? "");
+      }(),
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
 
-        return _onWillPop();
+        var shouldExit = await _onWillPop();
+        if (shouldExit) {
+          if (context.mounted) Navigator.of(context).pop();
+        }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            maxLines: null,
-            autofocus: true,
-            controller: _notesCtrl,
-            keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration.collapsed(
-                hintText: "Enter notes here..."),
-            style: TextStyle(fontSize: 16),
-          )
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              maxLines: null,
+              autofocus: true,
+              controller: _notesCtrl,
+              keyboardType: TextInputType.multiline,
+              decoration: const InputDecoration.collapsed(
+                  hintText: "Enter notes here..."),
+              style: TextStyle(fontSize: 16),
+            )
+          ],
+        ),
       ),
     );
   }
