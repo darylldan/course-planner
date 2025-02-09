@@ -131,7 +131,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           child: Text(
             "NERD SECTION",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              color: Theme.of(context).colorScheme.onInverseSurface,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -167,6 +167,9 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           height: 10,
         ),
         ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(
+                  Theme.of(context).colorScheme.primaryContainer)),
           onPressed: () async {
             String url = "https://github.com/darylldan/course-planner";
             var urlLaunchable = await canLaunchUrlString(url);
@@ -213,6 +216,9 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.primaryContainer)),
         onPressed: () async {
           String url = "https://forms.gle/DwKwhx2G12tZ2DB69";
           var urlLaunchable = await canLaunchUrlString(url);
