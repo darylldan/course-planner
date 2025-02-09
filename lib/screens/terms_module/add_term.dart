@@ -48,99 +48,105 @@ class _AddTermState extends State<AddTerm> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      onWillPop: () async {
-        if (_acadYearCtrl.text.isEmpty && _semesterCtrl.text.isEmpty) {
-          return true;
+    return PopScope(
+      canPop: () {
+        return _acadYearCtrl.text.isEmpty && _semesterCtrl.text.isEmpty;
+      }(),
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+
+        var shouldExit = await _onWillPop(context);
+        if (shouldExit) {
+          if (context.mounted) Navigator.of(context).pop();
         }
-
-        return _onWillPop();
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _semesterCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter Name (Ex. "First Semester")',
-                  labelText: 'Semester'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter the semester.";
-                }
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _semesterCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter Name (Ex. "First Semester")',
+                    labelText: 'Semester'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter the semester.";
+                  }
 
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _acadYearCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter A.Y. (Ex. "A.Y. 2023 - 2024")',
-                  labelText: 'Academic Year'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter the Academic Year.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      textStyle: const MaterialStatePropertyAll(
-                        TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primaryContainer),
-                      foregroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.onPrimaryContainer)),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState?.save();
-                      context.read<TermProvider>().addTerm(Term()
-                        ..isCurrentTerm = false
-                        ..semester = _semesterCtrl.text
-                        ..academicYear = _acadYearCtrl.text);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Term added.")));
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  },
-                  child: const Text("Save"),
-                ),
+                  return null;
+                },
               ),
-            ],
-          ),
-        ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _acadYearCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter A.Y. (Ex. "A.Y. 2023 - 2024")',
+                    labelText: 'Academic Year'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter the Academic Year.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        textStyle: const WidgetStatePropertyAll(
+                          TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.primaryContainer),
+                        foregroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimaryContainer)),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState?.save();
+                        context.read<TermProvider>().addTerm(Term()
+                          ..isCurrentTerm = false
+                          ..semester = _semesterCtrl.text
+                          ..academicYear = _acadYearCtrl.text);
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Term added.")));
+                          Navigator.of(context).pop();
+                        }
+                      }
+                    },
+                    child: const Text("Save"),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(BuildContext context) async {
     return (await showDialog(
             context: context,
             builder: (context) {

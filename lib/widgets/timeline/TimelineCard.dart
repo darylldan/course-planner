@@ -49,7 +49,7 @@ class TimelineCard extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),

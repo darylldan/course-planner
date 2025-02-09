@@ -20,7 +20,7 @@ class ClassCard extends StatelessWidget {
       child: Material(
         child: Ink(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
           ),
           child: InkWell(
@@ -97,7 +97,7 @@ class ClassCard extends StatelessWidget {
                             style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .surfaceVariant,
+                                    .surfaceContainerHighest,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 11),
                           ),

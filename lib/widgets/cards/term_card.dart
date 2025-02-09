@@ -22,7 +22,7 @@ class TermCard extends StatelessWidget {
         child: Material(
           child: Ink(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius:
                     BorderRadius.circular(Constants.cardBorderRadius)),
             child: InkWell(
@@ -140,7 +140,7 @@ class TermCard extends StatelessWidget {
             subjectStr,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 fontWeight: FontWeight.bold,
                 fontSize: 11),
           ),

@@ -19,7 +19,7 @@ class DayLabel extends StatelessWidget {
   Widget _opaqueLabel(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       width: 48,
       height: 17,

@@ -81,7 +81,7 @@ class _ViewTermState extends State<ViewTerm> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.surfaceVariant),
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest),
                 ),
               ),
               const Expanded(
