@@ -79,9 +79,9 @@ class _ViewTermState extends State<ViewTerm> {
                 child: Text(
                   "SUBJECTS",
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onInverseSurface),
                 ),
               ),
               const Expanded(

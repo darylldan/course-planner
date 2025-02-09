@@ -20,7 +20,7 @@ class ClassCard extends StatelessWidget {
       child: Material(
         child: Ink(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            color: Theme.of(context).colorScheme.onInverseSurface,
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
           ),
           child: InkWell(
@@ -199,9 +199,7 @@ class ClassCard extends StatelessWidget {
                   title: const Text("Delete Subject"),
                   leading: const Icon(Icons.delete_forever_rounded),
                   onTap: () {
-                    context
-                        .read<SubjectProvider>()
-                        .deleteSubject(subject.id!);
+                    context.read<SubjectProvider>().deleteSubject(subject.id!);
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

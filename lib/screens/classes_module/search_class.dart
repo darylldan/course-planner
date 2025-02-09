@@ -88,11 +88,11 @@ class _SearchClassState extends State<SearchClass> {
         child: TextFormField(
           decoration: InputDecoration(
             suffixIcon: IconButton(
-            onPressed: () {
-              _searchValue.clear();
-            },
-            icon: const Icon(Icons.clear_rounded),
-          ),
+              onPressed: () {
+                _searchValue.clear();
+              },
+              icon: const Icon(Icons.clear_rounded),
+            ),
           ),
           controller: _searchValue,
           onChanged: (value) {
@@ -210,7 +210,7 @@ class _SearchClassState extends State<SearchClass> {
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest),
+                color: Theme.of(context).colorScheme.onInverseSurface),
           ),
         ),
         const SizedBox(
@@ -234,7 +234,7 @@ class _SearchClassState extends State<SearchClass> {
           child: Text(
             "SEARCH RESULT",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              color: Theme.of(context).colorScheme.onInverseSurface,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),

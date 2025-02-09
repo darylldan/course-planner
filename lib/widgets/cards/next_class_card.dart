@@ -21,7 +21,7 @@ class NextClassCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(C.cardBorderRadius),
       child: Ink(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            color: Theme.of(context).colorScheme.onInverseSurface,
             borderRadius: BorderRadius.circular(C.cardBorderRadius)),
         child: InkWell(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
@@ -63,7 +63,7 @@ class NextClassCard extends StatelessWidget {
       );
     }
 
-    if (isLastClass ) {
+    if (isLastClass) {
       return SizedBox(
         width: double.infinity,
         child: Text(
@@ -181,14 +181,14 @@ class NextClassCard extends StatelessWidget {
                 child: Icon(
                   Icons.groups_rounded,
                   size: 14,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
                 ),
               ),
               Text(
                 "Section",
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
                   fontSize: 12,
                 ),
               ),
@@ -200,7 +200,7 @@ class NextClassCard extends StatelessWidget {
               nextClass!.section,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),
@@ -227,14 +227,14 @@ class NextClassCard extends StatelessWidget {
                 child: Icon(
                   Icons.apartment_rounded,
                   size: 14,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
                 ),
               ),
               Text(
                 "Room",
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(context).colorScheme.onInverseSurface,
                     fontSize: 12),
               ),
             ],
@@ -245,7 +245,7 @@ class NextClassCard extends StatelessWidget {
               nextClass!.room,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.onInverseSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -273,14 +273,14 @@ class NextClassCard extends StatelessWidget {
                 child: Icon(
                   Icons.format_list_bulleted_rounded,
                   size: 14,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  color: Theme.of(context).colorScheme.onInverseSurface,
                 ),
               ),
               Text(
                 "Notes",
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(context).colorScheme.onInverseSurface,
                     fontSize: 12),
               ),
             ],
@@ -298,7 +298,7 @@ class NextClassCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest),
+                    color: Theme.of(context).colorScheme.onInverseSurface),
               ),
             ),
           )

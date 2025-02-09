@@ -1,6 +1,7 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/terms_module/view_term.dart';
+import 'package:course_planner/styles/theme.dart';
 import 'package:course_planner/widgets/timetable/SubjectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class TermCard extends StatelessWidget {
         child: Material(
           child: Ink(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.onInverseSurface,
                 borderRadius:
                     BorderRadius.circular(Constants.cardBorderRadius)),
             child: InkWell(
@@ -57,7 +58,7 @@ class TermCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      color: Theme.of(context).colorScheme.onSurface),
                   width: 4,
                   height: 50,
                 ),
@@ -140,7 +141,7 @@ class TermCard extends StatelessWidget {
             subjectStr,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                color: Theme.of(context).colorScheme.onInverseSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 11),
           ),

@@ -36,8 +36,7 @@ class TimelineCard extends StatelessWidget {
     }
 
     if (duration.inMinutes % 60 > 0) {
-      durationString =
-          "$durationString ${duration.inMinutes % 60} m";
+      durationString = "$durationString ${duration.inMinutes % 60} m";
     }
 
     return durationString;
@@ -49,15 +48,15 @@ class TimelineCard extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          color: Theme.of(context).colorScheme.onInverseSurface,
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ViewClass(subjectID: subject.id!))
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ViewClass(subjectID: subject.id!)));
           },
           child: _subjectContainer(context),
         ),

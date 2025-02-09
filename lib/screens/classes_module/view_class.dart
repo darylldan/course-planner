@@ -35,9 +35,10 @@ class _ViewClassState extends State<ViewClass> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => EditClass(
-                            subject: subject,
-                          ),));
+                    builder: (BuildContext context) => EditClass(
+                      subject: subject,
+                    ),
+                  ));
             },
             icon: const Icon(Icons.edit_rounded),
           )
@@ -83,7 +84,9 @@ class _ViewClassState extends State<ViewClass> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _notesWrapper(context),
         ),
-        const SizedBox(height: 150,)
+        const SizedBox(
+          height: 150,
+        )
       ],
     );
   }
@@ -282,7 +285,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.surfaceContainerHighest),
+          color: Theme.of(context).colorScheme.onInverseSurface),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -464,7 +467,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(C.cardBorderRadius),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.onInverseSurface,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,7 +515,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(C.cardBorderRadius),
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        color: Theme.of(context).colorScheme.onInverseSurface,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,7 +569,7 @@ class _ViewClassState extends State<ViewClass> {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          color: Theme.of(context).colorScheme.onInverseSurface,
         ),
         child: InkWell(
           onTap: () {
@@ -651,7 +654,7 @@ class _ViewClassState extends State<ViewClass> {
                   : subject.notes!,
               style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest),
+                  color: Theme.of(context).colorScheme.onInverseSurface),
               maxLines: 8,
               overflow: TextOverflow.ellipsis,
             ),
