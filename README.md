@@ -58,12 +58,17 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 
 ---
 ## Milestones
-- Complete Backend Functions -> IN PROGRESS
+- Complete Backend Functions -> DONE
+- Term Module -> DONE
+- Subject Module -> IN PROGRESS
 - Building Module
 - Rooms Module
-- Subject Module
 - Note Module
 - Todo Module
 - Deadline Event Module
 - Notifications
 - Course Sharing
+
+### Notes:
+- Fix the PopScope implementation on others.
+- Be wary of other theming errors
