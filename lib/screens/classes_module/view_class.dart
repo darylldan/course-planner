@@ -282,7 +282,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.surfaceVariant),
+          color: Theme.of(context).colorScheme.surfaceContainerHighest),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -464,7 +464,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(C.cardBorderRadius),
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,7 +512,7 @@ class _ViewClassState extends State<ViewClass> {
           vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(C.cardBorderRadius),
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,7 +566,7 @@ class _ViewClassState extends State<ViewClass> {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
         ),
         child: InkWell(
           onTap: () {
@@ -651,7 +651,7 @@ class _ViewClassState extends State<ViewClass> {
                   : subject.notes!,
               style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).colorScheme.surfaceVariant),
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest),
               maxLines: 8,
               overflow: TextOverflow.ellipsis,
             ),

@@ -27,7 +27,6 @@ class _SearchClassState extends State<SearchClass> {
   List<Term> _terms = [];
   Term? _globalCurrentTerm;
 
-  final Day _today = DayMethods.fromInt(DateTime.now().weekday);
   Term? _currentTerm;
 
   int? _termFilter;
@@ -211,7 +210,7 @@ class _SearchClassState extends State<SearchClass> {
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.surfaceVariant),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest),
           ),
         ),
         const SizedBox(
@@ -235,7 +234,7 @@ class _SearchClassState extends State<SearchClass> {
           child: Text(
             "SEARCH RESULT",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -347,9 +346,9 @@ class _SearchClassState extends State<SearchClass> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          foregroundColor: MaterialStatePropertyAll(
+                          foregroundColor: WidgetStatePropertyAll(
                               Theme.of(context).colorScheme.onPrimaryContainer),
-                          backgroundColor: MaterialStatePropertyAll(
+                          backgroundColor: WidgetStatePropertyAll(
                               Theme.of(context).colorScheme.primaryContainer)),
                       onPressed: () {
                         Navigator.pop(context);
