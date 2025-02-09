@@ -81,6 +81,11 @@ class _OverviewState extends State<Overview> {
   }
 
   Widget _buildOverview(BuildContext context) {
+    _term = context.watch<TermProvider>().currentTerm;
+
+    if (_term == null) {
+      return _noTermsYet(context);
+    }
     if (_rightNow.weekday == 7) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,11 +96,6 @@ class _OverviewState extends State<Overview> {
       );
     }
 
-    _term = context.watch<TermProvider>().currentTerm;
-
-    if (_term == null) {
-      return _noTermsYet(context);
-    }
 
     _subjects = context.watch<SubjectProvider>().getSubjectsByTerm(_term!.id!);
 
