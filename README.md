@@ -59,8 +59,8 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 ---
 ## Milestones
 - Complete Backend Functions -> DONE
-- Term Module -> DONE
-- Subject Module -> IN PROGRESS
+- Term Module -> IN PROGRESS
+- Subject Module -> 
 - Building Module
 - Rooms Module
 - Note Module
@@ -68,6 +68,10 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Deadline Event Module
 - Notifications
 - Course Sharing
+
+### To-Do:
+- Add range visualization on term page
+
 
 ### Notes:
 - Fix the PopScope implementation on others.
