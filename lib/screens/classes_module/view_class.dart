@@ -264,7 +264,7 @@ class _ViewClassState extends State<ViewClass> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              subject.room,
+              "To be replacced",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSecondaryContainer,

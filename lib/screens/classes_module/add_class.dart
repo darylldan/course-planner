@@ -679,40 +679,6 @@ class _AddClassState extends State<AddClass> {
     );
   }
 
-  Widget _classTypeRadio() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: RadioListTile<bool>(
-              title: const Text("Lecture"),
-              value: false,
-              groupValue: _isLaboratory,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isLaboratory = value!;
-                });
-              },
-            ),
-          ),
-          Expanded(
-            child: RadioListTile<bool>(
-              title: const Text("Laboratory"),
-              value: true,
-              groupValue: _isLaboratory,
-              onChanged: (bool? value) {
-                setState(() {
-                  _isLaboratory = value!;
-                });
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   // Custom color picker
   void _showColorPicker() {
     showModalBottomSheet(
@@ -810,12 +776,12 @@ class _AddClassState extends State<AddClass> {
         _courseColor!.green,
         _courseColor!.blue
       ]
-      ..isLaboratory = _isLaboratory
+      ..isLaboratory = _classTypeSelection.contains(ClassType.lec)
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
-      ..room = _selectedRoomID.toString()
       ..instructor = _instructorCtrl.text
       ..termID = _selectedTermID!
+      ..roomID = _selectedRoomID
       ..frequency =
           _frequency.keys.toList().where((d) => _frequency[d]!).toList()
       ..startDate = _startDate!

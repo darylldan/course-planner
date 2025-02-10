@@ -11,7 +11,6 @@ class Subject {
   late bool isLaboratory;
   String? description;
   late String section;
-  late String room;
   late String? instructor;
   late int termID;
   late int? roomID;

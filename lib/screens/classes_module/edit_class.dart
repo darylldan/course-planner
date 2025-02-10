@@ -397,8 +397,7 @@ class _EditClassState extends State<EditClass> {
     if (_courseCodeCtrl.text == widget.subject.courseCode &&
         _isLaboratory == widget.subject.isLaboratory &&
         _descCtrl.text == (widget.subject.description ?? "") &&
-        _sectionCtrl.text == widget.subject.section &&
-        _roomCtrl.text == widget.subject.room &&
+        _sectionCtrl.text == widget.subject.section  &&
         _instructorCtrl.text == (widget.subject.instructor ?? "") &&
         _notesCtrl.text == (widget.subject.notes ?? "") &&
         _selectedTermID == widget.subject.termID &&
@@ -415,7 +414,6 @@ class _EditClassState extends State<EditClass> {
     _isLaboratory = widget.subject.isLaboratory;
     _descCtrl.text = widget.subject.description ?? "";
     _sectionCtrl.text = widget.subject.section;
-    _roomCtrl.text = widget.subject.room;
     _instructorCtrl.text = widget.subject.instructor ?? "";
     _notesCtrl.text = widget.subject.notes ?? "";
     _selectedTermID = widget.subject.termID;
@@ -851,7 +849,6 @@ class _EditClassState extends State<EditClass> {
       ..isLaboratory = _isLaboratory
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
-      ..room = _roomCtrl.text
       ..instructor = _instructorCtrl.text
       ..termID = _selectedTermID!
       ..frequency =
