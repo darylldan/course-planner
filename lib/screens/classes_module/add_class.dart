@@ -30,7 +30,6 @@ class _AddClassState extends State<AddClass> {
   final _courseCodeCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
   final _sectionCtrl = TextEditingController();
-  final _roomCtrl = TextEditingController();
   final _instructorCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();
 
@@ -38,6 +37,7 @@ class _AddClassState extends State<AddClass> {
   bool _isLaboratory = false;
 
   int? _selectedTermID;
+  int? _selectedRoomID;
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -121,7 +121,7 @@ class _AddClassState extends State<AddClass> {
   bool get _canPop {
     return _courseCodeCtrl.text.isEmpty &&
         _sectionCtrl.text.isEmpty &&
-        _roomCtrl.text.isEmpty &&
+        _selectedRoomID == null &&
         _instructorCtrl.text.isEmpty &&
         _notesCtrl.text.isEmpty &&
         _selection.isEmpty &&
@@ -234,26 +234,6 @@ class _AddClassState extends State<AddClass> {
               ),
             ),
 
-            // Room
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: TextFormField(
-                controller: _roomCtrl,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    hintText: 'Enter room ("ICS Megahall")',
-                    labelText: 'Room'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter room.";
-                  }
-
-                  return null;
-                },
-              ),
-            ),
-
             // Instructor
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -273,8 +253,14 @@ class _AddClassState extends State<AddClass> {
               child: _termSelector(),
             ),
 
+            // Room
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                child: _roomSelector(context)),
+
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.only(bottom: 10),
               child: Opacity(
                 opacity: 0.5,
                 child: Divider(),
@@ -283,13 +269,13 @@ class _AddClassState extends State<AddClass> {
 
             // Class time selector
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _classTimeSelector(context),
             ),
 
             // Frequency selector
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: _frequencySelector(context),
             ),
 
@@ -413,6 +399,27 @@ class _AddClassState extends State<AddClass> {
     return isValidForm;
   }
 
+  Widget _roomSelector(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Room",
+          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+        ),
+        TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+                  content: Text("Hello!!!"), actions: [Text("Dismiss")]));
+            },
+            child: Text("Select Room",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                )))
+      ],
+    );
+  }
+
   Widget _frequencySelector(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,13 +455,6 @@ class _AddClassState extends State<AddClass> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            "Timeslot",
-            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
-          ),
-        ),
         if (_isDatesInvalid)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),
@@ -464,117 +464,126 @@ class _AddClassState extends State<AddClass> {
                   color: Theme.of(context).colorScheme.error, fontSize: 12),
             ),
           ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Start Time"),
-              TextButton(
-                onPressed: () async {
-                  final TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: _startDate == null
-                          ? const TimeOfDay(hour: 7, minute: 0)
-                          : TimeOfDay(
-                              hour: _startDate!.hour,
-                              minute: _startDate!.minute));
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Start Time",
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+            ),
+            TextButton(
+              onPressed: () async {
+                final TimeOfDay? time = await showTimePicker(
+                    context: context,
+                    initialTime: _startDate == null
+                        ? const TimeOfDay(hour: 7, minute: 0)
+                        : TimeOfDay(
+                            hour: _startDate!.hour,
+                            minute: _startDate!.minute));
 
-                  if (context.mounted) {
-                    if (time == null) {
-                      return;
-                    }
-
-                    if (time.hour < 7 ||
-                        (time.hour >= 21 && time.minute > 0) ||
-                        time.hour > 21) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const Dialog(
-                            child: ErrorCard(
-                                title: "Invalid Time",
-                                content:
-                                    "The class only supports time from 7am to 9pm."),
-                          );
-                        },
-                      );
-                    } else {
-                      setState(() {
-                        _startDate = DateTime(
-                            _currentTerm.startDate.year,
-                            _currentTerm.startDate.month,
-                            _currentTerm.startDate.day,
-                            time.hour,
-                            time.minute);
-                      });
-                    }
+                if (context.mounted) {
+                  if (time == null) {
+                    return;
                   }
-                },
-                child: Text(_startDate != null
-                    ? DateFormat.jm().format(_startDate!)
-                    : "Select Time"),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("End Time"),
-              TextButton(
-                onPressed: _startDate == null
-                    ? null
-                    : () async {
-                        final TimeOfDay? time = await showTimePicker(
-                            context: context,
-                            initialTime: _endDate == null
-                                ? const TimeOfDay(hour: 7, minute: 0)
-                                : TimeOfDay(
-                                    hour: _endDate!.hour,
-                                    minute: _endDate!.minute));
 
-                        if (context.mounted) {
-                          if (time == null) {
-                            return;
-                          }
-
-                          if (time.hour < 7 ||
-                              (time.hour >= 21 && time.minute > 0) ||
-                              time.hour > 21) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return const Dialog(
-                                  child: ErrorCard(
-                                      title: "Invalid Time",
-                                      content:
-                                          "The class only supports time from 7am to 9pm."),
-                                );
-                              },
-                            );
-                          } else {
-                            setState(() {
-                              print(time.toString());
-                              _endDate = DateTime(
-                                  _currentTerm.startDate.year,
-                                  _currentTerm.startDate.month,
-                                  _currentTerm.startDate.day,
-                                  time.hour,
-                                  time.minute);
-                            });
-                          }
-                        }
+                  if (time.hour < 7 ||
+                      (time.hour >= 21 && time.minute > 0) ||
+                      time.hour > 21) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const Dialog(
+                          child: ErrorCard(
+                              title: "Invalid Time",
+                              content:
+                                  "The class only supports time from 7am to 9pm."),
+                        );
                       },
-                child: Text(_endDate != null
+                    );
+                  } else {
+                    setState(() {
+                      _startDate = DateTime(
+                          _currentTerm.startDate.year,
+                          _currentTerm.startDate.month,
+                          _currentTerm.startDate.day,
+                          time.hour,
+                          time.minute);
+                    });
+                  }
+                }
+              },
+              child: Text(
+                _startDate != null
+                    ? DateFormat.jm().format(_startDate!)
+                    : "Select Time",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "End Time",
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+            ),
+            TextButton(
+              onPressed: _startDate == null
+                  ? null
+                  : () async {
+                      final TimeOfDay? time = await showTimePicker(
+                          context: context,
+                          initialTime: _endDate == null
+                              ? const TimeOfDay(hour: 7, minute: 0)
+                              : TimeOfDay(
+                                  hour: _endDate!.hour,
+                                  minute: _endDate!.minute));
+
+                      if (context.mounted) {
+                        if (time == null) {
+                          return;
+                        }
+
+                        if (time.hour < 7 ||
+                            (time.hour >= 21 && time.minute > 0) ||
+                            time.hour > 21) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const Dialog(
+                                child: ErrorCard(
+                                    title: "Invalid Time",
+                                    content:
+                                        "The class only supports time from 7am to 9pm."),
+                              );
+                            },
+                          );
+                        } else {
+                          setState(() {
+                            _endDate = DateTime(
+                                _currentTerm.startDate.year,
+                                _currentTerm.startDate.month,
+                                _currentTerm.startDate.day,
+                                time.hour,
+                                time.minute);
+                          });
+                        }
+                      }
+                    },
+              child: Text(
+                _endDate != null
                     ? DateFormat.jm().format(_endDate!)
-                    : "Select Time"),
-              )
-            ],
-          ),
-        )
+                    : "Select Time",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
+        ),
       ],
     );
   }
@@ -770,7 +779,7 @@ class _AddClassState extends State<AddClass> {
       ..isLaboratory = _isLaboratory
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
-      ..room = _roomCtrl.text
+      ..room = _selectedRoomID.toString()
       ..instructor = _instructorCtrl.text
       ..termID = _selectedTermID!
       ..frequency =
