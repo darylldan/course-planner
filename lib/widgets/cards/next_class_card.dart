@@ -242,7 +242,7 @@ class NextClassCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Text(
-              nextClass!.room,
+              "nextClass!.room",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onInverseSurface,

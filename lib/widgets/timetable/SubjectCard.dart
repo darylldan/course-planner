@@ -66,7 +66,7 @@ class SubjectCard extends StatelessWidget {
               clipBehavior: Clip.hardEdge,
               fit: BoxFit.none,
               child: Text(
-                subject.room,
+                "subject.room",
                 style: const TextStyle(fontSize: 7),
                 overflow: TextOverflow.fade,
               ),

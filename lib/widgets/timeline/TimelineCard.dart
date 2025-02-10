@@ -115,7 +115,7 @@ class TimelineCard extends StatelessWidget {
                       SizedBox(
                         width: 220,
                         child: Text(
-                          subject.room,
+                          "subject.room",
                           style: TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 14),
                         ),

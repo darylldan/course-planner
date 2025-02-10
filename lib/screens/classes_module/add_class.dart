@@ -33,9 +33,9 @@ class _AddClassState extends State<AddClass> {
   final _sectionCtrl = TextEditingController();
   final _instructorCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();
+  final _unitsCtrl = TextEditingController();
 
   Color? _courseColor;
-  bool _isLaboratory = false;
 
   int? _selectedTermID;
   int? _selectedRoomID;
@@ -132,8 +132,7 @@ class _AddClassState extends State<AddClass> {
         _startDate == null &&
         _endDate == null &&
         _selectedTermID == null &&
-        _classTypeSelection.contains(ClassType.lec)
-        ;
+        _classTypeSelection.contains(ClassType.lec);
   }
 
   Widget _buildForm(BuildContext context) {
@@ -207,6 +206,30 @@ class _AddClassState extends State<AddClass> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: _classTypeSelector(context),
+            ),
+
+            // Units
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _unitsCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    labelText: 'Units'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter units";
+                  }
+
+                  if ((value is! int) || int.parse(value) == 0) {
+                    return "Please enter valid units.";
+                  }
+
+                  return null;
+                },
+              ),
             ),
 
             // Class descrpition
@@ -323,8 +346,9 @@ class _AddClassState extends State<AddClass> {
                         "Save",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.onPrimaryContainer),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer),
                       ),
                     ),
                   )
@@ -437,7 +461,8 @@ class _AddClassState extends State<AddClass> {
         Expanded(
           child: SegmentedButton<ClassType>(
             segments: const [
-              ButtonSegment<ClassType>(value: ClassType.lec, label: Text("Lecture")),
+              ButtonSegment<ClassType>(
+                  value: ClassType.lec, label: Text("Lecture")),
               ButtonSegment<ClassType>(
                   value: ClassType.lab, label: Text("Laboratory/Recit"))
             ],
@@ -776,14 +801,15 @@ class _AddClassState extends State<AddClass> {
         _courseColor!.green,
         _courseColor!.blue
       ]
+      ..units = double.parse(_unitsCtrl.text)
+      ..grade = 0.0
       ..isLaboratory = _classTypeSelection.contains(ClassType.lec)
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
       ..instructor = _instructorCtrl.text
       ..termID = _selectedTermID!
       ..roomID = _selectedRoomID
-      ..frequency =
-          _frequency.keys.toList().where((d) => _frequency[d]!).toList()
+      ..frequency = _selection.toList()
       ..startDate = _startDate!
       ..endDate = _endDate!
       ..notes = _notesCtrl.text;

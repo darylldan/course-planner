@@ -63,33 +63,28 @@ const SubjectSchema = CollectionSchema(
       name: r'notes',
       type: IsarType.string,
     ),
-    r'room': PropertySchema(
-      id: 9,
-      name: r'room',
-      type: IsarType.string,
-    ),
     r'roomID': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'roomID',
       type: IsarType.long,
     ),
     r'section': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'section',
       type: IsarType.string,
     ),
     r'startDate': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'startDate',
       type: IsarType.dateTime,
     ),
     r'termID': PropertySchema(
-      id: 13,
+      id: 12,
       name: r'termID',
       type: IsarType.long,
     ),
     r'units': PropertySchema(
-      id: 14,
+      id: 13,
       name: r'units',
       type: IsarType.double,
     )
@@ -141,7 +136,6 @@ int _subjectEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.room.length * 3;
   bytesCount += 3 + object.section.length * 3;
   return bytesCount;
 }
@@ -162,12 +156,11 @@ void _subjectSerialize(
   writer.writeString(offsets[6], object.instructor);
   writer.writeBool(offsets[7], object.isLaboratory);
   writer.writeString(offsets[8], object.notes);
-  writer.writeString(offsets[9], object.room);
-  writer.writeLong(offsets[10], object.roomID);
-  writer.writeString(offsets[11], object.section);
-  writer.writeDateTime(offsets[12], object.startDate);
-  writer.writeLong(offsets[13], object.termID);
-  writer.writeDouble(offsets[14], object.units);
+  writer.writeLong(offsets[9], object.roomID);
+  writer.writeString(offsets[10], object.section);
+  writer.writeDateTime(offsets[11], object.startDate);
+  writer.writeLong(offsets[12], object.termID);
+  writer.writeDouble(offsets[13], object.units);
 }
 
 Subject _subjectDeserialize(
@@ -191,12 +184,11 @@ Subject _subjectDeserialize(
   object.instructor = reader.readStringOrNull(offsets[6]);
   object.isLaboratory = reader.readBool(offsets[7]);
   object.notes = reader.readStringOrNull(offsets[8]);
-  object.room = reader.readString(offsets[9]);
-  object.roomID = reader.readLongOrNull(offsets[10]);
-  object.section = reader.readString(offsets[11]);
-  object.startDate = reader.readDateTime(offsets[12]);
-  object.termID = reader.readLong(offsets[13]);
-  object.units = reader.readDouble(offsets[14]);
+  object.roomID = reader.readLongOrNull(offsets[9]);
+  object.section = reader.readString(offsets[10]);
+  object.startDate = reader.readDateTime(offsets[11]);
+  object.termID = reader.readLong(offsets[12]);
+  object.units = reader.readDouble(offsets[13]);
   return object;
 }
 
@@ -230,16 +222,14 @@ P _subjectDeserializeProp<P>(
     case 8:
       return (reader.readStringOrNull(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
-    case 10:
       return (reader.readLongOrNull(offset)) as P;
-    case 11:
+    case 10:
       return (reader.readString(offset)) as P;
-    case 12:
+    case 11:
       return (reader.readDateTime(offset)) as P;
-    case 13:
+    case 12:
       return (reader.readLong(offset)) as P;
-    case 14:
+    case 13:
       return (reader.readDouble(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1487,136 +1477,6 @@ extension SubjectQueryFilter
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'room',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'room',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'room',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'room',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIDIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2076,18 +1936,6 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoom() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoomDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.desc);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoomID() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'roomID', Sort.asc);
@@ -2247,18 +2095,6 @@ extension SubjectQuerySortThenBy
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoom() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoomDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.desc);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoomID() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'roomID', Sort.asc);
@@ -2380,13 +2216,6 @@ extension SubjectQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Subject, Subject, QDistinct> distinctByRoom(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'room', caseSensitive: caseSensitive);
-    });
-  }
-
   QueryBuilder<Subject, Subject, QDistinct> distinctByRoomID() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'roomID');
@@ -2478,12 +2307,6 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, String?, QQueryOperations> notesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'notes');
-    });
-  }
-
-  QueryBuilder<Subject, String, QQueryOperations> roomProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'room');
     });
   }
 
