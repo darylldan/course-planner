@@ -123,20 +123,29 @@ class _AddClassState extends State<AddClass> {
         _sectionCtrl.text.isEmpty &&
         _roomCtrl.text.isEmpty &&
         _instructorCtrl.text.isEmpty &&
-        _notesCtrl.text.isEmpty;
+        _notesCtrl.text.isEmpty &&
+        _selection.isEmpty &&
+        _descCtrl.text.isEmpty &&
+        _startDate == null &&
+        _endDate == null &&
+        _selectedTermID == null;
   }
 
   Widget _buildForm(BuildContext context) {
     _courseColor ??= _colors[Random().nextInt(_colors.length - 1)];
 
     return PopScope(
-      canPop: _canPop,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
-
-        var shouldExit = await _onWillPop(context);
-        if (shouldExit) {
-          if (context.mounted) Navigator.of(context).pop();
+        if (!didPop) {
+          if (_canPop) {
+            if (context.mounted) Navigator.of(context).pop();
+          } else {
+            var shouldExit = await _onWillPop(context);
+            if (shouldExit) {
+              if (context.mounted) Navigator.of(context).pop();
+            }
+          }
         }
       },
       child: Form(
@@ -257,7 +266,7 @@ class _AddClassState extends State<AddClass> {
                     labelText: 'Instructor (Optional)'),
               ),
             ),
-            
+
             // Term selector
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -280,7 +289,7 @@ class _AddClassState extends State<AddClass> {
 
             // Frequency selector
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: _frequencySelector(context),
             ),
 
@@ -381,9 +390,7 @@ class _AddClassState extends State<AddClass> {
       _isTermInvalid = false;
     }
 
-    if (_frequency.entries
-        .toList()
-        .every((element) => element.value == false)) {
+    if (_selection.isEmpty) {
       _isFrequencyInvalid = true;
       isValidForm = false;
     } else {
@@ -407,42 +414,34 @@ class _AddClassState extends State<AddClass> {
   }
 
   Widget _frequencySelector(BuildContext context) {
-    return SegmentedButton<Day>(
-      segments: const [
-        ButtonSegment<Day>(value: Day.mon, label: Text("Mon")),
-        ButtonSegment<Day>(value: Day.tue, label: Text("Tue")),
-        ButtonSegment<Day>(value: Day.wed, label: Text("Wed")),
-        ButtonSegment<Day>(value: Day.thu, label: Text("Thu")),
-        ButtonSegment<Day>(value: Day.fri, label: Text("Fri")),
-        ButtonSegment<Day>(value: Day.sat, label: Text("Sat")),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SegmentedButton<Day>(
+          segments: const [
+            ButtonSegment<Day>(value: Day.mon, label: Text("Mon")),
+            ButtonSegment<Day>(value: Day.tue, label: Text("Tue")),
+            ButtonSegment<Day>(value: Day.wed, label: Text("Wed")),
+            ButtonSegment<Day>(value: Day.thu, label: Text("Thu")),
+            ButtonSegment<Day>(value: Day.fri, label: Text("Fri")),
+            ButtonSegment<Day>(value: Day.sat, label: Text("Sat")),
+          ],
+          selected: _selection,
+          onSelectionChanged: (Set<Day> newSelection) {
+            setState(() {
+              _selection = newSelection;
+            });
+          },
+          multiSelectionEnabled: true,
+          emptySelectionAllowed: true,
+          showSelectedIcon: false,
+        ),
+        if (_isFrequencyInvalid)
+          Text("Please select at least one day.",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.error, fontSize: 12))
       ],
-      selected: _selection,
-      onSelectionChanged: (Set<Day> newSelection) {
-        setState(() {
-          _selection = newSelection;
-        });
-      },
-      multiSelectionEnabled: true,
-      emptySelectionAllowed: true,
-      showSelectedIcon: false,
     );
-  }
-
-  String _dayEnumToName(Day day) {
-    switch (day) {
-      case Day.mon:
-        return "Monday";
-      case Day.tue:
-        return "Tuesday";
-      case Day.wed:
-        return "Wednesday";
-      case Day.thu:
-        return "Thursday";
-      case Day.fri:
-        return "Friday";
-      case Day.sat:
-        return "Saturday";
-    }
   }
 
   Widget _classTimeSelector(BuildContext context) {
