@@ -1,7 +1,9 @@
-import 'dart:io';
-
+import 'package:course_planner/providers/building_provider.dart';
+import 'package:course_planner/providers/deadlineevent_provider.dart';
+import 'package:course_planner/providers/note_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/providers/todo_provider.dart';
 import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/styles/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,10 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: ((context) => SubjectProvider())),
       ChangeNotifierProvider(create: ((context) => TermProvider())),
+      ChangeNotifierProvider(create: ((context) => BuildingProvider())),
+      ChangeNotifierProvider(create: ((context) => DeadlineEventProvider())),
+      ChangeNotifierProvider(create: ((context) => NoteProvider())),
+      ChangeNotifierProvider(create: ((context) => TodoProvider()))
     ],
     child: MyApp(),
   ));
