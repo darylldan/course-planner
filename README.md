@@ -59,10 +59,10 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 ---
 ## Milestones
 - Complete Backend Functions -> DONE
-- Term Module -> IN PROGRESS
-- Subject Module -> 
+- Term Module -> DONE
+- Subject Module -> IN PROGRESS
+- Rooms Module -> IN PROGRESS
 - Building Module
-- Rooms Module
 - Note Module
 - Todo Module
 - Deadline Event Module
@@ -70,7 +70,10 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Course Sharing
 
 ### To-Do:
-- Add range visualization on term page
+- Implement room selector for add class
+- check validation functions
+- revise the subject packing method
+- mirror changes to edit class
 
 
 ### Notes:

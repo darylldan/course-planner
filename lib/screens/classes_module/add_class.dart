@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
@@ -14,6 +13,8 @@ import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/enums.dart';
 import '../../utils/constants.dart' as C;
+
+enum ClassType { lec, lab }
 
 class AddClass extends StatefulWidget {
   List<Term> terms;
@@ -53,6 +54,8 @@ class _AddClassState extends State<AddClass> {
     Day.sat: false,
   };
   Set<Day> _selection = <Day>{};
+
+  Set<ClassType> _classTypeSelection = <ClassType>{ClassType.lec};
 
   final List<Color?> _colors = [
     Colors.red.shade600,
@@ -128,7 +131,9 @@ class _AddClassState extends State<AddClass> {
         _descCtrl.text.isEmpty &&
         _startDate == null &&
         _endDate == null &&
-        _selectedTermID == null;
+        _selectedTermID == null &&
+        _classTypeSelection.contains(ClassType.lec)
+        ;
   }
 
   Widget _buildForm(BuildContext context) {
@@ -154,7 +159,7 @@ class _AddClassState extends State<AddClass> {
           children: [
             // Course code and course color
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
                   Flexible(
@@ -199,11 +204,14 @@ class _AddClassState extends State<AddClass> {
             ),
 
             // isLaboratory
-            _classTypeRadio(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: _classTypeSelector(context),
+            ),
 
             // Class descrpition
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(
                 controller: _descCtrl,
                 decoration: InputDecoration(
@@ -216,7 +224,7 @@ class _AddClassState extends State<AddClass> {
 
             // Section
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(
                 controller: _sectionCtrl,
                 decoration: InputDecoration(
@@ -236,7 +244,7 @@ class _AddClassState extends State<AddClass> {
 
             // Instructor
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(
                 controller: _instructorCtrl,
                 decoration: InputDecoration(
@@ -249,7 +257,7 @@ class _AddClassState extends State<AddClass> {
 
             // Term selector
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: _termSelector(),
             ),
 
@@ -260,7 +268,7 @@ class _AddClassState extends State<AddClass> {
                 child: _roomSelector(context)),
 
             const Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Opacity(
                 opacity: 0.5,
                 child: Divider(),
@@ -269,13 +277,13 @@ class _AddClassState extends State<AddClass> {
 
             // Class time selector
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: _classTimeSelector(context),
             ),
 
             // Frequency selector
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: _frequencySelector(context),
             ),
 
@@ -288,7 +296,7 @@ class _AddClassState extends State<AddClass> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
@@ -301,24 +309,27 @@ class _AddClassState extends State<AddClass> {
               ),
             ),
 
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                            Theme.of(context).colorScheme.primaryContainer)),
-                    onPressed: _submit,
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).colorScheme.primaryContainer)),
+                      onPressed: _submit,
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).colorScheme.onPrimaryContainer),
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
 
             const SizedBox(
@@ -416,6 +427,29 @@ class _AddClassState extends State<AddClass> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 )))
+      ],
+    );
+  }
+
+  Widget _classTypeSelector(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: SegmentedButton<ClassType>(
+            segments: const [
+              ButtonSegment<ClassType>(value: ClassType.lec, label: Text("Lecture")),
+              ButtonSegment<ClassType>(
+                  value: ClassType.lab, label: Text("Laboratory/Recit"))
+            ],
+            selected: _classTypeSelection,
+            onSelectionChanged: (Set<ClassType> newSelection) {
+              setState(() {
+                _classTypeSelection = newSelection;
+              });
+            },
+            showSelectedIcon: false,
+          ),
+        ),
       ],
     );
   }
