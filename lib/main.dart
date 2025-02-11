@@ -1,6 +1,7 @@
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/providers/note_provider.dart';
+import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/providers/todo_provider.dart';
@@ -17,7 +18,8 @@ void main() {
       ChangeNotifierProvider(create: ((context) => BuildingProvider())),
       ChangeNotifierProvider(create: ((context) => DeadlineEventProvider())),
       ChangeNotifierProvider(create: ((context) => NoteProvider())),
-      ChangeNotifierProvider(create: ((context) => TodoProvider()))
+      ChangeNotifierProvider(create: ((context) => TodoProvider())),
+      ChangeNotifierProvider(create: ((context) => RoomProvider()))
     ],
     child: MyApp(),
   ));
