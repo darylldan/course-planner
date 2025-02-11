@@ -443,10 +443,7 @@ class _AddClassState extends State<AddClass> {
           style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
         ),
         TextButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-                  content: Text("Hello!!!"), actions: [Text("Dismiss")]));
-            },
+            onPressed: () => {},
             child: Text("Select Room",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
