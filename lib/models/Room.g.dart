@@ -22,13 +22,23 @@ const RoomSchema = CollectionSchema(
       name: r'buildingId',
       type: IsarType.long,
     ),
-    r'notes': PropertySchema(
+    r'lat': PropertySchema(
       id: 1,
+      name: r'lat',
+      type: IsarType.double,
+    ),
+    r'long': PropertySchema(
+      id: 2,
+      name: r'long',
+      type: IsarType.double,
+    ),
+    r'notes': PropertySchema(
+      id: 3,
       name: r'notes',
       type: IsarType.string,
     ),
     r'roomName': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'roomName',
       type: IsarType.string,
     )
@@ -70,8 +80,10 @@ void _roomSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.buildingId);
-  writer.writeString(offsets[1], object.notes);
-  writer.writeString(offsets[2], object.roomName);
+  writer.writeDouble(offsets[1], object.lat);
+  writer.writeDouble(offsets[2], object.long);
+  writer.writeString(offsets[3], object.notes);
+  writer.writeString(offsets[4], object.roomName);
 }
 
 Room _roomDeserialize(
@@ -83,8 +95,10 @@ Room _roomDeserialize(
   final object = Room();
   object.buildingId = reader.readLong(offsets[0]);
   object.id = id;
-  object.notes = reader.readStringOrNull(offsets[1]);
-  object.roomName = reader.readString(offsets[2]);
+  object.lat = reader.readDoubleOrNull(offsets[1]);
+  object.long = reader.readDoubleOrNull(offsets[2]);
+  object.notes = reader.readStringOrNull(offsets[3]);
+  object.roomName = reader.readString(offsets[4]);
   return object;
 }
 
@@ -98,8 +112,12 @@ P _roomDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 2:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -310,6 +328,162 @@ extension RoomQueryFilter on QueryBuilder<Room, Room, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lat',
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lat',
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lat',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> latBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lat',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'long',
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'long',
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'long',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'long',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longLessThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'long',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterFilterCondition> longBetween(
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'long',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -605,6 +779,30 @@ extension RoomQuerySortBy on QueryBuilder<Room, Room, QSortBy> {
     });
   }
 
+  QueryBuilder<Room, Room, QAfterSortBy> sortByLat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> sortByLatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> sortByLong() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'long', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> sortByLongDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'long', Sort.desc);
+    });
+  }
+
   QueryBuilder<Room, Room, QAfterSortBy> sortByNotes() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.asc);
@@ -655,6 +853,30 @@ extension RoomQuerySortThenBy on QueryBuilder<Room, Room, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Room, Room, QAfterSortBy> thenByLat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> thenByLatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lat', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> thenByLong() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'long', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Room, Room, QAfterSortBy> thenByLongDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'long', Sort.desc);
+    });
+  }
+
   QueryBuilder<Room, Room, QAfterSortBy> thenByNotes() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.asc);
@@ -687,6 +909,18 @@ extension RoomQueryWhereDistinct on QueryBuilder<Room, Room, QDistinct> {
     });
   }
 
+  QueryBuilder<Room, Room, QDistinct> distinctByLat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lat');
+    });
+  }
+
+  QueryBuilder<Room, Room, QDistinct> distinctByLong() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'long');
+    });
+  }
+
   QueryBuilder<Room, Room, QDistinct> distinctByNotes(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -712,6 +946,18 @@ extension RoomQueryProperty on QueryBuilder<Room, Room, QQueryProperty> {
   QueryBuilder<Room, int, QQueryOperations> buildingIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'buildingId');
+    });
+  }
+
+  QueryBuilder<Room, double?, QQueryOperations> latProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lat');
+    });
+  }
+
+  QueryBuilder<Room, double?, QQueryOperations> longProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'long');
     });
   }
 

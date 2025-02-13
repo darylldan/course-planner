@@ -5,6 +5,7 @@ import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart
 import 'package:course_planner/screens/misc/about.dart';
 import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
+import 'package:course_planner/screens/test_screen.dart';
 import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
@@ -165,6 +166,16 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
         onTap: () {
           _navigateTo(context, "/terms", const Terms());
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.flag),
+        title: const Text(
+          "Testing Screen",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/test-screen", const TestScreen());
         },
       )
     ];

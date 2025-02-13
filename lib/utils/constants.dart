@@ -22,6 +22,10 @@ const titleCardContentFontSize = 24.0;
 
 const titleCardInstructionFontSize = 18.0;
 
+// Location Picker Init Pos
+const double obleLat = 14.165066352080837;
+const double obleLong = 121.24156452547093;
+
 // App Info
 const appName = "Course Planner";
 const appVersion = "v 1.0.3";

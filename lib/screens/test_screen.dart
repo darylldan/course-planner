@@ -1,19 +1,8 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/current_term_card.dart';
-import 'package:course_planner/widgets/cards/error_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
-import 'package:course_planner/widgets/cards/term_card.dart';
+import 'package:course_planner/screens/misc/location_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import '../models/Term.dart';
 import '../utils/constants.dart' as C;
-import '../widgets/elements/title_text.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
@@ -53,128 +42,40 @@ class _TestScreenState extends State<TestScreen> {
 
   Color? selectedColor;
 
+  double lat = 14.165066352080837;
+  double long = 121.24156452547093;
+
   @override
   Widget build(BuildContext context) {
-    selectedColor ??= colors.first;
     return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+        appBar: AppBar(),
+        drawer: Drawer(),
+        body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: _showColorPicker,
-                child: Row(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(color: selectedColor),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text("Select Color")
-                  ],
-                ),
-              ),
-              
+                  onPressed: () async {
+                    var result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LocationPicker(id: 0, structType: "new")));
+
+                    if (result != null) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(result.toString())));
+                      }
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("receieved null")));
+                      }
+                    }
+                  },
+                  child: Text("Click"))
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _clickableContainer(BuildContext context) {
-    return Material(
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Theme.of(context).colorScheme.primaryContainer,
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Pressed on tap!")));
-          },
-          child: Container(
-            height: 100,
-            width: 100,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showColorPicker() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SizedBox(
-          height: 450,
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 16),
-                child: Text(
-                  "Select Color",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-                ),
-              ),
-              Flexible(flex: 1, child: _buildColors())
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildColors() {
-    return GridView.count(
-      padding: EdgeInsets.all(20),
-      mainAxisSpacing: 20,
-      crossAxisSpacing: 30,
-      crossAxisCount: 5,
-      children: colors.map<Widget>((e) => _colorCube(e!)).toList(),
-    );
-  }
-
-  Widget _colorCube(Color color) {
-    return Material(
-      borderRadius: BorderRadius.circular(15),
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: color,
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: () {
-            Navigator.pop(context);
-            setState(() {
-              selectedColor = color;
-            });
-          },
-          child: Container(
-            height: 10,
-            width: 10,
-            child: (color == selectedColor)
-                ? Center(
-                    child: Icon(Icons.check),
-                  )
-                : null,
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }
