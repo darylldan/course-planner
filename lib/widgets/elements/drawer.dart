@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:course_planner/screens/buildings_module/buildings.dart';
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
 import 'package:course_planner/screens/misc/about.dart';
@@ -16,7 +17,7 @@ import '../../utils/constants.dart' as C;
  * Weekly Schedule
  * Classes
  * Terms
- * 
+ * Buildings and Rooms
  */
 
 class SideDrawer extends StatefulWidget {
@@ -166,6 +167,16 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
         onTap: () {
           _navigateTo(context, "/terms", const Terms());
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.meeting_room_rounded),
+        title: const Text(
+          "Buildings and Rooms",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/buildings", const Buildings());
         },
       ),
       ListTile(
