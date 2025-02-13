@@ -39,7 +39,7 @@ class _LocationPickerState extends State<LocationPicker> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                userAgentPackageName: 'com.example.course_planner',
               ),
               Center(
                 child: Icon(
