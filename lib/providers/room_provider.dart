@@ -27,6 +27,18 @@ class RoomProvider extends ChangeNotifier {
     return _rooms.where((element) => element.buildingId == buildingId).toList();
   }
 
+  List<Room> getAllUniassignedRooms() {
+    return _rooms.where((r) => r.buildingId == -1).toList();
+  }
+
+  int getUnassignedRoomCount() {
+    return _rooms.where((r) => r.buildingId == -1).length;
+  }
+
+  int getRoomCount() {
+    return _rooms.length;
+  }
+
   Future<void> createRoom(Room room) async {
     int? newID = await isarService.createRoom(room);
     room.id = newID;
