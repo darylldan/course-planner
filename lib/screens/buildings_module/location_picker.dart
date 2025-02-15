@@ -64,8 +64,8 @@ class _LocationPickerState extends State<LocationPicker> {
     if (widget.structType == "building") {
       Building building =
           context.read<BuildingProvider>().getBuildingByID(widget.id);
-      _initLat = building.latitude;
-      _initLong = building.longitude;
+      _initLat = building.latitude!;
+      _initLong = building.longitude!;
     }
 
     if (widget.structType == "room") {
