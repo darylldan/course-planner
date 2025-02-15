@@ -1,8 +1,10 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/screens/buildings_module/add_building.dart';
 import 'package:course_planner/screens/buildings_module/search_building.dart';
 import 'package:course_planner/widgets/cards/building_card.dart';
+import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/elements/drawer.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +60,12 @@ class _BuildingsState extends State<Buildings> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddBuilding()),
+          );
+        },
         label: const Text("Create Building"),
         icon: const Icon(Icons.add_rounded),
       ),
@@ -67,28 +74,8 @@ class _BuildingsState extends State<Buildings> {
 
   Widget _buildBuildings(BuildContext context) {
     List<Building> buildings = context.watch<BuildingProvider>().building
-      ..sort((a, b) => a.buildingName.compareTo(b.buildingName));
-
-    buildings = [
-      Building()
-        ..id = 1
-        ..buildingName = "Physical Sciences"
-        ..notes = "testing the notes"
-        ..latitude = C.obleLat
-        ..longitude = C.obleLong,
-      Building()
-        ..id = 2
-        ..buildingName = "CAS"
-        ..notes = "testing the notes"
-        ..latitude = C.obleLat
-        ..longitude = C.obleLong,
-      Building()
-        ..id = 3
-        ..buildingName = "Physical Sciences"
-        ..notes = "testing the notes"
-        ..latitude = C.obleLat
-        ..longitude = C.obleLong
-    ];
+      ..sort((a, b) =>
+          a.buildingName.toLowerCase().compareTo(b.buildingName.toLowerCase()));
 
     if (buildings.isEmpty) {
       return _emptyBuilding(context);
@@ -170,7 +157,7 @@ class _BuildingsState extends State<Buildings> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 2),
                             child: Text(
-                              "4",
+                              roomCount.toString(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
@@ -190,6 +177,8 @@ class _BuildingsState extends State<Buildings> {
   }
 
   Widget _emptyBuilding(BuildContext context) {
-    return Column();
+    return InfoCard(
+        content:
+            "Begin adding buildings by cliking the 'Create Building' button below.");
   }
 }

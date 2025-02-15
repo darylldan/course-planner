@@ -2,6 +2,7 @@ import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/screens/buildings_module/view_building.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -49,7 +50,13 @@ class _BuildingCardState extends State<BuildingCard> {
                   color: Theme.of(context).colorScheme.onInverseSurface),
               child: InkWell(
                 borderRadius: BorderRadius.circular(C.cardBorderRadius),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ViewBuilding(bldg: widget.bldg)));
+                },
                 onLongPress: () => _showActions(context),
                 child: Column(
                   children: [
@@ -87,33 +94,59 @@ class _BuildingCardState extends State<BuildingCard> {
   }
 
   Widget _buildLocation(BuildContext context, CacheStore cacheStore) {
-    return SizedBox(
+    if (widget.bldg.latitude == null && widget.bldg.longitude == null) {
+      return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(C.cardBorderRadius),
+            color: Theme.of(context).colorScheme.inverseSurface),
+        height: 150,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.location_off,
+              size: 40,
+              color: Theme.of(context).colorScheme.onInverseSurface,
+            )
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius)),
+      clipBehavior: Clip.hardEdge,
       height: 150, // Increased height for better visibility
       child: Stack(
         children: [
-          FlutterMap(
-            mapController: MapController(),
-            options: MapOptions(
-                initialCenter:
-                    LatLng(widget.bldg.latitude, widget.bldg.longitude),
-                keepAlive: true,
-                initialZoom: 19,
-                interactionOptions:
-                    InteractionOptions(flags: InteractiveFlag.none)),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.course_planner',
-                tileProvider: CachedTileProvider(
-                    store: cacheStore), // Ensure network loading
-              ),
-            ],
-          ),
-          Center(
-            child: Icon(
-              Icons.location_on,
-              color: Theme.of(context).colorScheme.primaryContainer,
-              size: 32,
+          AbsorbPointer(
+            child: FlutterMap(
+              mapController: MapController(),
+              options: MapOptions(
+                  initialCenter:
+                      LatLng(widget.bldg.latitude!, widget.bldg.longitude!),
+                  keepAlive: true,
+                  initialZoom: 19,
+                  interactionOptions:
+                      InteractionOptions(flags: InteractiveFlag.none)),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.course_planner',
+                  tileProvider: CachedTileProvider(
+                      store: cacheStore), // Ensure network loading
+                ),
+                Center(
+                  child: Icon(
+                    Icons.location_on,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    size: 32,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
