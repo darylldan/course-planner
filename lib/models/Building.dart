@@ -7,7 +7,7 @@ class Building {
   Id? id = Isar.autoIncrement;
 
   late String buildingName;
-  late double longitude;
-  late double latitude;
+  late double? longitude;
+  late double? latitude;
   String? notes;
 }
