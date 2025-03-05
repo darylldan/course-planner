@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/widgets/cards/quick_notes_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -82,7 +83,7 @@ class _ViewClassState extends State<ViewClass> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _notesWrapper(context),
+          child: QuickNotesCard(notes: subject.notes, id: subject.id!, type: "subject", name: subject.courseCode,),
         ),
         const SizedBox(
           height: 150,
