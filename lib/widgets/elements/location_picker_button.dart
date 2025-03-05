@@ -7,7 +7,7 @@ import '../../utils/constants.dart' as C;
 class LocationPickerButton extends StatefulWidget {
   final ValueChanged<LatLng?> onLocationSelected;
 
-  LocationPickerButton({super.key, required this.onLocationSelected});
+  const LocationPickerButton({super.key, required this.onLocationSelected});
 
   @override
   State<LocationPickerButton> createState() => _LocationPickerButtonState();
