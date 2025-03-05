@@ -223,7 +223,7 @@ class _AddClassState extends State<AddClass> {
                     return "Please enter units";
                   }
 
-                  if ((value is! int) || int.parse(value) == 0) {
+                  if (int.parse(value) == 0) {
                     return "Please enter valid units.";
                   }
 
