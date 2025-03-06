@@ -1,9 +1,19 @@
 import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/screens/buildings_module/add_room.dart';
+import 'package:course_planner/screens/buildings_module/edit_building.dart';
+import 'package:course_planner/screens/misc/edit_quick_notes.dart';
 import 'package:course_planner/screens/misc/view_location.dart';
+import 'package:course_planner/widgets/cards/error_card_no_action.dart';
+import 'package:course_planner/widgets/cards/info_card.dart';
+import 'package:course_planner/widgets/cards/quick_notes_card.dart';
+import 'package:course_planner/widgets/cards/room_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as c;
 
 import 'dart:io';
@@ -13,9 +23,9 @@ import 'package:flutter_map_cache/flutter_map_cache.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ViewBuilding extends StatefulWidget {
-  final Building bldg;
+  Building bldg;
 
-  const ViewBuilding({super.key, required this.bldg});
+  ViewBuilding({super.key, required this.bldg});
 
   @override
   State<ViewBuilding> createState() => _ViewBuildingState();
@@ -30,10 +40,33 @@ class _ViewBuildingState extends State<ViewBuilding> {
     return FileCacheStore('${dir.path}${Platform.pathSeparator}MapTiles');
   }
 
+  TextEditingController _roomSearchCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () async {
+              Building? editedBuilding = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => EditBuilding(
+                      bldg: widget.bldg,
+                    ),
+                  ));
+
+              if (editedBuilding != null) {
+                setState(() {
+                  widget.bldg = editedBuilding;
+                });
+              }
+            },
+            icon: Icon(Icons.edit),
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: c.screenHorizontalPadding),
@@ -42,13 +75,35 @@ class _ViewBuildingState extends State<ViewBuilding> {
             children: [
               TitleText(title: "View Building"),
               _buildMainCard(context),
-              _roomsTitle(context)
+              const SizedBox(
+                height: 12,
+              ),
+              QuickNotesCard(
+                  notes: widget.bldg.notes,
+                  id: widget.bldg.id!,
+                  type: "building",
+                  name: widget.bldg.buildingName),
+              const SizedBox(
+                height: 12,
+              ),
+              _roomsTitle(context),
+              _buildRooms(context),
+              SizedBox(
+                height: 150,
+              )
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddRoom(
+                        bldg: widget.bldg,
+                      )));
+        },
         label: Text("Create Room"),
         icon: Icon(Icons.add),
       ),
@@ -356,7 +411,7 @@ class _ViewBuildingState extends State<ViewBuilding> {
               ],
             ),
             Text(
-              widget.bldg.latitude!.toStringAsFixed(8),
+              widget.bldg.longitude!.toStringAsFixed(8),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -401,6 +456,76 @@ class _ViewBuildingState extends State<ViewBuilding> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRooms(BuildContext context) {
+    List<Room> rooms =
+        context.watch<RoomProvider>().getAllRoomsInBuilding(widget.bldg.id!);
+    List<Room> filteredRooms = rooms;
+
+    if (rooms.isEmpty) {
+      return InfoCard(content: "No rooms in this building yet.");
+    }
+
+    if (_roomSearchCtrl.text.isNotEmpty) {
+      filteredRooms = filteredRooms.where((r) => r.roomName
+          .toLowerCase()
+          .contains(_roomSearchCtrl.text.toLowerCase())).toList();
+    }
+
+    List<Padding> roomCard = filteredRooms
+        .map((r) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: RoomCard(room: r),
+            ))
+        .toList();
+
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _roomSearchCtrl,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.search),
+                  hintText: 'Search',
+                ),
+                onChanged: (String val) {
+                  setState(() {});
+                },
+              ),
+            ),
+            if (_roomSearchCtrl.text.isNotEmpty) 
+              IconButton(onPressed: () => setState(() {
+                _roomSearchCtrl.clear();
+              }), icon: Icon(Icons.clear))
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        if (filteredRooms.isEmpty && _roomSearchCtrl.text.isNotEmpty) 
+          Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ErrorCardNoAction(
+              title: "SEARCH RESULTS", content: "No rooms found."),
+        )
+        else
+          ...roomCard,
+        Center(
+          child: Text(
+            "${filteredRooms.length} ${filteredRooms.length == 1 ? "Room" : "Rooms"}",
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onInverseSurface),
+          ),
+        ),
+      ],
     );
   }
 }
