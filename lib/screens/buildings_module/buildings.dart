@@ -2,6 +2,7 @@ import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/screens/buildings_module/add_building.dart';
+import 'package:course_planner/screens/buildings_module/rooms.dart';
 import 'package:course_planner/screens/buildings_module/search_building.dart';
 import 'package:course_planner/widgets/cards/building_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
@@ -117,7 +118,7 @@ class _BuildingsState extends State<Buildings> {
   }
 
   Widget _roomsButton() {
-    int roomCount = context.watch<RoomProvider>().getUnassignedRoomCount();
+    int roomCount = context.watch<RoomProvider>().rooms.length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +130,10 @@ class _BuildingsState extends State<Buildings> {
                     style: ButtonStyle(
                         backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.onInverseSurface)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Rooms()));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
