@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/screens/buildings_module/select_building_room.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
@@ -38,7 +41,9 @@ class _AddClassState extends State<AddClass> {
   Color? _courseColor;
 
   int? _selectedTermID;
-  int? _selectedRoomID;
+  int? _selectedLocationID;
+  String? _selectedLocationType;
+  String? _selectedLocName;
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -124,7 +129,7 @@ class _AddClassState extends State<AddClass> {
   bool get _canPop {
     return _courseCodeCtrl.text.isEmpty &&
         _sectionCtrl.text.isEmpty &&
-        _selectedRoomID == null &&
+        _selectedLocationID == null &&
         _instructorCtrl.text.isEmpty &&
         _notesCtrl.text.isEmpty &&
         _selection.isEmpty &&
@@ -284,7 +289,7 @@ class _AddClassState extends State<AddClass> {
               child: _termSelector(),
             ),
 
-            // Room
+            // Location
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -439,15 +444,61 @@ class _AddClassState extends State<AddClass> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Room",
+          "Location",
           style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
         ),
-        TextButton(
-            onPressed: () => {},
-            child: Text("Select Room",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )))
+        Spacer(),
+        Flexible(
+          fit: FlexFit.loose,
+          child: TextButton(
+            onPressed: () async {
+              var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SelectBuildingRoom()));
+
+              if (result == null) {
+                return;
+              }
+
+              if (result is Building) {
+                setState(() {
+                  _selectedLocationType = "building";
+                  _selectedLocName = result.buildingName;
+                  _selectedLocationID = result.id!;
+                });
+              }
+
+              if (result is Room) {
+                setState(() {
+                  _selectedLocationType = "room";
+                  _selectedLocName = result.roomName;
+                  _selectedLocationID = result.id!;
+                });
+              }
+            },
+            child: Text(
+              _selectedLocName ?? "Select",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        if (_selectedLocationID != null)
+          IconButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text("Location cleared."),
+                ));
+                setState(() {
+                  _selectedLocName = null;
+                  _selectedLocationType = null;
+                  _selectedLocationID = null;
+                });
+              },
+              icon: Icon(Icons.cancel))
       ],
     );
   }
@@ -805,7 +856,8 @@ class _AddClassState extends State<AddClass> {
       ..section = _sectionCtrl.text
       ..instructor = _instructorCtrl.text
       ..termID = _selectedTermID!
-      ..roomID = _selectedRoomID
+      ..locationID = _selectedLocationID
+      ..locationType = _selectedLocationType
       ..frequency = _selection.toList()
       ..startDate = _startDate!
       ..endDate = _endDate!
