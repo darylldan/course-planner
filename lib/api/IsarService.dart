@@ -270,11 +270,15 @@ class IsarService {
     await isar.writeTxn(() async {
       await isar.rooms.delete(id);
 
-      List<Subject> affectedSubjects =
-          await isar.subjects.filter().roomIDEqualTo(id).findAll();
+      List<Subject> affectedSubjects = await isar.subjects
+          .filter()
+          .locationTypeEqualTo("room")
+          .locationIDEqualTo(id)
+          .findAll();
 
       for (Subject s in affectedSubjects) {
-        s.roomID = null;
+        s.locationID = null;
+        s.locationType = null;
       }
 
       for (Subject s in affectedSubjects) {

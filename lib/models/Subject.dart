@@ -13,7 +13,8 @@ class Subject {
   late String section;
   late String? instructor;
   late int termID;
-  late int? roomID;
+  late int? locationID;
+  late String? locationType; // "room" or "bldg"
 
   @Enumerated(EnumType.name)
   late List<Day> frequency;

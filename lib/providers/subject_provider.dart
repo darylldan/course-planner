@@ -54,17 +54,25 @@ class SubjectProvider with ChangeNotifier {
   }
 
   List<Subject> getSubjectsByRoom(int roomID) {
-    return _subjects.where((element) => element.roomID == roomID).toList();
+    return _subjects
+        .where((element) =>
+            element.locationType == "room" && element.locationID == roomID)
+        .toList();
   }
 
   Future<List<Subject>> getSubjectByBuilding(int buildingID) async {
     List<Room> rooms = await isarService.getAllRooms();
 
-    return _subjects.where((e) {
-      Room retrievedRoom = rooms.firstWhere((r) => r.id == e.roomID);
+    List<Subject> results = [];
 
-      return retrievedRoom.buildingId == buildingID;
-    }).toList();
+    results.addAll(_subjects.where(
+        (e) => e.locationType == "building" && e.locationID == buildingID));
+    results.addAll(_subjects.where((e) =>
+        e.locationType == "room" &&
+        rooms.firstWhere((r) => r.id == e.locationID).buildingId ==
+            buildingID));
+
+    return results;
   }
 
   Future<void> createSubject(Subject subject) async {
