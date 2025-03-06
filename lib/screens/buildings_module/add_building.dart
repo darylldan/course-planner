@@ -76,11 +76,8 @@ class _AddBuildingState extends State<AddBuilding> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child:
-                  LocationPickerButton(onLocationSelected: _onLocationSelected),
-            ),
+            LocationPickerButton(onLocationSelected: _onLocationSelected, initialLoc: null,),
+            SizedBox(height: 12,),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(

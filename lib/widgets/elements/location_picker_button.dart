@@ -6,8 +6,9 @@ import '../../utils/constants.dart' as C;
 
 class LocationPickerButton extends StatefulWidget {
   final ValueChanged<LatLng?> onLocationSelected;
-
-  const LocationPickerButton({super.key, required this.onLocationSelected});
+  final LatLng? initialLoc;
+  const LocationPickerButton(
+      {super.key, required this.onLocationSelected, required this.initialLoc});
 
   @override
   State<LocationPickerButton> createState() => _LocationPickerButtonState();
@@ -32,6 +33,12 @@ class _LocationPickerButtonState extends State<LocationPickerButton> {
     });
 
     widget.onLocationSelected(null);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pickedLocation = widget.initialLoc;
   }
 
   @override
@@ -122,16 +129,19 @@ class _LocationPickerButtonState extends State<LocationPickerButton> {
         ),
       ),
       if (_pickedLocation != null)
-      Align(
-        alignment: Alignment.topRight,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8, right: 8),
-          child: IconButton(
-            onPressed: () => _removeLocation(),
-            icon: Icon(Icons.cancel, color: Theme.of(context).colorScheme.onInverseSurface,),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, right: 8),
+            child: IconButton(
+              onPressed: () => _removeLocation(),
+              icon: Icon(
+                Icons.cancel,
+                color: Theme.of(context).colorScheme.onInverseSurface,
+              ),
+            ),
           ),
         ),
-      ),
     ]);
   }
 
