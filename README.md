@@ -60,20 +60,28 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 ## Milestones
 - Complete Backend Functions -> DONE
 - Term Module -> DONE
-- Subject Module -> IN PROGRESS
-- Rooms Module -> IN PROGRESS
-- Building Module
-- Note Module
-- Todo Module
-- Deadline Event Module
-- Notifications
-- Course Sharing
+- Subject Module -> IN PROGRESS // Will always be in progress
+- Rooms Module -> DONE
+- Building Module -> DONE
+- Note Module (est: 2d) -> IN PROGRESS 
+- Grades Module (est: 3d)
+- Todo Module (est: 3d)
+- Deadline Event Module (est: 7d)
+- Notifications (est: 3d)
+- Course Sharing (est: 7d)
 
 ### To-Do:
-- Implement room selector for add class
-- check validation functions
-- revise the subject packing method
-- mirror changes to edit class
+- changes to edit class
+- think on how to implement other nuisance of classes
+  - non credited classes
+    - might add a checkbox
+  - classes that has no sched (sp)
+    - might make the class schedule nullable
+    - if time is selected, a frequency must not be empty
+    - if frequency is not empty, a time must be selected
+- think on how the grades will be implemented
+  - linking of classes
+  - non numerical grade
 
 
 ### Notes:
