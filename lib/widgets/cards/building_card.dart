@@ -2,6 +2,7 @@ import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/screens/buildings_module/edit_building.dart';
 import 'package:course_planner/screens/buildings_module/view_building.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -17,8 +18,14 @@ import 'package:path_provider/path_provider.dart';
 
 class BuildingCard extends StatefulWidget {
   final Building bldg;
+  final bool disableAction;
+  final bool pickMode;
 
-  const BuildingCard({super.key, required this.bldg});
+  const BuildingCard(
+      {super.key,
+      required this.bldg,
+      this.disableAction = false,
+      this.pickMode = false});
 
   @override
   State<BuildingCard> createState() => _BuildingCardState();
@@ -50,14 +57,21 @@ class _BuildingCardState extends State<BuildingCard> {
                   color: Theme.of(context).colorScheme.onInverseSurface),
               child: InkWell(
                 borderRadius: BorderRadius.circular(C.cardBorderRadius),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ViewBuilding(bldg: widget.bldg)));
-                },
-                onLongPress: () => _showActions(context),
+                onTap: widget.pickMode
+                    ? () {
+                        Navigator.pop(context, widget.bldg);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text("Selected ${widget.bldg.buildingName}")));
+                      }
+                    : () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ViewBuilding(bldg: widget.bldg)));
+                      },
+                onLongPress:
+                    widget.disableAction ? null : () => _showActions(context),
                 child: Column(
                   children: [
                     _buildLocation(context, cacheStore),
@@ -195,10 +209,11 @@ class _BuildingCardState extends State<BuildingCard> {
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => _showActions(context),
-            icon: Icon(Icons.more_vert),
-          )
+          if (!widget.disableAction)
+            IconButton(
+              onPressed: () => _showActions(context),
+              icon: Icon(Icons.more_vert),
+            )
         ],
       ),
     );
@@ -250,12 +265,12 @@ class _BuildingCardState extends State<BuildingCard> {
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => EditClass(
-                    //               subject: subject,
-                    //             )));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditBuilding(
+                                  bldg: widget.bldg,
+                                )));
                   },
                 ),
                 ListTile(
