@@ -1,9 +1,11 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/models/Subject.dart';
+import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/buildings_module/edit_room.dart';
 import 'package:course_planner/screens/buildings_module/view_room.dart';
 import 'package:flutter/material.dart';
@@ -131,8 +133,9 @@ class _RoomCardState extends State<RoomCard> {
   }
 
   Widget _subjectCount(BuildContext context) {
+    Term? currentTerm = context.watch<TermProvider>().currentTerm;
     List<Subject> subjects =
-        context.read<SubjectProvider>().getSubjectsByRoom(widget.room.id!);
+        context.read<SubjectProvider>().getSubjectsByRoom(widget.room.id!, currentTerm!.id!);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
