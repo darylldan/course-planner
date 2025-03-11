@@ -53,10 +53,12 @@ class SubjectProvider with ChangeNotifier {
     return subjects;
   }
 
-  List<Subject> getSubjectsByRoom(int roomID) {
+  List<Subject> getSubjectsByRoom(int roomID, int termID) {
     return _subjects
         .where((element) =>
-            element.locationType == "room" && element.locationID == roomID)
+            element.locationType == "room" &&
+            element.locationID == roomID &&
+            element.termID == termID)
         .toList();
   }
 

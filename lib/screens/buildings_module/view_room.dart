@@ -1,8 +1,10 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/models/Subject.dart';
+import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
+import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/buildings_module/edit_room.dart';
 import 'package:course_planner/screens/misc/view_location.dart';
 import 'package:course_planner/widgets/cards/error_card_no_action.dart';
@@ -218,9 +220,7 @@ class _ViewRoomState extends State<ViewRoom> {
           final cacheStore = snapshot.data!;
 
           return Container(
-            height: (coords == null)
-                ? 75
-                : 150,
+            height: (coords == null) ? 75 : 150,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(c.cardBorderRadius)),
             clipBehavior: Clip.hardEdge,
@@ -476,8 +476,15 @@ class _ViewRoomState extends State<ViewRoom> {
   }
 
   Widget _buildSubjects(BuildContext context) {
+    Term? currentTerm = context.watch<TermProvider>().currentTerm;
+
+    if (currentTerm == null) {
+      return InfoCard(
+          content: "No terms yet. Create one via the Terms screen.");
+    }
+
     List<Subject> subjects =
-        context.watch<SubjectProvider>().getSubjectsByRoom(widget.room.id!);
+        context.watch<SubjectProvider>().getSubjectsByRoom(widget.room.id!, currentTerm.id!);
     List<Subject> filteredSubjects = subjects;
 
     if (subjects.isEmpty) {
