@@ -3,7 +3,6 @@ import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/widgets/cards/building_card.dart';
-import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/error_card_no_action.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/room_card.dart';

@@ -1,20 +1,13 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/widgets/cards/building_card.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Term.dart';
 import '../../utils/constants.dart' as C;
-import '../../utils/enums.dart';
 
 enum ResultFilter { building, room, all }
 
