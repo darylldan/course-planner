@@ -11,4 +11,7 @@ class Note {
   late int termId; // incase the note is unassigned
   late String title;
   late String content;
+
+  late DateTime created;
+  late DateTime updated;
 }

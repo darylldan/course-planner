@@ -27,15 +27,25 @@ const NoteSchema = CollectionSchema(
       name: r'courseId',
       type: IsarType.long,
     ),
-    r'termId': PropertySchema(
+    r'created': PropertySchema(
       id: 2,
+      name: r'created',
+      type: IsarType.dateTime,
+    ),
+    r'termId': PropertySchema(
+      id: 3,
       name: r'termId',
       type: IsarType.long,
     ),
     r'title': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'title',
       type: IsarType.string,
+    ),
+    r'updated': PropertySchema(
+      id: 5,
+      name: r'updated',
+      type: IsarType.dateTime,
     )
   },
   estimateSize: _noteEstimateSize,
@@ -71,8 +81,10 @@ void _noteSerialize(
 ) {
   writer.writeString(offsets[0], object.content);
   writer.writeLong(offsets[1], object.courseId);
-  writer.writeLong(offsets[2], object.termId);
-  writer.writeString(offsets[3], object.title);
+  writer.writeDateTime(offsets[2], object.created);
+  writer.writeLong(offsets[3], object.termId);
+  writer.writeString(offsets[4], object.title);
+  writer.writeDateTime(offsets[5], object.updated);
 }
 
 Note _noteDeserialize(
@@ -84,9 +96,11 @@ Note _noteDeserialize(
   final object = Note();
   object.content = reader.readString(offsets[0]);
   object.courseId = reader.readLong(offsets[1]);
+  object.created = reader.readDateTime(offsets[2]);
   object.id = id;
-  object.termId = reader.readLong(offsets[2]);
-  object.title = reader.readString(offsets[3]);
+  object.termId = reader.readLong(offsets[3]);
+  object.title = reader.readString(offsets[4]);
+  object.updated = reader.readDateTime(offsets[5]);
   return object;
 }
 
@@ -102,9 +116,13 @@ P _noteDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 3:
+      return (reader.readLong(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -378,6 +396,59 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'created',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'created',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'created',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> createdBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'created',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -625,6 +696,59 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updated',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updated',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension NoteQueryObject on QueryBuilder<Note, Note, QFilterCondition> {}
@@ -656,6 +780,18 @@ extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
     });
   }
 
+  QueryBuilder<Note, Note, QAfterSortBy> sortByCreated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'created', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByCreatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'created', Sort.desc);
+    });
+  }
+
   QueryBuilder<Note, Note, QAfterSortBy> sortByTermId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'termId', Sort.asc);
@@ -677,6 +813,18 @@ extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
   QueryBuilder<Note, Note, QAfterSortBy> sortByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updated', Sort.desc);
     });
   }
 }
@@ -703,6 +851,18 @@ extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
   QueryBuilder<Note, Note, QAfterSortBy> thenByCourseIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'courseId', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByCreated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'created', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByCreatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'created', Sort.desc);
     });
   }
 
@@ -741,6 +901,18 @@ extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updated', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updated', Sort.desc);
+    });
+  }
 }
 
 extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
@@ -757,6 +929,12 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
     });
   }
 
+  QueryBuilder<Note, Note, QDistinct> distinctByCreated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'created');
+    });
+  }
+
   QueryBuilder<Note, Note, QDistinct> distinctByTermId() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'termId');
@@ -767,6 +945,12 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Note, Note, QDistinct> distinctByUpdated() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updated');
     });
   }
 }
@@ -790,6 +974,12 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Note, DateTime, QQueryOperations> createdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'created');
+    });
+  }
+
   QueryBuilder<Note, int, QQueryOperations> termIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'termId');
@@ -799,6 +989,12 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
   QueryBuilder<Note, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'title');
+    });
+  }
+
+  QueryBuilder<Note, DateTime, QQueryOperations> updatedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updated');
     });
   }
 }
