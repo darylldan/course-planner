@@ -25,16 +25,22 @@ class NoteProvider extends ChangeNotifier {
 
   List<Note> getAllUnassignedNotes(int termId) {
     return _notes
-    .where((n) => n.termId == termId)
-    .where((n) => n.courseId == -1).toList();
+        .where((n) => n.termId == termId)
+        .where((n) => n.courseId == -1)
+        .toList();
   }
 
-  Future<void> createNote(Note note) async {
+  int getNotesCountByCourse(int courseId) {
+    return _notes.where((n) => n.courseId == courseId).length;
+  }
+
+  Future<int?> createNote(Note note) async {
     int? newId = await isarService.createNote(note);
     note.id = newId;
     _notes.add(note);
 
     notifyListeners();
+    return newId;
   }
 
   Future<void> editNote(Note note) async {
