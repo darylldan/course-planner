@@ -50,6 +50,7 @@ dependencies:
   dio_cache_interceptor_file_store: ^1.2.3
   flutter_map_cache: ^1.5.1
   dio_cache_interceptor: ^3.5.1
+  markdown_editor_plus: ^0.2.15
 
 dev_dependencies:
   flutter_test:
