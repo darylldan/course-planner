@@ -184,12 +184,15 @@ class NextClassCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onInverseSurface,
                 ),
               ),
-              Text(
-                "Section",
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.onInverseSurface,
-                  fontSize: 12,
+              Expanded(
+                child: Text(
+                  "Section",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
