@@ -51,6 +51,8 @@ dependencies:
   flutter_map_cache: ^1.5.1
   dio_cache_interceptor: ^3.5.1
   markdown_editor_plus: ^0.2.15
+  webview_flutter: ^4.10.0
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
