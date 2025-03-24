@@ -4,6 +4,7 @@ import 'package:course_planner/screens/buildings_module/buildings.dart';
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
 import 'package:course_planner/screens/misc/about.dart';
+import 'package:course_planner/screens/notes_module.dart/note.dart';
 import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
 import 'package:course_planner/screens/test_screen.dart';
@@ -61,58 +62,46 @@ class _SideDrawerState extends State<SideDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 175,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primaryContainer),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextButton(
-                        onLongPress: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Padayon! 🌻"))
-                          );
-                        },
-                        onPressed: () {
-                          setState(() {
-                            SideDrawer._currIndex =
-                                Random().nextInt(_foodEmojis.length);
-                          });
-                        },
-                        child: Text(
-                          _foodEmojis[SideDrawer._currIndex],
-                          style: const TextStyle(fontSize: 30),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 175,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primaryContainer),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextButton(
+                          onLongPress: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Padayon! 🌻")));
+                          },
+                          onPressed: () {
+                            setState(() {
+                              SideDrawer._currIndex =
+                                  Random().nextInt(_foodEmojis.length);
+                            });
+                          },
+                          child: Text(
+                            _foodEmojis[SideDrawer._currIndex],
+                            style: const TextStyle(fontSize: 30),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              ..._drawerButtons()
-            ],
-          ),
-          SafeArea(
-            child: ListTile(
-              leading: Icon(Icons.info_rounded),
-              title: const Text(
-                "About",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              onTap: () {
-                _navigateTo(context, "/about", About());
-              },
+                ..._drawerButtons()
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -180,6 +169,16 @@ class _SideDrawerState extends State<SideDrawer> {
         },
       ),
       ListTile(
+        leading: Icon(Icons.meeting_room_rounded),
+        title: const Text(
+          "Notes",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/notes", const Notes());
+        },
+      ),
+      ListTile(
         leading: Icon(Icons.flag),
         title: const Text(
           "Testing Screen",
@@ -188,7 +187,17 @@ class _SideDrawerState extends State<SideDrawer> {
         onTap: () {
           _navigateTo(context, "/test-screen", const TestScreen());
         },
-      )
+      ),
+      ListTile(
+        leading: Icon(Icons.info_rounded),
+        title: const Text(
+          "About",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/about", About());
+        },
+      ),
     ];
   }
 
