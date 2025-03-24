@@ -10,8 +10,8 @@ import 'package:course_planner/screens/misc/view_location.dart';
 import 'package:course_planner/widgets/cards/error_card_no_action.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/quick_notes_card.dart';
+import 'package:course_planner/widgets/cards/subject_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
-import 'package:course_planner/widgets/timetable/SubjectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -502,7 +502,7 @@ class _ViewRoomState extends State<ViewRoom> {
     List<Padding> roomCard = filteredSubjects
         .map((s) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SubjectCard(subject: s),
+              child: ClassCard(subject: s),
             ))
         .toList();
 
@@ -545,7 +545,7 @@ class _ViewRoomState extends State<ViewRoom> {
           ...roomCard,
         Center(
           child: Text(
-            "${filteredSubjects.length} ${filteredSubjects.length == 1 ? "Room" : "Rooms"}",
+            "${filteredSubjects.length} ${filteredSubjects.length == 1 ? "Subject" : "Subjects"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
