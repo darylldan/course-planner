@@ -63,12 +63,12 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Subject Module -> IN PROGRESS // Will always be in progress
 - Rooms Module -> DONE
 - Building Module -> DONE
-- Note Module (est: 2d) -> IN PROGRESS 
-- Grades Module (est: 3d)
-- Todo Module (est: 3d)
-- Deadline Event Module (est: 7d)
-- Notifications (est: 3d)
-- Course Sharing (est: 7d)
+- Note Module (est: 1d) -> IN PROGRESS 
+- Grades Module (est: 1d)
+- Todo Module (est: 1d)
+- Event Module (est: 3d)
+- Notifications (est: 1d)
+- Course Sharing (est: 2d)
 
 ### To-Do:
 - changes to edit class
