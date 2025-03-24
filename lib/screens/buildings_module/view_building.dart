@@ -475,7 +475,7 @@ class _ViewBuildingState extends State<ViewBuilding> {
 
     List<Padding> roomCard = filteredRooms
         .map((r) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.symmetric(vertical: 6.0),
               child: RoomCard(room: r),
             ))
         .toList();
