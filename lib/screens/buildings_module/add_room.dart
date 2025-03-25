@@ -1,6 +1,5 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/screens/buildings_module/select_building.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';

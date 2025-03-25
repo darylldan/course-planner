@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as Constants;
 
 class TitleText extends StatelessWidget {
-  late String title;
+  final String title;
 
-  TitleText({super.key, required this.title});
+  const TitleText({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'SubjectCard.dart';
 import '../../utils/constants.dart' as Constants;
 
 class TimetableSubjects extends StatelessWidget {
-  List<Subject> subjects;
+  final  List<Subject> subjects;
 
   final Map<Day, List<Widget>> _timeslots = {
     Day.mon: [],

@@ -60,14 +60,14 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 ## Milestones
 - Complete Backend Functions -> DONE
 - Term Module -> DONE
-- Subject Module -> IN PROGRESS // Will always be in progress
 - Rooms Module -> DONE
 - Building Module -> DONE
-- Note Module (est: 1d) -> IN PROGRESS 
-- Grades Module (est: 1d)
+- Note Module (est: 1d) -> DONE
+- Grades Module (est: 1d) -> IN PROGRESS
 - Todo Module (est: 1d)
 - Event Module (est: 3d)
-- Notifications (est: 1d)
+- Subject Module -> (est: 3d)
+- Notifications (est: 1d) // might have to drop
 - Course Sharing (est: 2d)
 
 ### To-Do:
@@ -82,8 +82,11 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - think on how the grades will be implemented
   - linking of classes
   - non numerical grade
+  - ask peers if yung grades ba ng lab nila ay linked sa lecture, like sa comsci
+  - might have to create a new model for grade setup
 
 
 ### Notes:
 - Fix the PopScope implementation on others.
 - Be wary of other theming errors
+- Successfully tested token sniffing, can now import schedule from amis (hopefully)

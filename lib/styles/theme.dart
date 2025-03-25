@@ -1,7 +1,5 @@
 import "package:flutter/material.dart";
 
-import 'package:flutter/material.dart';
-
 @immutable
 class SurfaceContainerTheme extends ThemeExtension<SurfaceContainerTheme> {
   final Color surfaceContainerLowest;

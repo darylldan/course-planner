@@ -6,9 +6,9 @@ import '../../utils/constants.dart' as Constants;
 import 'TimetableSubjects.dart';
 
 class Timetable extends StatelessWidget {
-  List<Subject> subjects;
+  final List<Subject> subjects;
 
-  Timetable({super.key, required this.subjects});
+  const Timetable({super.key, required this.subjects});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,6 @@ import "package:course_planner/models/Subject.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
-import "../../utils/enums.dart";
 import "TimelineCard.dart";
 
 /*
@@ -10,9 +9,9 @@ import "TimelineCard.dart";
  */
 
 class Timeline extends StatelessWidget {
-  List<Subject> subjects;
+  final List<Subject> subjects;
 
-  Timeline({super.key, required this.subjects});
+  const Timeline({super.key, required this.subjects});
   // Timeline({super.key});
 
   @override

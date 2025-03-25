@@ -172,7 +172,7 @@ class _OverviewState extends State<Overview> {
     if (onSchedule && currentSubject == null) {
       // On break
       Duration diff =
-          _subjectsToday[curSubIndex! + 1].startDate.difference(moment);
+          _subjectsToday[curSubIndex + 1].startDate.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else if (onSchedule) {
       // On class
@@ -200,7 +200,7 @@ class _OverviewState extends State<Overview> {
       nextClass = const NextClassCard(isLastClass: true);
     } else {
       nextClass = NextClassCard(
-          isLastClass: false, nextClass: _subjectsToday[curSubIndex! + 1]);
+          isLastClass: false, nextClass: _subjectsToday[curSubIndex + 1]);
     }
 
     return Column(
@@ -213,7 +213,7 @@ class _OverviewState extends State<Overview> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _timeLeft(
-              context, timeLeft, onSchedule, curSubIndex!, currentSubject),
+              context, timeLeft, onSchedule, curSubIndex, currentSubject),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),

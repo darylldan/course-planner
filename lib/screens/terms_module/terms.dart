@@ -1,11 +1,9 @@
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/terms_module/add_term.dart';
 import 'package:course_planner/widgets/cards/current_term_card.dart';
-import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/term_card.dart';
 import 'package:course_planner/widgets/elements/Drawer.dart';
-import 'package:course_planner/widgets/elements/current_star.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../utils/enums.dart';
 
 class DayLabel extends StatelessWidget {
-  var isOpaque;
-  Day day;
+  final bool isOpaque;
+  final Day day;
 
-  DayLabel({super.key, required this.day, required this.isOpaque});
+  const DayLabel({super.key, required this.day, required this.isOpaque});
 
   @override
   Widget build(BuildContext context) {

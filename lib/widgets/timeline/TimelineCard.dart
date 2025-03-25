@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TimelineCard extends StatelessWidget {
-  Subject subject;
+  final Subject subject;
 
-  TimelineCard({super.key, required this.subject});
+  const TimelineCard({super.key, required this.subject});
 
   @override
   Widget build(BuildContext context) {

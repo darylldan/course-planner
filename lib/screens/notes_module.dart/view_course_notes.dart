@@ -1,9 +1,6 @@
 import 'package:course_planner/models/Note.dart';
 import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/note_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/misc/edit_quick_notes.dart';
 import 'package:course_planner/screens/notes_module.dart/view_note.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/note_card.dart';
