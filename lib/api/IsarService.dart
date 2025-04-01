@@ -1,7 +1,9 @@
 import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/CourseGrade.dart';
 import 'package:course_planner/models/DeadlineEvent.dart';
 import 'package:course_planner/models/Note.dart';
 import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/models/TermGrade.dart';
 import 'package:course_planner/models/Todo.dart';
 import 'package:course_planner/models/User.dart';
 import 'package:isar/isar.dart';
@@ -28,7 +30,9 @@ class IsarService {
         NoteSchema,
         RoomSchema,
         TodoSchema,
-        UserSchema
+        UserSchema,
+        CourseGradeSchema,
+        TermGradeSchema
       ], directory: dir.path);
     }
 
@@ -82,6 +86,18 @@ class IsarService {
     final isar = await db;
 
     return isar.users.where().findAll();
+  }
+
+  Future<List<TermGrade>> getAllTermGrades() async {
+    final isar = await db;
+
+    return isar.termGrades.where().findAll();
+  }
+
+  Future<List<CourseGrade>> getAllCourseGrades() async {
+    final isar = await db;
+
+    return isar.courseGrades.where().findAll();
   }
 
   // All WRITE
@@ -172,6 +188,28 @@ class IsarService {
     return returnID;
   }
 
+  Future<int?> createTermGrade(TermGrade termGrade) async {
+    final isar = await db;
+    int? returnID;
+
+    await isar.writeTxn(() async {
+      returnID = await isar.termGrades.put(termGrade);
+    });
+
+    return returnID;
+  }
+
+  Future<int?> createCourseGrade(CourseGrade courseGrade) async {
+    final isar = await db;
+    int? returnID;
+
+    await isar.writeTxn(() async {
+      returnID = await isar.courseGrades.put(courseGrade);
+    });
+
+    return returnID;
+  }
+
   // All EDIT
   Future<void> editSubject(Subject subject) async {
     final isar = await db;
@@ -237,16 +275,46 @@ class IsarService {
     });
   }
 
+  Future<void> editTermGrade(TermGrade termGrade) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.termGrades.put(termGrade);
+    });
+  }
+
+  Future<void> editCourseGrade(CourseGrade courseGrade) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.courseGrades.put(courseGrade);
+    });
+  }
+
   // All DELETE
 
   Future<void> deleteSubject(int id) async {
     final isar = await db;
+    Subject? course = await isar.subjects.filter().idEqualTo(id).findFirst();
+    String courseCode = course!.courseCode;
+    List<Subject> linkedCourses = await isar.subjects
+        .filter()
+        .courseCodeEqualTo(courseCode, caseSensitive: false)
+        .findAll();
 
     await isar.writeTxn(() async {
       await isar.subjects.delete(id);
       await isar.deadlineEvents.filter().courseIdEqualTo(id).deleteAll();
       await isar.notes.filter().courseIdEqualTo(id).deleteAll();
       await isar.todos.filter().courseIdEqualTo(id).deleteAll();
+
+      // Deleting a course grade if no matching course code+units is detected
+      if (linkedCourses.isEmpty) {
+        await isar.courseGrades
+            .filter()
+            .courseCodeEqualTo(courseCode, caseSensitive: false)
+            .deleteAll();
+      }
     });
   }
 
@@ -261,6 +329,9 @@ class IsarService {
       for (Subject s in affectedSubjects) {
         await deleteSubject(s.id!);
       }
+
+      // Deleting unassinged notes
+      await isar.notes.filter().termIdEqualTo(id).deleteAll();
     });
   }
 
@@ -325,6 +396,22 @@ class IsarService {
 
     await isar.writeTxn(() async {
       await isar.todos.delete(id);
+    });
+  }
+
+  Future<void> deleteTermGrade(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.termGrades.delete(id);
+    });
+  }
+
+  Future<void> deleteCourseGrade(int id) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.courseGrades.delete(id);
     });
   }
 
