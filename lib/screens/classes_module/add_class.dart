@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/CourseGrade.dart';
 import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/providers/course_grade_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/screens/buildings_module/select_building_room.dart';
 import 'package:course_planner/widgets/cards/error_card.dart';
@@ -38,6 +40,7 @@ class _AddClassState extends State<AddClass> {
   final _notesCtrl = TextEditingController();
   final _unitsCtrl = TextEditingController();
 
+  bool? _isCredited = true;
   Color? _courseColor;
 
   int? _selectedTermID;
@@ -216,24 +219,60 @@ class _AddClassState extends State<AddClass> {
             // Units
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: TextFormField(
-                controller: _unitsCtrl,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    labelText: 'Units'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter units";
-                  }
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Flexible(
+                    child: TextFormField(
+                      controller: _unitsCtrl,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          labelText: 'Units'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter units";
+                        }
 
-                  if (int.parse(value) == 0) {
-                    return "Please enter valid units.";
-                  }
+                        int? parsedVal = int.tryParse(value);
 
-                  return null;
-                },
+                        if (parsedVal == null) {
+                          return "Please enter valid units.";
+                        }
+
+                        if (parsedVal <= 0) {
+                          return "Units must be at least 1.";
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: GestureDetector(
+                      onLongPress: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Credited courses count towards your GWA. Non-credited courses do not (e.g., NSTP1/2, HK11, etc.)."),
+                            duration: Duration(seconds: 5),
+                          ),
+                        );
+                      },
+                      child: CheckboxListTile(
+                        title: const Text("Credited"),
+                        value: _isCredited,
+                        onChanged: (bool? val) {
+                          setState(() {
+                            _isCredited = val;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -395,7 +434,22 @@ class _AddClassState extends State<AddClass> {
           },
         );
       } else {
-        context.read<SubjectProvider>().createSubject(_packSubject());
+        Subject newSubject = _packSubject();
+        context.read<SubjectProvider>().createSubject(newSubject);
+
+        CourseGrade newCourseGrade = CourseGrade()
+          ..courseCode = newSubject.courseCode
+          ..isCredited = newSubject.credited
+          ..termId = newSubject.termID
+          ..units = newSubject.units;
+
+        bool doesCourseGradeExist = context
+            .read<CourseGradeProvider>()
+            .doesCourseGradeExist(newCourseGrade);
+
+        if (!doesCourseGradeExist) {
+          context.read<CourseGradeProvider>().createCourseGrade(newCourseGrade);
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Subject added."),
@@ -849,9 +903,9 @@ class _AddClassState extends State<AddClass> {
         _courseColor!.green,
         _courseColor!.blue
       ]
-      ..units = double.parse(_unitsCtrl.text)
-      ..grade = 0.0
+      ..units = int.parse(_unitsCtrl.text)
       ..isLaboratory = _classTypeSelection.contains(ClassType.lec)
+      ..credited = _isCredited!
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
       ..instructor = _instructorCtrl.text

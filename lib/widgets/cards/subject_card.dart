@@ -50,68 +50,69 @@ class ClassCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 2, right: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Color.fromARGB(
-                        subject.color[0],
-                        subject.color[1],
-                        subject.color[2],
-                        subject.color[3],
-                      )),
-                  width: 4,
-                  height: 50,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 229,
-                    child: Text(
-                      "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
-                    ),
+          Expanded(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, right: 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color.fromARGB(
+                          subject.color[0],
+                          subject.color[1],
+                          subject.color[2],
+                          subject.color[3],
+                        )),
+                    width: 4,
+                    height: 50,
                   ),
-                  Row(children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      constraints: BoxConstraints(maxWidth: 60),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: SizedBox(
-                        child: Center(
-                          child: Text(
-                            subject.section,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surfaceContainerHighest,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
+                      ),
+                      Row(children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          constraints: BoxConstraints(maxWidth: 60),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              borderRadius: BorderRadius.circular(4)),
+                          child: SizedBox(
+                            child: Center(
+                              child: Text(
+                                subject.section,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainerHighest,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _buildSubjectSubtitle(context),
-                  ])
-                ],
-              ),
-            ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        _buildSubjectSubtitle(context),
+                      ])
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           IconButton(
             onPressed: () {
