@@ -1,3 +1,4 @@
+import 'package:course_planner/models/CourseGrade.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:flutter/foundation.dart';
 
@@ -59,6 +60,61 @@ class SubjectProvider with ChangeNotifier {
             element.locationType == "room" &&
             element.locationID == roomID &&
             element.termID == termID)
+        .toList();
+  }
+
+  CourseComponents getCourseComponents(String courseCode, int termId, int units) {
+    List<Subject> foundCourses = _subjects
+        .where((s) =>
+            s.termID == termId &&
+            s.courseCode.toLowerCase() == courseCode.toLowerCase() &&
+            s.units == units
+            )
+        .toList();
+
+    Set<CourseComponents> foundComponents = {};
+
+    for (Subject s in foundCourses) {
+      if (s.isLaboratory) {
+        foundComponents.add(CourseComponents.lab);
+      } else {
+        foundComponents.add(CourseComponents.lec);
+      }
+    }
+
+    if (foundComponents.length == 1) {
+      return foundComponents.first;
+    } else {
+      return CourseComponents.both;
+    }
+  }
+
+  int getTermUnits(int termId, {bool credited = true}) {
+    final Set<String> uniqueCourseAndUnits = {};
+
+    return _subjects
+        .where((s) => s.termID == termId && s.credited == credited)
+        .fold(0, (totalUnits, subject) {
+      final String key = "${subject.courseCode}-${subject.units}";
+      if (!uniqueCourseAndUnits.contains(key)) {
+        uniqueCourseAndUnits.add(key);
+        return totalUnits + subject.units;
+      }
+      return totalUnits;
+    });
+  }
+
+  int getCourseCount(int termId) {
+    return _subjects.where((s) => s.termID == termId).length;
+  }
+
+  List<Subject> getLinkedCoursesFromCG(CourseGrade courseGrade) {
+    return _subjects
+        .where((s) =>
+            s.termID == courseGrade.termId &&
+            s.courseCode.toLowerCase() ==
+                courseGrade.courseCode.toLowerCase() &&
+            s.units == courseGrade.units)
         .toList();
   }
 
