@@ -23,8 +23,8 @@ class Subject {
   late DateTime startDate;
   late DateTime endDate;
 
-  late double units;
-  late double? grade;
+  late int units;
+  late bool credited;
 
   // List because the Color class is not serializable
   late List<int> color;

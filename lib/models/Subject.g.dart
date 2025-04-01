@@ -27,26 +27,26 @@ const SubjectSchema = CollectionSchema(
       name: r'courseCode',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'credited': PropertySchema(
       id: 2,
+      name: r'credited',
+      type: IsarType.bool,
+    ),
+    r'description': PropertySchema(
+      id: 3,
       name: r'description',
       type: IsarType.string,
     ),
     r'endDate': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'endDate',
       type: IsarType.dateTime,
     ),
     r'frequency': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'frequency',
       type: IsarType.stringList,
       enumMap: _SubjectfrequencyEnumValueMap,
-    ),
-    r'grade': PropertySchema(
-      id: 5,
-      name: r'grade',
-      type: IsarType.double,
     ),
     r'instructor': PropertySchema(
       id: 6,
@@ -91,7 +91,7 @@ const SubjectSchema = CollectionSchema(
     r'units': PropertySchema(
       id: 14,
       name: r'units',
-      type: IsarType.double,
+      type: IsarType.long,
     )
   },
   estimateSize: _subjectEstimateSize,
@@ -159,11 +159,11 @@ void _subjectSerialize(
 ) {
   writer.writeLongList(offsets[0], object.color);
   writer.writeString(offsets[1], object.courseCode);
-  writer.writeString(offsets[2], object.description);
-  writer.writeDateTime(offsets[3], object.endDate);
+  writer.writeBool(offsets[2], object.credited);
+  writer.writeString(offsets[3], object.description);
+  writer.writeDateTime(offsets[4], object.endDate);
   writer.writeStringList(
-      offsets[4], object.frequency.map((e) => e.name).toList());
-  writer.writeDouble(offsets[5], object.grade);
+      offsets[5], object.frequency.map((e) => e.name).toList());
   writer.writeString(offsets[6], object.instructor);
   writer.writeBool(offsets[7], object.isLaboratory);
   writer.writeLong(offsets[8], object.locationID);
@@ -172,7 +172,7 @@ void _subjectSerialize(
   writer.writeString(offsets[11], object.section);
   writer.writeDateTime(offsets[12], object.startDate);
   writer.writeLong(offsets[13], object.termID);
-  writer.writeDouble(offsets[14], object.units);
+  writer.writeLong(offsets[14], object.units);
 }
 
 Subject _subjectDeserialize(
@@ -184,14 +184,14 @@ Subject _subjectDeserialize(
   final object = Subject();
   object.color = reader.readLongList(offsets[0]) ?? [];
   object.courseCode = reader.readString(offsets[1]);
-  object.description = reader.readStringOrNull(offsets[2]);
-  object.endDate = reader.readDateTime(offsets[3]);
+  object.credited = reader.readBool(offsets[2]);
+  object.description = reader.readStringOrNull(offsets[3]);
+  object.endDate = reader.readDateTime(offsets[4]);
   object.frequency = reader
-          .readStringList(offsets[4])
+          .readStringList(offsets[5])
           ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
           .toList() ??
       [];
-  object.grade = reader.readDoubleOrNull(offsets[5]);
   object.id = id;
   object.instructor = reader.readStringOrNull(offsets[6]);
   object.isLaboratory = reader.readBool(offsets[7]);
@@ -201,7 +201,7 @@ Subject _subjectDeserialize(
   object.section = reader.readString(offsets[11]);
   object.startDate = reader.readDateTime(offsets[12]);
   object.termID = reader.readLong(offsets[13]);
-  object.units = reader.readDouble(offsets[14]);
+  object.units = reader.readLong(offsets[14]);
   return object;
 }
 
@@ -217,17 +217,17 @@ P _subjectDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readDateTime(offset)) as P;
+    case 5:
       return (reader
               .readStringList(offset)
               ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
               .toList() ??
           []) as P;
-    case 5:
-      return (reader.readDoubleOrNull(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
@@ -245,7 +245,7 @@ P _subjectDeserializeProp<P>(
     case 13:
       return (reader.readLong(offset)) as P;
     case 14:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -620,6 +620,16 @@ extension SubjectQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'courseCode',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> creditedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'credited',
+        value: value,
       ));
     });
   }
@@ -1041,84 +1051,6 @@ extension SubjectQueryFilter
         upper,
         includeUpper,
       );
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'grade',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'grade',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'grade',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'grade',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'grade',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> gradeBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'grade',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
     });
   }
 
@@ -1946,54 +1878,46 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'units',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsGreaterThan(
-    double value, {
+    int value, {
     bool include = false,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'units',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsLessThan(
-    double value, {
+    int value, {
     bool include = false,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'units',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsBetween(
-    double lower,
-    double upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    double epsilon = Query.epsilon,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2002,7 +1926,6 @@ extension SubjectQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        epsilon: epsilon,
       ));
     });
   }
@@ -2027,6 +1950,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -2048,18 +1983,6 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByEndDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByGrade() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'grade', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByGradeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'grade', Sort.desc);
     });
   }
 
@@ -2186,6 +2109,18 @@ extension SubjectQuerySortThenBy
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
@@ -2207,18 +2142,6 @@ extension SubjectQuerySortThenBy
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByEndDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'endDate', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByGrade() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'grade', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByGradeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'grade', Sort.desc);
     });
   }
 
@@ -2358,6 +2281,12 @@ extension SubjectQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Subject, Subject, QDistinct> distinctByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'credited');
+    });
+  }
+
   QueryBuilder<Subject, Subject, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2374,12 +2303,6 @@ extension SubjectQueryWhereDistinct
   QueryBuilder<Subject, Subject, QDistinct> distinctByFrequency() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'frequency');
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QDistinct> distinctByGrade() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'grade');
     });
   }
 
@@ -2462,6 +2385,12 @@ extension SubjectQueryProperty
     });
   }
 
+  QueryBuilder<Subject, bool, QQueryOperations> creditedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'credited');
+    });
+  }
+
   QueryBuilder<Subject, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
@@ -2477,12 +2406,6 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, List<Day>, QQueryOperations> frequencyProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'frequency');
-    });
-  }
-
-  QueryBuilder<Subject, double?, QQueryOperations> gradeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'grade');
     });
   }
 
@@ -2534,7 +2457,7 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, double, QQueryOperations> unitsProperty() {
+  QueryBuilder<Subject, int, QQueryOperations> unitsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'units');
     });
