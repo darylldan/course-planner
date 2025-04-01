@@ -63,9 +63,9 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Rooms Module -> DONE
 - Building Module -> DONE
 - Note Module (est: 1d) -> DONE
-- Grades Module (est: 1d) -> IN PROGRESS
+- Grades Module (est: 1d) -> DONE
+- Event Module (est: 3d) -> IN PROGRESS
 - Todo Module (est: 1d)
-- Event Module (est: 3d)
 - Subject Module -> (est: 3d)
 - Notifications (est: 1d) // might have to drop
 - Course Sharing (est: 2d)
@@ -73,17 +73,10 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 ### To-Do:
 - changes to edit class
 - think on how to implement other nuisance of classes
-  - non credited classes
-    - might add a checkbox
   - classes that has no sched (sp)
     - might make the class schedule nullable
     - if time is selected, a frequency must not be empty
     - if frequency is not empty, a time must be selected
-- think on how the grades will be implemented
-  - linking of classes
-  - non numerical grade
-  - ask peers if yung grades ba ng lab nila ay linked sa lecture, like sa comsci
-  - might have to create a new model for grade setup
 
 
 ### Notes:
