@@ -22,8 +22,8 @@ import '../../utils/constants.dart' as C;
 enum ClassType { lec, lab }
 
 class AddClass extends StatefulWidget {
-  List<Term> terms;
-  AddClass({super.key, required this.terms});
+  final List<Term> terms;
+  const AddClass({super.key, required this.terms});
 
   @override
   State<AddClass> createState() => _AddClassState();
@@ -53,14 +53,6 @@ class _AddClassState extends State<AddClass> {
 
   late Term _currentTerm;
 
-  final Map<Day, bool> _frequency = {
-    Day.mon: false,
-    Day.tue: false,
-    Day.wed: false,
-    Day.thu: false,
-    Day.fri: false,
-    Day.sat: false,
-  };
   Set<Day> _selection = <Day>{};
 
   Set<ClassType> _classTypeSelection = <ClassType>{ClassType.lec};
@@ -904,7 +896,7 @@ class _AddClassState extends State<AddClass> {
         _courseColor!.blue
       ]
       ..units = int.parse(_unitsCtrl.text)
-      ..isLaboratory = _classTypeSelection.contains(ClassType.lec)
+      ..isLaboratory = _classTypeSelection.contains(ClassType.lab)
       ..credited = _isCredited!
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
