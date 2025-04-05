@@ -2,6 +2,8 @@ enum Day { mon, tue, wed, thu, fri, sat }
 
 enum Honors { summa, magna, cum, none }
 
+enum ViewEventType { upcoming, past }
+
 enum CourseComponents { lec, lab, both }
 
 enum NumericalGrade {
