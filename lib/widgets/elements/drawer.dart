@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:course_planner/screens/buildings_module/buildings.dart';
 import 'package:course_planner/screens/classes_module/classes.dart';
 import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
+import 'package:course_planner/screens/events_module/events.dart';
 import 'package:course_planner/screens/grades_module/grades.dart';
 import 'package:course_planner/screens/misc/about.dart';
 import 'package:course_planner/screens/notes_module.dart/note.dart';
@@ -187,6 +188,16 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
         onTap: () {
           _navigateTo(context, "/grades", const Grades());
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.event),
+        title: const Text(
+          "Events",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/events", const Events());
         },
       ),
       ListTile(
