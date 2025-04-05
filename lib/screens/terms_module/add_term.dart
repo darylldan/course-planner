@@ -13,7 +13,7 @@ class AddTerm extends StatefulWidget {
   const AddTerm({super.key});
 
   @override
-  _AddTermState createState() => _AddTermState();
+  State<AddTerm> createState() => _AddTermState();
 }
 
 class _AddTermState extends State<AddTerm> {

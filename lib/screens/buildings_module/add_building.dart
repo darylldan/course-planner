@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 
 class AddBuilding extends StatefulWidget {
-  AddBuilding({super.key});
+  const AddBuilding({super.key});
 
   @override
   State<AddBuilding> createState() => _AddBuildingState();
