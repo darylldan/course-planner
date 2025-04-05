@@ -32,9 +32,9 @@ const DeadlineEventSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'notifyPreference': PropertySchema(
+    r'termId': PropertySchema(
       id: 3,
-      name: r'notifyPreference',
+      name: r'termId',
       type: IsarType.long,
     )
   },
@@ -58,12 +58,7 @@ int _deadlineEventEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.description.length * 3;
   return bytesCount;
 }
 
@@ -76,7 +71,7 @@ void _deadlineEventSerialize(
   writer.writeLong(offsets[0], object.courseId);
   writer.writeDateTime(offsets[1], object.date);
   writer.writeString(offsets[2], object.description);
-  writer.writeLong(offsets[3], object.notifyPreference);
+  writer.writeLong(offsets[3], object.termId);
 }
 
 DeadlineEvent _deadlineEventDeserialize(
@@ -88,9 +83,9 @@ DeadlineEvent _deadlineEventDeserialize(
   final object = DeadlineEvent();
   object.courseId = reader.readLong(offsets[0]);
   object.date = reader.readDateTime(offsets[1]);
-  object.description = reader.readStringOrNull(offsets[2]);
+  object.description = reader.readString(offsets[2]);
   object.id = id;
-  object.notifyPreference = reader.readLong(offsets[3]);
+  object.termId = reader.readLong(offsets[3]);
   return object;
 }
 
@@ -106,7 +101,7 @@ P _deadlineEventDeserializeProp<P>(
     case 1:
       return (reader.readDateTime(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
       return (reader.readLong(offset)) as P;
     default:
@@ -322,26 +317,8 @@ extension DeadlineEventQueryFilter
   }
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
       descriptionEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -355,7 +332,7 @@ extension DeadlineEventQueryFilter
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
       descriptionGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -371,7 +348,7 @@ extension DeadlineEventQueryFilter
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
       descriptionLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -387,8 +364,8 @@ extension DeadlineEventQueryFilter
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
       descriptionBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -547,45 +524,45 @@ extension DeadlineEventQueryFilter
   }
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      notifyPreferenceEqualTo(int value) {
+      termIdEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'notifyPreference',
+        property: r'termId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      notifyPreferenceGreaterThan(
+      termIdGreaterThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'notifyPreference',
+        property: r'termId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      notifyPreferenceLessThan(
+      termIdLessThan(
     int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'notifyPreference',
+        property: r'termId',
         value: value,
       ));
     });
   }
 
   QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterFilterCondition>
-      notifyPreferenceBetween(
+      termIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -593,7 +570,7 @@ extension DeadlineEventQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'notifyPreference',
+        property: r'termId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -649,17 +626,15 @@ extension DeadlineEventQuerySortBy
     });
   }
 
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy>
-      sortByNotifyPreference() {
+  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy> sortByTermId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'notifyPreference', Sort.asc);
+      return query.addSortBy(r'termId', Sort.asc);
     });
   }
 
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy>
-      sortByNotifyPreferenceDesc() {
+  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy> sortByTermIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'notifyPreference', Sort.desc);
+      return query.addSortBy(r'termId', Sort.desc);
     });
   }
 }
@@ -716,17 +691,15 @@ extension DeadlineEventQuerySortThenBy
     });
   }
 
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy>
-      thenByNotifyPreference() {
+  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy> thenByTermId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'notifyPreference', Sort.asc);
+      return query.addSortBy(r'termId', Sort.asc);
     });
   }
 
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy>
-      thenByNotifyPreferenceDesc() {
+  QueryBuilder<DeadlineEvent, DeadlineEvent, QAfterSortBy> thenByTermIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'notifyPreference', Sort.desc);
+      return query.addSortBy(r'termId', Sort.desc);
     });
   }
 }
@@ -752,10 +725,9 @@ extension DeadlineEventQueryWhereDistinct
     });
   }
 
-  QueryBuilder<DeadlineEvent, DeadlineEvent, QDistinct>
-      distinctByNotifyPreference() {
+  QueryBuilder<DeadlineEvent, DeadlineEvent, QDistinct> distinctByTermId() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'notifyPreference');
+      return query.addDistinctBy(r'termId');
     });
   }
 }
@@ -780,16 +752,15 @@ extension DeadlineEventQueryProperty
     });
   }
 
-  QueryBuilder<DeadlineEvent, String?, QQueryOperations> descriptionProperty() {
+  QueryBuilder<DeadlineEvent, String, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
     });
   }
 
-  QueryBuilder<DeadlineEvent, int, QQueryOperations>
-      notifyPreferenceProperty() {
+  QueryBuilder<DeadlineEvent, int, QQueryOperations> termIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'notifyPreference');
+      return query.addPropertyName(r'termId');
     });
   }
 }
