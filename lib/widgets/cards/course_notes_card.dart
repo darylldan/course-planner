@@ -1,6 +1,5 @@
 import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/note_provider.dart';
-import 'package:course_planner/screens/misc/edit_quick_notes.dart';
 import 'package:course_planner/screens/notes_module.dart/view_course_notes.dart';
 import 'package:course_planner/utils/enums.dart';
 import 'package:provider/provider.dart';

@@ -11,7 +11,8 @@ import '../../utils/enums.dart';
 
 class ClassCard extends StatelessWidget {
   final Subject subject;
-  const ClassCard({super.key, required this.subject});
+  final bool pickMode;
+  const ClassCard({super.key, required this.subject, this.pickMode = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +26,18 @@ class ClassCard extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ViewClass(
-                            subjectID: subject.id!,
-                          )));
-            },
+            onTap: pickMode
+                ? () {
+                    Navigator.pop(context, subject);
+                  }
+                : () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewClass(
+                                  subjectID: subject.id!,
+                                )));
+                  },
             onLongPress: () {
               _showActions(context);
             },
@@ -83,10 +88,13 @@ class ClassCard extends StatelessWidget {
                       ),
                       Row(children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           constraints: BoxConstraints(maxWidth: 60),
                           decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                               borderRadius: BorderRadius.circular(4)),
                           child: SizedBox(
                             child: Center(
