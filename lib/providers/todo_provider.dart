@@ -27,19 +27,58 @@ class TodoProvider extends ChangeNotifier {
     return _todos.firstWhere((t) => t.id == id);
   }
 
-  List<Todo> getAllUnassignedTodo() {
-    return _todos.where((t) => t.courseId == -1).toList();
+  List<Todo> getAllUnassignedTodo(int termId) {
+    return _todos.where((t) => t.termId == termId && t.courseId == -1).toList();
   }
 
-  Future<List<Todo>> getAllUncompletedTodo(int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
-
+  List<Todo> getAllUncompletedTodo(int termId) {
     return _todos
-        .where((t) => t.courseId == -1
-            ? t.termId == termId
-            : subjects.firstWhere((s) => s.id == t.courseId).termID == termId)
-        .where((t) => !t.isDone)
+        .where((t) => t.termId == termId && t.isDone == false)
         .toList();
+  }
+
+  List<Todo> getAllUncompletedUnassignedTodo(int termId) {
+    return _todos
+        .where(
+            (t) => t.termId == termId && t.courseId == -1 && t.isDone == false)
+        .toList();
+  }
+
+  List<Todo> getAllCompletedUnassignedTodo(int termId) {
+    return _todos
+        .where(
+            (t) => t.termId == termId && t.courseId == -1 && t.isDone == true)
+        .toList();
+  }
+
+  List<Todo> getAllUncompletedTodoByCourse(int termId, int courseId) {
+    return _todos
+        .where((t) =>
+            t.termId == termId && t.courseId == courseId && t.isDone == false)
+        .toList();
+  }
+
+  List<Todo> getAllCompletedTodoByCourse(int termId, int courseId) {
+    return _todos
+        .where((t) =>
+            t.termId == termId && t.courseId == courseId && t.isDone == true)
+        .toList();
+  }
+
+  List<Todo> getAllUnassignedCompletedTodo(int termId) {
+    return _todos
+        .where(
+            (t) => t.termId == termId && t.courseId == -1 && t.isDone == true)
+        .toList();
+  }
+
+  Future<int?> addTodo(Todo todo) async {
+    int? newId = await isarService.createTodo(todo);
+    todo.id = newId;
+    _todos.add(todo);
+
+    notifyListeners();
+    return newId;
   }
 
   Future<void> editTodo(Todo todo) async {
@@ -52,5 +91,7 @@ class TodoProvider extends ChangeNotifier {
   Future<void> deleteTodo(int id) async {
     await isarService.deleteTodo(id);
     _todos.removeWhere((t) => t.id == id);
+
+    notifyListeners();
   }
 }
