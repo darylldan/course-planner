@@ -1,7 +1,5 @@
 import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/models/Subject.dart';
 import 'package:flutter/foundation.dart';
-
 import '../api/IsarService.dart';
 
 class DeadlineEventProvider extends ChangeNotifier {
@@ -37,94 +35,143 @@ class DeadlineEventProvider extends ChangeNotifier {
     return _deadlineEvents.firstWhere((e) => e.id == id);
   }
 
-  List<DeadlineEvent> getDeadlineAllEventByCourse(int courseId) {
+  List<DeadlineEvent> getAllDeadlineEventByCourse(int courseId) {
     return _deadlineEvents.where((e) => e.courseId == courseId).toList();
   }
 
-  Future<List<DeadlineEvent>> getDeadlineEventByTerm(int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
+  List<DeadlineEvent> getDeadlineEventByTerm(int termId) {
+    return _deadlineEvents.where((d) => d.termId == termId).toList();
+  }
 
+  List<DeadlineEvent> getUnassignedDeadlineEventByTerm(int termId) {
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => d.courseId == e.id).termID == termId)
+        .where((d) => d.termId == termId && d.courseId == -1)
         .toList();
   }
 
-  Future<List<DeadlineEvent>> getAllOngoingDeadlineEvents(int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
-
+  List<DeadlineEvent> getAllUpcomingDeadlineEvents(int termId) {
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => d.courseId == e.id).termID == termId)
+        .where((d) => d.termId == termId)
+        .where((d) => d.date.isAfter(DateTime.now()))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date)); // Ascending (nearest first)
+  }
+
+  List<DeadlineEvent> getAllPastDeadlineEvents(int termId) {
+    return _deadlineEvents
+        .where((d) => d.termId == termId)
         .where((d) => d.date.isBefore(DateTime.now()))
-        .toList();
+        .toList()
+      ..sort((a, b) => b.date.compareTo(a.date)); // Descending (latest last)
   }
 
-  List<DeadlineEvent> getAllOngoingDeadlineEventsForSubject(int courseId) {
-    return _deadlineEvents
+  List<DeadlineEvent> getAllUpcomingDeadlineEventsForSubject(int courseId) {
+    final events = _deadlineEvents
+        .where((d) => d.courseId == courseId)
+        .where((d) => d.date.isAfter(DateTime.now()))
+        .toList();
+    events.sort((a, b) => a.date.compareTo(b.date));
+    return events;
+  }
+
+  List<DeadlineEvent> getAllDoneDeadlineEventsForSubject(int courseId) {
+    final events = _deadlineEvents
         .where((d) => d.courseId == courseId)
         .where((d) => d.date.isBefore(DateTime.now()))
         .toList();
+    events.sort((a, b) => b.date.compareTo(a.date)); // Reverse sort
+    return events;
   }
 
-  Future<List<DeadlineEvent>> getAllOngoingDeadlineEventsToday(
-      int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
+  List<DeadlineEvent> getAllUpcomingUnassignedEvent(int termId) {
+    final events = _deadlineEvents
+        .where((d) => d.termId == termId && d.courseId == -1)
+        .where((d) => d.date.isAfter(DateTime.now()))
+        .toList();
+    events.sort((a, b) => a.date.compareTo(b.date));
+    return events;
+  }
+
+  List<DeadlineEvent> getAllDoneUnassignedEvent(int termId) {
+    final events = _deadlineEvents
+        .where((d) => d.termId == termId && d.courseId == -1)
+        .where((d) => d.date.isBefore(DateTime.now()))
+        .toList();
+    events.sort((a, b) => b.date.compareTo(a.date)); // Reverse sort
+    return events;
+  }
+
+  List<DeadlineEvent> getAllOngoingDeadlineEventsToday(int termId) {
     DateTime today = DateTime.now();
 
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => d.courseId == e.id).termID == termId)
+        .where((d) => d.termId == termId)
         .where((d) => _isSameDate(d.date, today))
         .toList();
   }
 
-  Future<List<DeadlineEvent>> getAllDeadlineEventsThisWeek(int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
-    DateTime today = DateTime.now();
+  List<DeadlineEvent> getAllDeadlineEventsThisWeek(int termId) {
+    final now = DateTime.now();
 
-    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
-    DateTime endOfWeek = today.add(Duration(days: 6));
+    // Get start of week (Monday)
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeekAtMidnight =
+        DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+
+    // Get end of week (Sunday)
+    final endOfWeek = startOfWeekAtMidnight.add(Duration(days: 6));
+    final endOfWeekAtMidnight =
+        DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
 
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => d.courseId == e.id).termID == termId)
-        .where((d) =>
-            d.date.isAfter(startOfWeek.subtract(Duration(seconds: 1))) &&
-            d.date.isBefore(endOfWeek.add(Duration(days: 1))))
-        .toList();
+        .where((d) => d.termId == termId)
+        .where(
+            (d) => d.date.isAfter(now) && d.date.isBefore(endOfWeekAtMidnight))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
   }
 
-  Future<List<DeadlineEvent>> getAllDeadlineEventsInMonth(
-      int termId, int month) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
+  List<DeadlineEvent> getAllDeadlineEventsOfSubjThisWeek(
+      int termId, int courseId) {
+    final now = DateTime.now();
+
+    // Get start of week (Monday)
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeekAtMidnight =
+        DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+
+    // Get end of week (Sunday)
+    final endOfWeek = startOfWeekAtMidnight.add(Duration(days: 6));
+    final endOfWeekAtMidnight =
+        DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day, 23, 59, 59);
 
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => e.id == d.courseId).termID == termId)
+        .where((d) => d.termId == termId && d.courseId == courseId)
+        .where(
+            (d) => d.date.isAfter(now) && d.date.isBefore(endOfWeekAtMidnight))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<DeadlineEvent> getAllDeadlineEventsInMonth(int termId, int month) {
+    return _deadlineEvents
+        .where((d) => d.termId == termId)
         .where((d) => d.date.month == month)
         .toList();
   }
 
   // Inclusive
-  Future<List<DeadlineEvent>> getAllDeadlineEventsRange(
-      int termId, DateTime startDate, DateTime endDate) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
-
+  List<DeadlineEvent> getAllDeadlineEventsRange(
+      int termId, DateTime startDate, DateTime endDate) {
     return _deadlineEvents
         .where((d) =>
-            subjects.firstWhere((e) => e.id == d.courseId).termID == termId)
-        .where((d) => _isWithinRange(d.date, startDate, endDate))
+            d.termId == termId && _isWithinRange(d.date, startDate, endDate))
         .toList();
   }
 
-  Future<List<DeadlineEvent>> getAllLapsedDeadlineEvent(int termId) async {
-    List<Subject> subjects = await isarService.getAllSubjects();
-
+  List<DeadlineEvent> getAllLapsedDeadlineEvent(int termId) {
     return _deadlineEvents
-        .where((d) =>
-            subjects.firstWhere((e) => e.id == d.courseId).termID == termId)
-        .where((d) => d.date.isBefore(DateTime.now()))
+        .where((d) => d.termId == termId && d.date.isBefore(DateTime.now()))
         .toList();
   }
 
