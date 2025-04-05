@@ -10,9 +10,9 @@ import 'package:course_planner/screens/notes_module.dart/note.dart';
 import 'package:course_planner/screens/overview_module/overview.dart';
 import 'package:course_planner/screens/terms_module/terms.dart';
 import 'package:course_planner/screens/test_screen.dart';
+import 'package:course_planner/screens/todo_module/todo.dart';
 import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
-import '../../utils/constants.dart' as C;
 
 /*
  * Overview
@@ -24,8 +24,8 @@ import '../../utils/constants.dart' as C;
  */
 
 class SideDrawer extends StatefulWidget {
-  String parent;
-  SideDrawer({super.key, required this.parent});
+  final String parent;
+  const SideDrawer({super.key, required this.parent});
 
   static var _currIndex = 0;
 
@@ -178,6 +178,16 @@ class _SideDrawerState extends State<SideDrawer> {
         ),
         onTap: () {
           _navigateTo(context, "/notes", const Notes());
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.check_box_rounded),
+        title: const Text(
+          "To-Do",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/todo", const TodoScreen());
         },
       ),
       ListTile(
