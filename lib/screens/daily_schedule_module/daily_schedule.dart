@@ -73,7 +73,7 @@ class _DailyScheduleState extends State<DailySchedule> {
           ),
           InfoCard(
             content:
-                "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a subject under that term on this subjects page. The timeline of the subjects you created will appear here.",
+                "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this courses page. The timeline of the courses you created will appear here.",
           )
         ],
       );

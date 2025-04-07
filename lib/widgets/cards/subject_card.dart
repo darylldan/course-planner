@@ -192,7 +192,7 @@ class ClassCard extends StatelessWidget {
                   height: 20,
                 ),
                 ListTile(
-                  title: const Text("Edit Subject"),
+                  title: const Text("Edit Course"),
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
                     Navigator.pop(context);
@@ -205,14 +205,14 @@ class ClassCard extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  title: const Text("Delete Subject"),
+                  title: const Text("Delete Course"),
                   leading: const Icon(Icons.delete_forever_rounded),
                   onTap: () {
                     context.read<SubjectProvider>().deleteSubject(subject.id!);
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Subject deleted."),
+                        content: Text("Course deleted."),
                       ));
                       Navigator.pop(context);
                     }

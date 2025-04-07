@@ -1,20 +1,17 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/terms_module/view_term.dart';
-import 'package:course_planner/styles/theme.dart';
-import 'package:course_planner/widgets/timetable/SubjectCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../screens/terms_module/edit_term.dart';
 
 class TermCard extends StatelessWidget {
-  late Term term;
+  final Term term;
 
-  TermCard({super.key, required this.term});
+  const TermCard({super.key, required this.term});
 
   @override
   Widget build(BuildContext context) {
@@ -125,9 +122,9 @@ class TermCard extends StatelessWidget {
     if (subjectCount == 0) {
       subjectStr = "NO CLASSES";
     } else if (subjectCount == 1) {
-      subjectStr = "$subjectCount SUBJECT";
+      subjectStr = "$subjectCount Course";
     } else {
-      subjectStr = "$subjectCount SUBJECTS";
+      subjectStr = "$subjectCount Courses";
     }
 
     return Container(

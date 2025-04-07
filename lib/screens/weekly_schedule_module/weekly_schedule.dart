@@ -199,7 +199,7 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         TitleText(title: _screenTitle),
         InfoCard(
           content:
-              "Add a term on the terms page, then create subjects under it on the subject page. Your created subjects will be displayed here.",
+              "Add a term on the terms page, then create courses under it on the Courses page. Your created courses will be displayed here.",
         )
       ],
     );

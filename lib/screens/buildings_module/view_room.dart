@@ -455,7 +455,7 @@ class _ViewRoomState extends State<ViewRoom> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  "SUBJECTS",
+                  "COURSES",
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -488,7 +488,7 @@ class _ViewRoomState extends State<ViewRoom> {
     List<Subject> filteredSubjects = subjects;
 
     if (subjects.isEmpty) {
-      return InfoCard(content: "No subjects in this room yet.");
+      return InfoCard(content: "No courses in this room yet.");
     }
 
     if (_subjSearchCtrl.text.isNotEmpty) {
@@ -545,7 +545,7 @@ class _ViewRoomState extends State<ViewRoom> {
           ...roomCard,
         Center(
           child: Text(
-            "${filteredSubjects.length} ${filteredSubjects.length == 1 ? "Subject" : "Subjects"}",
+            "${filteredSubjects.length} ${filteredSubjects.length == 1 ? "Course" : "Courses"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

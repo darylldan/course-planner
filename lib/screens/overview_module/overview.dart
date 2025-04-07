@@ -410,7 +410,7 @@ class _OverviewState extends State<Overview> {
         TitleText(title: _screenTitle),
         InfoCard(
             content:
-                "Welcome! \nBegin by adding a term in the 'Terms' section. Next, populate the 'Classes' screen with your classes. Your daily summary will be displayed here.")
+                "Welcome! \nBegin by adding a term in the 'Terms' section. Next, populate the 'Courses' screen with your courses. Your daily summary will be displayed here.")
       ],
     );
   }
@@ -422,7 +422,7 @@ class _OverviewState extends State<Overview> {
         TitleText(title: _screenTitle),
         InfoCard(
             content:
-                "You don't have any classes in the current term. Add one on the 'Classes' screen.")
+                "You don't have any courses in the current term. Add one on the 'Courses' screen.")
       ],
     );
   }

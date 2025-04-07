@@ -1,17 +1,15 @@
-import 'package:course_planner/providers/term_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../models/Term.dart';
 import '../elements/current_star.dart';
 import '../../utils/constants.dart' as Constants;
 
 class CurrentTermCard extends StatelessWidget {
-  late Term term;
-  late bool onCurrentTerm;
-  late bool editMode;
+  final  Term term;
+  final bool onCurrentTerm;
+  final bool editMode;
 
-  CurrentTermCard(
+  const CurrentTermCard(
       {super.key,
       required this.term,
       required this.onCurrentTerm,

@@ -2,7 +2,6 @@ import 'package:course_planner/models/DeadlineEvent.dart';
 import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/screens/events_module/add_event.dart';
-import 'package:course_planner/screens/misc/edit_quick_notes.dart';
 import 'package:course_planner/utils/enums.dart';
 import 'package:course_planner/widgets/cards/error_card_no_action.dart';
 import 'package:course_planner/widgets/cards/events_card.dart';

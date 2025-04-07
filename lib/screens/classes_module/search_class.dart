@@ -206,7 +206,7 @@ class _SearchClassState extends State<SearchClass> {
         ),
         Center(
           child: Text(
-            "${resultsCard.length} ${resultsCard.length == 1 ? "Subject" : "Subjects"}",
+            "${resultsCard.length} ${resultsCard.length == 1 ? "Course" : "Courses"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

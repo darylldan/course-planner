@@ -64,11 +64,13 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Building Module -> DONE
 - Note Module (est: 1d) -> DONE
 - Grades Module (est: 1d) -> DONE
-- Event Module (est: 3d) -> IN PROGRESS
-- Todo Module (est: 1d)
-- Subject Module -> (est: 3d)
-- Notifications (est: 1d) // might have to drop
-- Course Sharing (est: 2d)
+- Event Module (est: 3d) -> DONE
+- Todo Module (est: 1d) -> DONE
+- Pomodoro Module (est: 1d) -> IN PROGRESS
+- Subject Module (est: 3d)
+- Overview/WeeklySched/DailySched (est: 1d)
+- Features Screen (est: 1d)
+
 
 ### To-Do:
 - changes to edit class
@@ -77,6 +79,8 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
     - might make the class schedule nullable
     - if time is selected, a frequency must not be empty
     - if frequency is not empty, a time must be selected
+- Pomodoro module (quick pls)
+-
 
 
 ### Notes:

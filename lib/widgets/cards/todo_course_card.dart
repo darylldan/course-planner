@@ -1,6 +1,5 @@
 import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/todo_provider.dart';
-import 'package:course_planner/screens/events_module/view_course_event.dart';
 import 'package:course_planner/screens/todo_module/view_course_todo.dart';
 import 'package:course_planner/utils/enums.dart';
 import 'package:provider/provider.dart';

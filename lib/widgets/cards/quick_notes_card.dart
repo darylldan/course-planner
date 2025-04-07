@@ -4,9 +4,9 @@ import '../../utils/constants.dart' as C;
 
 class QuickNotesCard extends StatefulWidget {
   String? notes;
-  int id;
-  String type;
-  String name;
+  final int id;
+  final String type;
+  final String name;
 
   QuickNotesCard(
       {super.key, required this.notes, required this.id, required this.type, required this.name});

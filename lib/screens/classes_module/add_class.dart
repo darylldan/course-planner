@@ -30,7 +30,7 @@ class AddClass extends StatefulWidget {
 }
 
 class _AddClassState extends State<AddClass> {
-  final _screenTitle = "Create New Class";
+  final _screenTitle = "Create New Course";
   final _formKey = GlobalKey<FormState>();
 
   final _courseCodeCtrl = TextEditingController();
@@ -444,7 +444,7 @@ class _AddClassState extends State<AddClass> {
         }
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Subject added."),
+          content: Text("Course added."),
         ));
         Navigator.of(context).pop();
       }

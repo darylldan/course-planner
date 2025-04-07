@@ -22,8 +22,8 @@ class Classes extends StatefulWidget {
 }
 
 class _ClassesState extends State<Classes> {
-  final _screenTitle = "Classes";
-  final _route = "/classes";
+  final _screenTitle = "Courses";
+  final _route = "/courses";
   late Term? currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
@@ -100,7 +100,7 @@ class _ClassesState extends State<Classes> {
             ),
           ),
           InfoCard(
-            content: "No subjects yet. Create one via the Add button below.",
+            content: "No courses yet. Create one via the Add button below.",
           )
         ],
       );
@@ -132,7 +132,7 @@ class _ClassesState extends State<Classes> {
         ),
         Center(
           child: Text(
-            "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
+            "${subjects.length} ${subjects.length == 1 ? "Course" : "Courses"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ class _ClassesState extends State<Classes> {
         TitleText(title: _screenTitle),
         InfoCard(
           content:
-              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a subject under that term on this page",
+              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this page",
         )
       ],
     );

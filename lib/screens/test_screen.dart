@@ -1,12 +1,21 @@
 import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/DeadlineEvent.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/models/Subject.dart';
+import 'package:course_planner/models/Term.dart';
+import 'package:course_planner/models/Todo.dart';
 import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/screens/buildings_module/location_picker.dart';
 import 'package:course_planner/screens/buildings_module/select_building_room.dart';
 import 'package:course_planner/widgets/cards/building_card.dart';
+import 'package:course_planner/widgets/cards/event_course_card.dart';
+import 'package:course_planner/widgets/cards/events_card.dart';
 import 'package:course_planner/widgets/cards/quick_notes_card.dart';
+import 'package:course_planner/widgets/cards/term_grade_card.dart';
+import 'package:course_planner/widgets/cards/todo_card.dart';
+import 'package:course_planner/widgets/cards/unassigned_card.dart';
+import 'package:course_planner/widgets/elements/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../utils/constants.dart' as C;
@@ -51,6 +60,14 @@ class _TestScreenState extends State<TestScreen> {
 
   Color? selectedColor;
 
+  Term _term = Term()
+    ..id = 1
+    ..academicYear = "A.Y. 2024 - 2025"
+    ..semester = "First Semester"
+    ..startDate = DateTime.now()
+    ..endDate = DateTime.now()
+    ..isCurrentTerm = true;
+
   double lat = 14.165066352080837;
   double long = 121.24156452547093;
   Building _bldg = Building()
@@ -67,21 +84,34 @@ class _TestScreenState extends State<TestScreen> {
     ..long = C.obleLong
     ..lat = C.obleLat;
 
+  DeadlineEvent dle = DeadlineEvent()
+    ..id = 1
+    ..courseId = 1
+    ..description = "Lexical Analyzer Deadline"
+    ..date = DateTime.now().add(Duration(days: 10));
+
+  Todo todo = Todo()
+    ..id = 1
+    ..courseId = 1
+    ..termId = 1
+    ..task = "Study for exam"
+    ..isDone = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        drawer: Drawer(),
+        drawer: SideDrawer(parent: '/test-screen'),
         body: SingleChildScrollView(
           child: Column(
             children: [
+              TermGradeCard(term: _term),
               ElevatedButton(
                   onPressed: () async {
                     var result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                SelectBuildingRoom()));
+                            builder: (context) => SelectBuildingRoom()));
 
                     if (result != null) {
                       if (context.mounted) {
@@ -96,9 +126,9 @@ class _TestScreenState extends State<TestScreen> {
                     }
                   },
                   child: Text("Click")),
+              TodoCard(todo: todo)
             ],
           ),
         ));
   }
-
 }

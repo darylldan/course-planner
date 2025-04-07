@@ -141,7 +141,7 @@ class _AddBuildingState extends State<AddBuilding> {
 
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
-                            content: Text("Subject added."),
+                            content: Text("Building added."),
                           ));
                           Navigator.of(context).pop();
                         }

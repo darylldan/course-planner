@@ -87,7 +87,7 @@ class _ViewTermState extends State<ViewTerm> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    "SUBJECTS",
+                    "COURSERS",
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -174,7 +174,7 @@ class _ViewTermState extends State<ViewTerm> {
           ),
           Center(
             child: Text(
-              "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
+              "${subjects.length} ${subjects.length == 1 ? "Course" : "Courses"}",
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import '../../models/Subject.dart';
-import '../../providers/subject_provider.dart';
 import '../../utils/constants.dart' as C;
 import '../../utils/enums.dart';
 
