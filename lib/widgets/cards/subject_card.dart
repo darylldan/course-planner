@@ -1,5 +1,7 @@
+import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/screens/classes_module/edit_class.dart';
+import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -195,12 +197,16 @@ class ClassCard extends StatelessWidget {
                   title: const Text("Edit Course"),
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
+                    List<Term> terms =
+                        Provider.of<TermProvider>(context, listen: false).terms;
                     Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EditClass(
-                                  subject: subject,
+                            builder: (context) => AddClass(
+                                  terms: terms,
+                                  course: subject,
+                                  editMode: true,
                                 )));
                   },
                 ),

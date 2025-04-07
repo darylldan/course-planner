@@ -1,5 +1,6 @@
 import 'package:course_planner/api/IsarService.dart';
 import 'package:course_planner/models/CourseGrade.dart';
+import 'package:course_planner/models/Subject.dart';
 import 'package:flutter/foundation.dart';
 
 class CourseGradeProvider with ChangeNotifier {
@@ -23,6 +24,14 @@ class CourseGradeProvider with ChangeNotifier {
     return _courseGrades.firstWhere((cg) => cg.id! == id);
   }
 
+  CourseGrade getCourseGradeByCourse(Subject course) {
+    return _courseGrades.firstWhere((cg) =>
+        cg.courseCode.toLowerCase() == course.courseCode.toLowerCase() &&
+        cg.units == course.units &&
+        cg.termId == course.termID &&
+        cg.isCredited == course.credited);
+  }
+
   List<CourseGrade> getCourseGradeByTerm(int termId) {
     return _courseGrades.where((cg) => cg.termId == termId).toList();
   }
@@ -36,11 +45,29 @@ class CourseGradeProvider with ChangeNotifier {
     return newId;
   }
 
+  bool doesCourseGradeHaveDependency(
+      CourseGrade courseGrade, List<Subject> courses) {
+    return courses.any((c) =>
+        c.units == courseGrade.units &&
+        c.courseCode.toLowerCase() == courseGrade.courseCode.toLowerCase() &&
+        c.termID == courseGrade.termId &&
+        c.credited == courseGrade.isCredited);
+  }
+
+  bool doesCourseHaveCourseGrade(Subject course) {
+    return _courseGrades.any((cg) =>
+        cg.courseCode.toLowerCase() == course.courseCode.toLowerCase() &&
+        cg.termId == course.termID &&
+        cg.units == course.units &&
+        cg.isCredited == course.credited);
+  }
+
   bool doesCourseGradeExist(CourseGrade courseGrade) {
     return _courseGrades.any((cg) =>
         cg.courseCode.toLowerCase() == courseGrade.courseCode.toLowerCase() &&
         cg.termId == courseGrade.termId &&
-        cg.units == courseGrade.units);
+        cg.units == courseGrade.units &&
+        cg.isCredited == courseGrade.isCredited);
   }
 
   Future<void> editCourseGrade(CourseGrade courseGrade) async {
@@ -62,5 +89,10 @@ class CourseGradeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // The only way to delete a coursegrade is to delete a subject
+  Future<void> deleteCourseGrade(int id) async {
+    await isarService.deleteCourseGrade(id);
+    _courseGrades.removeWhere((e) => e.id! == id);
+
+    notifyListeners();
+  }
 }

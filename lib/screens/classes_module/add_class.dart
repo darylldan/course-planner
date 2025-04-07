@@ -23,14 +23,16 @@ enum ClassType { lec, lab }
 
 class AddClass extends StatefulWidget {
   final List<Term> terms;
-  const AddClass({super.key, required this.terms});
+  final bool editMode;
+  final Subject? course;
+  const AddClass(
+      {super.key, required this.terms, this.editMode = false, this.course});
 
   @override
   State<AddClass> createState() => _AddClassState();
 }
 
 class _AddClassState extends State<AddClass> {
-  final _screenTitle = "Create New Course";
   final _formKey = GlobalKey<FormState>();
 
   final _courseCodeCtrl = TextEditingController();
@@ -89,6 +91,40 @@ class _AddClassState extends State<AddClass> {
   void initState() {
     super.initState();
     _currentTerm = widget.terms.firstWhere((t) => t.isCurrentTerm);
+
+    if (widget.editMode) {
+      _courseCodeCtrl.text = widget.course!.courseCode;
+
+      _classTypeSelection = widget.course!.isLaboratory
+          ? <ClassType>{ClassType.lab}
+          : <ClassType>{ClassType.lec};
+
+      _unitsCtrl.text = widget.course!.units.toString();
+      _isCredited = widget.course!.credited;
+      _descCtrl.text = widget.course!.description ?? "";
+      _sectionCtrl.text = widget.course!.section;
+      _instructorCtrl.text = widget.course!.instructor ?? "";
+      _selectedTermID = widget.course!.termID;
+      _selectedLocationID = widget.course!.locationID;
+      _selectedLocationType = widget.course!.locationType;
+      _notesCtrl.text = widget.course!.notes ?? "";
+
+      _startDate = widget.course!.startDate;
+      _endDate = widget.course!.endDate;
+
+      for (Day f in widget.course!.frequency) {
+        _selection.add(f);
+      }
+
+      for (var c in _colors) {
+        if (c!.alpha == widget.course!.color[0] &&
+            c.red == widget.course!.color[1] &&
+            c.green == widget.course!.color[2] &&
+            c.blue == widget.course!.color[3]) {
+          _courseColor = c;
+        }
+      }
+    }
   }
 
   @override
@@ -102,10 +138,11 @@ class _AddClassState extends State<AddClass> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleText(title: _screenTitle),
+              TitleText(
+                  title: widget.editMode ? "Edit Course" : "Create New Course"),
               InfoCard(
                   content:
-                      "Complete required fields. Avoid schedule conflicts when creating classes."),
+                      "Complete required fields. Avoid schedule conflicts when creating courses."),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Opacity(
@@ -121,18 +158,49 @@ class _AddClassState extends State<AddClass> {
     );
   }
 
+  bool _setAndListEqual<T>(Set<T> set, List<T> list) {
+    // Convert both to sets to ignore order and duplicates
+    final setFromList = list.toSet();
+    final setFromSet =
+        set.toSet(); // This might seem redundant but ensures symmetry
+
+    // Compare the sets
+    return setFromSet.length == setFromList.length &&
+        setFromSet.containsAll(setFromList);
+  }
+
   bool get _canPop {
-    return _courseCodeCtrl.text.isEmpty &&
-        _sectionCtrl.text.isEmpty &&
-        _selectedLocationID == null &&
-        _instructorCtrl.text.isEmpty &&
-        _notesCtrl.text.isEmpty &&
-        _selection.isEmpty &&
-        _descCtrl.text.isEmpty &&
-        _startDate == null &&
-        _endDate == null &&
-        _selectedTermID == null &&
-        _classTypeSelection.contains(ClassType.lec);
+    return widget.editMode
+        ? _courseCodeCtrl.text == widget.course!.courseCode &&
+            _classTypeSelection.contains(
+                widget.course!.isLaboratory ? ClassType.lab : ClassType.lec) &&
+            _descCtrl.text == widget.course!.description &&
+            _sectionCtrl.text == widget.course!.section &&
+            _instructorCtrl.text == widget.course!.instructor &&
+            _selectedTermID == widget.course!.termID &&
+            _selectedLocationID == widget.course!.locationID &&
+            _selectedLocationType == widget.course!.locationType &&
+            _startDate!.isAtSameMomentAs(widget.course!.startDate) &&
+            _endDate!.isAtSameMomentAs(widget.course!.endDate) &&
+            _notesCtrl.text == widget.course!.notes &&
+            _unitsCtrl.text == widget.course!.units.toString() &&
+            _isCredited == widget.course!.credited &&
+            (_courseColor!.alpha == widget.course!.color[0] &&
+                _courseColor!.red == widget.course!.color[1] &&
+                _courseColor!.green == widget.course!.color[2] &&
+                _courseColor!.blue == widget.course!.color[3]) &&
+            _setAndListEqual(_selection, widget.course!.frequency)
+        : _courseCodeCtrl.text.isEmpty &&
+            _sectionCtrl.text.isEmpty &&
+            _selectedLocationID == null &&
+            _instructorCtrl.text.isEmpty &&
+            _notesCtrl.text.isEmpty &&
+            _selection.isEmpty &&
+            _descCtrl.text.isEmpty &&
+            _startDate == null &&
+            _endDate == null &&
+            _selectedTermID == null &&
+            _classTypeSelection.contains(ClassType.lec);
   }
 
   Widget _buildForm(BuildContext context) {
@@ -406,9 +474,17 @@ class _AddClassState extends State<AddClass> {
     if (_formKey.currentState!.validate() && _validateOtherFields()) {
       _formKey.currentState?.save();
 
+      bool didCGChange = false;
+
+      Subject newSubject = _packSubject();
+
+      if (widget.editMode) {
+        newSubject.id = widget.course!.id!;
+      }
+
       // check first for overlaps
       var overlapResult =
-          context.read<SubjectProvider>().checkForOverlap(_packSubject());
+          context.read<SubjectProvider>().checkForOverlap(newSubject);
 
       if (overlapResult['isOverlapping']) {
         List<Subject> overlappingSubjects = [];
@@ -425,8 +501,53 @@ class _AddClassState extends State<AddClass> {
             );
           },
         );
+      } else if (widget.editMode) {
+        if (_didCourseGradeChange()) {
+          // Check if there are already coursegrade for edited subj
+          bool cgExistence = context
+              .read<CourseGradeProvider>()
+              .doesCourseHaveCourseGrade(newSubject);
+
+          List<Subject> courses = context
+              .read<SubjectProvider>()
+              .getSubjectsByTerm(widget.course!.termID)
+              .where((c) => c.id != widget.course!.id!)
+              .toList();
+
+          CourseGrade oldCG = context
+              .read<CourseGradeProvider>()
+              .getCourseGradeByCourse(widget.course!);
+
+          if (!cgExistence) {
+            CourseGrade newCourseGrade = CourseGrade()
+              ..courseCode = newSubject.courseCode
+              ..isCredited = newSubject.credited
+              ..termId = newSubject.termID
+              ..units = newSubject.units;
+
+            context
+                .read<CourseGradeProvider>()
+                .createCourseGrade(newCourseGrade);
+
+            // now check if the old coursegrade still have dependency
+            if (!context
+                .read<CourseGradeProvider>()
+                .doesCourseGradeHaveDependency(oldCG, courses)) {
+              didCGChange = true;
+              context.read<CourseGradeProvider>().deleteCourseGrade(oldCG.id!);
+            }
+          }
+        }
+
+        context.read<SubjectProvider>().editSubject(newSubject);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Course edited. ${didCGChange ? "Grade set for this course were cleared." : ""}"),
+        ));
+
+        Navigator.of(context).pop();
       } else {
-        Subject newSubject = _packSubject();
         context.read<SubjectProvider>().createSubject(newSubject);
 
         CourseGrade newCourseGrade = CourseGrade()
@@ -862,6 +983,27 @@ class _AddClassState extends State<AddClass> {
         ),
       ),
     );
+  }
+
+  bool _didCourseGradeChange() {
+    if (_courseCodeCtrl.text.toLowerCase() !=
+        widget.course!.courseCode.toLowerCase()) {
+      return true;
+    }
+
+    if (_unitsCtrl.text != widget.course!.units.toString()) {
+      return true;
+    }
+
+    if (_selectedTermID != widget.course!.termID) {
+      return true;
+    }
+
+    if (_isCredited != widget.course!.credited) {
+      return true;
+    }
+
+    return false;
   }
 
   // Responsible for "Discard creation?"

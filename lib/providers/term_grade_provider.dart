@@ -131,7 +131,7 @@ class TermGradeProvider with ChangeNotifier {
         getGradedCourseGradeByTerm(termId, credited: credited);
 
     if (courseGrade.isEmpty) {
-      return 0; // no grades encoded yet
+      return 0.0; // no grades encoded yet
     }
 
     // Now compute for the gwa of courses who already have a grade
@@ -285,6 +285,10 @@ class TermGradeProvider with ChangeNotifier {
       gradeMultUnitSum += tg.grade * tg.units;
     }
 
+    if (gradeMultUnitSum == 0 && totalUnitsTaken == 0) {
+      return 0.0;
+    }
+    
     // Return GWA
     return gradeMultUnitSum / totalUnitsTaken;
   }

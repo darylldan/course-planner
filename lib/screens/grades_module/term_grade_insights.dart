@@ -38,6 +38,7 @@ class _TermGradeInsightsState extends State<TermGradeInsights> {
 
   Widget _buildBody(BuildContext context) {
     double overallGWA = context.read<TermGradeProvider>().getOverallGWA();
+
     int totalUnitsTaken =
         context.read<TermGradeProvider>().getOverallUnitsTaken();
     HonorificScholarship? honSchol = context
@@ -406,6 +407,7 @@ class _TermGradeInsightsState extends State<TermGradeInsights> {
   Widget _currentTermGWA(BuildContext context, Term currTerm) {
     double currentTermGWA =
         context.read<TermGradeProvider>().getTermGWAFromCourses(currTerm.id!);
+
     return _cardTemplate(context,
         color: Theme.of(context).colorScheme.secondaryContainer,
         child: Column(

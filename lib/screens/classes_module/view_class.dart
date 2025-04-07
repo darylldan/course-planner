@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:course_planner/widgets/cards/quick_notes_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as C;
 import '../../utils/enums.dart';
-import 'edit_class.dart';
 import 'edit_notes.dart';
 
 class ViewClass extends StatefulWidget {
@@ -27,7 +27,9 @@ class _ViewClassState extends State<ViewClass> {
 
   @override
   Widget build(BuildContext context) {
+    List<Term> terms = context.watch<TermProvider>().terms;
     subject = context.watch<SubjectProvider>().getSubjectByID(widget.subjectID);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -36,8 +38,10 @@ class _ViewClassState extends State<ViewClass> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => EditClass(
-                      subject: subject,
+                    builder: (BuildContext context) => AddClass(
+                      terms: terms,
+                      course: subject,
+                      editMode: true,
                     ),
                   ));
             },
@@ -83,7 +87,12 @@ class _ViewClassState extends State<ViewClass> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: QuickNotesCard(notes: subject.notes, id: subject.id!, type: "subject", name: subject.courseCode,),
+          child: QuickNotesCard(
+            notes: subject.notes,
+            id: subject.id!,
+            type: "subject",
+            name: subject.courseCode,
+          ),
         ),
         const SizedBox(
           height: 150,
