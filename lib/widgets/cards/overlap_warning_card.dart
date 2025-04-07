@@ -152,7 +152,7 @@ class OverlapWarningCard extends StatelessWidget {
     }
 
     String timeSlot =
-        "${DateFormat.jm().format(subject.startDate)} - ${DateFormat.jm().format(subject.endDate)}";
+        "${DateFormat.jm().format(subject.startDate!)} - ${DateFormat.jm().format(subject.endDate!)}";
 
     return "${subject.section} | $subTitle $timeSlot";
   }

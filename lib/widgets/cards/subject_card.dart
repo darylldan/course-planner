@@ -138,6 +138,19 @@ class ClassCard extends StatelessWidget {
   Widget _buildSubjectSubtitle(BuildContext context) {
     String subTitle = "";
 
+    if (!haveSchedule) {
+      return SizedBox(
+      width: 155,
+      child: Text(
+        "No schedule",
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 12),
+      ),
+    );
+    }
+
     for (var d in subject.frequency) {
       switch (d) {
         case Day.mon:
@@ -155,8 +168,8 @@ class ClassCard extends StatelessWidget {
       }
     }
 
-    String startDate = DateFormat.jm().format(subject.startDate);
-    String endDate = DateFormat.jm().format(subject.endDate);
+    String startDate = DateFormat.jm().format(subject.startDate!);
+    String endDate = DateFormat.jm().format(subject.endDate!);
 
     subTitle = "$subTitle $startDate - $endDate";
 
@@ -231,4 +244,9 @@ class ClassCard extends StatelessWidget {
       },
     );
   }
+
+  bool get haveSchedule =>
+      subject.frequency.isNotEmpty &&
+      subject.startDate != null &&
+      subject.endDate != null;
 }

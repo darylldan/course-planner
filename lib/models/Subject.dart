@@ -20,8 +20,8 @@ class Subject {
   late List<Day> frequency;
   String? notes;
 
-  late DateTime startDate;
-  late DateTime endDate;
+  late DateTime? startDate;
+  late DateTime? endDate;
 
   late int units;
   late bool credited;

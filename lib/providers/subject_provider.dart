@@ -63,13 +63,13 @@ class SubjectProvider with ChangeNotifier {
         .toList();
   }
 
-  CourseComponents getCourseComponents(String courseCode, int termId, int units) {
+  CourseComponents getCourseComponents(
+      String courseCode, int termId, int units) {
     List<Subject> foundCourses = _subjects
         .where((s) =>
             s.termID == termId &&
             s.courseCode.toLowerCase() == courseCode.toLowerCase() &&
-            s.units == units
-            )
+            s.units == units)
         .toList();
 
     Set<CourseComponents> foundComponents = {};
@@ -169,13 +169,17 @@ class SubjectProvider with ChangeNotifier {
       _subjects
           .where((sub) =>
               sub.frequency.contains(d) && sub.termID == subject.termID)
+          .where((s) =>
+              s.frequency.isNotEmpty &&
+              s.startDate != null &&
+              s.endDate != null)
           .any((s) {
         if (subject.endDate == s.startDate || s.endDate == subject.startDate) {
           return false;
         }
 
-        if (!(subject.endDate.isBefore(s.startDate) ||
-            s.endDate.isBefore(subject.startDate))) {
+        if (!(subject.endDate!.isBefore(s.startDate!) ||
+            s.endDate!.isBefore(subject.startDate!))) {
           returnVal['overlapSubjectIDs'].add(s.id);
           return true;
         }

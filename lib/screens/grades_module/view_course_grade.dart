@@ -44,9 +44,6 @@ class _ViewCourseGradeState extends State<ViewCourseGrade> {
               "No courses yet. Begin by adding a course on the Courses screen.");
     }
 
-    List<CourseGrade> courseGrade =
-        context.watch<CourseGradeProvider>().courseGrades;
-
     return Column(
       children: [
         TermGradeSummary(term: widget.term),
@@ -54,7 +51,7 @@ class _ViewCourseGradeState extends State<ViewCourseGrade> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Divider(),
         ),
-        ...courseGrade.map((cg) => CourseGradeCard(courseGrade: cg)),
+        ...courseGrades.map((cg) => CourseGradeCard(courseGrade: cg)),
       ],
     );
   }

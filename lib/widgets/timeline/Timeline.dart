@@ -28,12 +28,12 @@ class Timeline extends StatelessWidget {
     for (int i = 0; i < subjects.length; i++) {
       // Check if there is break in between subjects, if so adds a break card
       if (i > 0) {
-        if (!subjects[i - 1].endDate.isAtSameMomentAs(subjects[i].startDate)) {
+        if (!subjects[i - 1].endDate!.isAtSameMomentAs(subjects[i].startDate!)) {
           timeline.addAll([
             _breakCard(
               context,
-              subjects[i - 1].endDate,
-              subjects[i].startDate.difference(subjects[i - 1].endDate),
+              subjects[i - 1].endDate!,
+              subjects[i].startDate!.difference(subjects[i - 1].endDate!),
             ),
             _verticalLine(context, 15, 1),
           ]);
@@ -45,7 +45,7 @@ class Timeline extends StatelessWidget {
 
       if (i == subjects.length - 1) {
         timeline.addAll(
-            [_freeCard(context, subjects[i].endDate), _endIndicator(context)]);
+            [_freeCard(context, subjects[i].endDate!), _endIndicator(context)]);
       }
     }
 

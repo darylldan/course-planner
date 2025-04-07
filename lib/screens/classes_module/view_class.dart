@@ -318,9 +318,24 @@ class _ViewClassState extends State<ViewClass> {
               ),
             ],
           ),
-          _stringifyFrequency(),
-          _stringifyTimeslot(),
-          _scheduleSummary()
+          if (!haveSchedule)
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                "No schedule",
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22),
+              ),
+            )
+          else ...[
+            _stringifyFrequency(),
+            _stringifyTimeslot(),
+            _scheduleSummary()
+          ]
         ],
       ),
     );
@@ -329,7 +344,7 @@ class _ViewClassState extends State<ViewClass> {
   Widget _scheduleSummary() {
     String summary = "Each session lasts";
 
-    Duration duration = subject.endDate.difference(subject.startDate);
+    Duration duration = subject.endDate!.difference(subject.startDate!);
     if (duration.inHours == 0) {
       summary =
           "$summary ${duration.inMinutes % 60} ${duration.inMinutes % 60 > 1 ? "minutes" : "minute"}";
@@ -389,7 +404,7 @@ class _ViewClassState extends State<ViewClass> {
     return SizedBox(
       width: double.infinity,
       child: Text(
-        "${DateFormat.jm().format(subject.startDate)} - ${DateFormat.jm().format(subject.endDate)}",
+        "${DateFormat.jm().format(subject.startDate!)} - ${DateFormat.jm().format(subject.endDate!)}",
         style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.bold,
@@ -673,4 +688,9 @@ class _ViewClassState extends State<ViewClass> {
       ),
     );
   }
+
+  bool get haveSchedule =>
+      subject.frequency.isNotEmpty &&
+      subject.startDate != null &&
+      subject.endDate != null;
 }

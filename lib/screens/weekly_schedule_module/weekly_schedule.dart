@@ -54,6 +54,8 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         .watch<SubjectProvider>()
         .subjects
         .where((e) => e.termID == currentTerm!.id)
+        .where((e) =>
+            e.startDate != null && e.endDate != null && e.frequency.isNotEmpty)
         .toList();
 
     return Column(

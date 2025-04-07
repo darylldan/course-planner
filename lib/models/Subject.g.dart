@@ -186,7 +186,7 @@ Subject _subjectDeserialize(
   object.courseCode = reader.readString(offsets[1]);
   object.credited = reader.readBool(offsets[2]);
   object.description = reader.readStringOrNull(offsets[3]);
-  object.endDate = reader.readDateTime(offsets[4]);
+  object.endDate = reader.readDateTimeOrNull(offsets[4]);
   object.frequency = reader
           .readStringList(offsets[5])
           ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
@@ -199,7 +199,7 @@ Subject _subjectDeserialize(
   object.locationType = reader.readStringOrNull(offsets[9]);
   object.notes = reader.readStringOrNull(offsets[10]);
   object.section = reader.readString(offsets[11]);
-  object.startDate = reader.readDateTime(offsets[12]);
+  object.startDate = reader.readDateTimeOrNull(offsets[12]);
   object.termID = reader.readLong(offsets[13]);
   object.units = reader.readLong(offsets[14]);
   return object;
@@ -221,7 +221,7 @@ P _subjectDeserializeProp<P>(
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
       return (reader
               .readStringList(offset)
@@ -241,7 +241,7 @@ P _subjectDeserializeProp<P>(
     case 11:
       return (reader.readString(offset)) as P;
     case 12:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 13:
       return (reader.readLong(offset)) as P;
     case 14:
@@ -781,8 +781,24 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'endDate',
@@ -792,7 +808,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -805,7 +821,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -818,8 +834,8 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1771,8 +1787,24 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'startDate',
@@ -1782,7 +1814,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1795,7 +1827,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1808,8 +1840,8 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -2397,7 +2429,7 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, DateTime, QQueryOperations> endDateProperty() {
+  QueryBuilder<Subject, DateTime?, QQueryOperations> endDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endDate');
     });
@@ -2445,7 +2477,7 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, DateTime, QQueryOperations> startDateProperty() {
+  QueryBuilder<Subject, DateTime?, QQueryOperations> startDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'startDate');
     });

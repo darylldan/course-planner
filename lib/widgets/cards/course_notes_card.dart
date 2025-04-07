@@ -32,8 +32,10 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ViewCourseNotes(subject: widget.subject, termId: widget.subject.termID,)
-                  ));
+                      builder: (context) => ViewCourseNotes(
+                            subject: widget.subject,
+                            termId: widget.subject.termID,
+                          )));
             },
             child: _subjectContainer(context),
           ),
@@ -82,10 +84,13 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
                       ),
                       Row(children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           constraints: BoxConstraints(maxWidth: 60),
                           decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
                               borderRadius: BorderRadius.circular(4)),
                           child: SizedBox(
                             child: Center(
@@ -113,7 +118,9 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
               ],
             ),
           ),
-          SizedBox(width: 14,),
+          SizedBox(
+            width: 14,
+          ),
           _notesCount(context)
         ],
       ),
@@ -125,23 +132,34 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
         context.watch<NoteProvider>().getNotesCountByCourse(widget.subject.id!);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).colorScheme.inverseSurface
-      ),
+          borderRadius: BorderRadius.circular(8),
+          color: Theme.of(context).colorScheme.inverseSurface),
       padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
       child: Text(
         count > 99 ? "99+" : count.toString(),
         style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-          color: Theme.of(context).colorScheme.onInverseSurface
-        ),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Theme.of(context).colorScheme.onInverseSurface),
       ),
     );
   }
 
   Widget _buildSubjectSubtitle(BuildContext context) {
     String subTitle = "";
+
+    if (!haveSchedule) {
+      return SizedBox(
+        width: 155,
+        child: Text(
+          "No schedule",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12),
+        ),
+      );
+    }
 
     for (var d in widget.subject.frequency) {
       switch (d) {
@@ -160,8 +178,8 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
       }
     }
 
-    String startDate = DateFormat.jm().format(widget.subject.startDate);
-    String endDate = DateFormat.jm().format(widget.subject.endDate);
+    String startDate = DateFormat.jm().format(widget.subject.startDate!);
+    String endDate = DateFormat.jm().format(widget.subject.endDate!);
 
     subTitle = "$subTitle $startDate - $endDate";
 
@@ -176,4 +194,9 @@ class _ClassNotesCardState extends State<ClassNotesCard> {
       ),
     );
   }
+
+  bool get haveSchedule =>
+      widget.subject.frequency.isNotEmpty &&
+      widget.subject.startDate != null &&
+      widget.subject.endDate != null;
 }

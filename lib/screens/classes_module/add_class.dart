@@ -42,7 +42,7 @@ class _AddClassState extends State<AddClass> {
   final _notesCtrl = TextEditingController();
   final _unitsCtrl = TextEditingController();
 
-  bool? _isCredited = true;
+  bool _isCredited = true;
   Color? _courseColor;
 
   int? _selectedTermID;
@@ -180,8 +180,8 @@ class _AddClassState extends State<AddClass> {
             _selectedTermID == widget.course!.termID &&
             _selectedLocationID == widget.course!.locationID &&
             _selectedLocationType == widget.course!.locationType &&
-            _startDate!.isAtSameMomentAs(widget.course!.startDate) &&
-            _endDate!.isAtSameMomentAs(widget.course!.endDate) &&
+            // _startDate!.isAtSameMomentAs(widget.course!.startDate) &&
+            // _endDate!.isAtSameMomentAs(widget.course!.endDate) &&
             _notesCtrl.text == widget.course!.notes &&
             _unitsCtrl.text == widget.course!.units.toString() &&
             _isCredited == widget.course!.credited &&
@@ -326,7 +326,7 @@ class _AddClassState extends State<AddClass> {
                         value: _isCredited,
                         onChanged: (bool? val) {
                           setState(() {
-                            _isCredited = val;
+                            _isCredited = val!;
                           });
                         },
                       ),
@@ -482,26 +482,33 @@ class _AddClassState extends State<AddClass> {
         newSubject.id = widget.course!.id!;
       }
 
-      // check first for overlaps
-      var overlapResult =
-          context.read<SubjectProvider>().checkForOverlap(newSubject);
+      if (newSubject.startDate != null &&
+          newSubject.endDate != null &&
+          newSubject.frequency.isNotEmpty) {
+        // check first for overlaps
+        var overlapResult =
+            context.read<SubjectProvider>().checkForOverlap(newSubject);
 
-      if (overlapResult['isOverlapping']) {
-        List<Subject> overlappingSubjects = [];
-        for (int i in overlapResult['overlapSubjectIDs']) {
-          overlappingSubjects
-              .add(context.read<SubjectProvider>().getSubjectByID(i));
+        if (overlapResult['isOverlapping']) {
+          List<Subject> overlappingSubjects = [];
+          for (int i in overlapResult['overlapSubjectIDs']) {
+            overlappingSubjects
+                .add(context.read<SubjectProvider>().getSubjectByID(i));
+          }
+
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: OverlapWarningCard(subjects: overlappingSubjects),
+              );
+            },
+          );
+
+          return;
         }
-
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              child: OverlapWarningCard(subjects: overlappingSubjects),
-            );
-          },
-        );
-      } else if (widget.editMode) {
+      }
+      if (widget.editMode) {
         if (_didCourseGradeChange()) {
           // Check if there are already coursegrade for edited subj
           bool cgExistence = context
@@ -574,99 +581,109 @@ class _AddClassState extends State<AddClass> {
 
   // Custom validation for frequency selector, term selector, and date selector
   bool _validateOtherFields() {
+    // resetting date flags
+    _isDatesInvalid = false;
+    _isFrequencyInvalid = false;
+    _isTermInvalid = false;
+
     bool isValidForm = true;
 
+    // Validate term
     if (_selectedTermID == null) {
       _isTermInvalid = true;
-      isValidForm = false;
     } else {
       _isTermInvalid = false;
     }
 
-    if (_selection.isEmpty) {
-      _isFrequencyInvalid = true;
-      isValidForm = false;
-    } else {
-      _isFrequencyInvalid = false;
-    }
-
-    if (_startDate == null ||
-        _endDate == null ||
-        _startDate == null ||
-        _endDate!.isBefore(_startDate!) ||
-        _startDate!.isAfter(_endDate!)) {
+    if (_startDate != null && _endDate == null) {
       _isDatesInvalid = true;
-      isValidForm = false;
-    } else {
-      _isDatesInvalid = false;
+    } else if (_startDate != null && _endDate != null) {
+      if (_selection.isEmpty) {
+        _isFrequencyInvalid = true;
+      }
+
+      if (_endDate!.isBefore(_startDate!) ||
+          _startDate!.isAfter(_endDate!) ||
+          _endDate!.isAtSameMomentAs(_startDate!)) {
+        _isDatesInvalid = true;
+      }
     }
 
     setState(() {});
 
-    return isValidForm;
+    return isValidForm &&
+        !_isTermInvalid &&
+        !_isFrequencyInvalid &&
+        !_isDatesInvalid;
   }
 
   Widget _roomSelector(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "Location",
-          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
-        ),
-        Spacer(),
-        Flexible(
-          fit: FlexFit.loose,
-          child: TextButton(
-            onPressed: () async {
-              var result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SelectBuildingRoom()));
+    return GestureDetector(
+      onTap: _selectedLocName != null ? () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_selectedLocName!)));
+      } : null,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Location",
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+          ),
+          Spacer(),
+          Flexible(
+            fit: FlexFit.loose,
+            child: TextButton(
+              onPressed: () async {
+                var result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SelectBuildingRoom()));
 
-              if (result == null) {
-                return;
-              }
+                if (result == null) {
+                  return;
+                }
 
-              if (result is Building) {
-                setState(() {
-                  _selectedLocationType = "building";
-                  _selectedLocName = result.buildingName;
-                  _selectedLocationID = result.id!;
-                });
-              }
+                if (result is Building) {
+                  setState(() {
+                    _selectedLocationType = "building";
+                    _selectedLocName = result.buildingName;
+                    _selectedLocationID = result.id!;
+                  });
+                }
 
-              if (result is Room) {
-                setState(() {
-                  _selectedLocationType = "room";
-                  _selectedLocName = result.roomName;
-                  _selectedLocationID = result.id!;
-                });
-              }
-            },
-            child: Text(
-              _selectedLocName ?? "Select",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+                if (result is Room) {
+                  setState(() {
+                    _selectedLocationType = "room";
+                    _selectedLocName = result.roomName;
+                    _selectedLocationID = result.id!;
+                  });
+                }
+              },
+              child: Text(
+                _selectedLocName ?? "Select",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              overflow: TextOverflow.ellipsis,
             ),
           ),
-        ),
-        if (_selectedLocationID != null)
-          IconButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text("Location cleared."),
-                ));
-                setState(() {
-                  _selectedLocName = null;
-                  _selectedLocationType = null;
-                  _selectedLocationID = null;
-                });
-              },
-              icon: Icon(Icons.cancel))
-      ],
+          if (_selectedLocationID != null)
+            IconButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Location cleared."),
+                  ));
+                  setState(() {
+                    _selectedLocName = null;
+                    _selectedLocationType = null;
+                    _selectedLocationID = null;
+                  });
+                },
+                icon: Icon(Icons.cancel))
+        ],
+      ),
     );
   }
 
@@ -708,11 +725,13 @@ class _AddClassState extends State<AddClass> {
             ButtonSegment<Day>(value: Day.sat, label: Text("Sat")),
           ],
           selected: _selection,
-          onSelectionChanged: (Set<Day> newSelection) {
-            setState(() {
-              _selection = newSelection;
-            });
-          },
+          onSelectionChanged: _startDate == null || _endDate == null
+              ? null
+              : (Set<Day> newSelection) {
+                  setState(() {
+                    _selection = newSelection;
+                  });
+                },
           multiSelectionEnabled: true,
           emptySelectionAllowed: true,
           showSelectedIcon: false,
@@ -745,55 +764,68 @@ class _AddClassState extends State<AddClass> {
               "Start Time",
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
             ),
-            TextButton(
-              onPressed: () async {
-                final TimeOfDay? time = await showTimePicker(
-                    context: context,
-                    initialTime: _startDate == null
-                        ? const TimeOfDay(hour: 7, minute: 0)
-                        : TimeOfDay(
-                            hour: _startDate!.hour,
-                            minute: _startDate!.minute));
-
-                if (context.mounted) {
-                  if (time == null) {
-                    return;
-                  }
-
-                  if (time.hour < 7 ||
-                      (time.hour >= 21 && time.minute > 0) ||
-                      time.hour > 21) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const Dialog(
-                          child: ErrorCard(
-                              title: "Invalid Time",
-                              content:
-                                  "The class only supports time from 7am to 9pm."),
-                        );
+            Row(
+              children: [
+                if (_startDate != null)
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _startDate = null;
+                          _selection.clear();
+                        });
                       },
-                    );
-                  } else {
-                    setState(() {
-                      _startDate = DateTime(
-                          _currentTerm.startDate.year,
-                          _currentTerm.startDate.month,
-                          _currentTerm.startDate.day,
-                          time.hour,
-                          time.minute);
-                    });
-                  }
-                }
-              },
-              child: Text(
-                _startDate != null
-                    ? DateFormat.jm().format(_startDate!)
-                    : "Select Time",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                      icon: Icon(Icons.cancel)),
+                TextButton(
+                  onPressed: () async {
+                    final TimeOfDay? time = await showTimePicker(
+                        context: context,
+                        initialTime: _startDate == null
+                            ? const TimeOfDay(hour: 7, minute: 0)
+                            : TimeOfDay(
+                                hour: _startDate!.hour,
+                                minute: _startDate!.minute));
+
+                    if (context.mounted) {
+                      if (time == null) {
+                        return;
+                      }
+
+                      if (time.hour < 7 ||
+                          (time.hour >= 21 && time.minute > 0) ||
+                          time.hour > 21) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const Dialog(
+                              child: ErrorCard(
+                                  title: "Invalid Time",
+                                  content:
+                                      "The class only supports time from 7am to 9pm."),
+                            );
+                          },
+                        );
+                      } else {
+                        setState(() {
+                          _startDate = DateTime(
+                              _currentTerm.startDate.year,
+                              _currentTerm.startDate.month,
+                              _currentTerm.startDate.day,
+                              time.hour,
+                              time.minute);
+                        });
+                      }
+                    }
+                  },
+                  child: Text(
+                    _startDate != null
+                        ? DateFormat.jm().format(_startDate!)
+                        : "Select Time",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             )
           ],
         ),
@@ -804,57 +836,70 @@ class _AddClassState extends State<AddClass> {
               "End Time",
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
             ),
-            TextButton(
-              onPressed: _startDate == null
-                  ? null
-                  : () async {
-                      final TimeOfDay? time = await showTimePicker(
-                          context: context,
-                          initialTime: _endDate == null
-                              ? const TimeOfDay(hour: 7, minute: 0)
-                              : TimeOfDay(
-                                  hour: _endDate!.hour,
-                                  minute: _endDate!.minute));
+            Row(
+              children: [
+                if (_endDate != null)
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _endDate = null;
+                          _selection.clear();
+                        });
+                      },
+                      icon: Icon(Icons.cancel)),
+                TextButton(
+                  onPressed: _startDate == null
+                      ? null
+                      : () async {
+                          final TimeOfDay? time = await showTimePicker(
+                              context: context,
+                              initialTime: _endDate == null
+                                  ? const TimeOfDay(hour: 7, minute: 0)
+                                  : TimeOfDay(
+                                      hour: _endDate!.hour,
+                                      minute: _endDate!.minute));
 
-                      if (context.mounted) {
-                        if (time == null) {
-                          return;
-                        }
+                          if (context.mounted) {
+                            if (time == null) {
+                              return;
+                            }
 
-                        if (time.hour < 7 ||
-                            (time.hour >= 21 && time.minute > 0) ||
-                            time.hour > 21) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const Dialog(
-                                child: ErrorCard(
-                                    title: "Invalid Time",
-                                    content:
-                                        "The class only supports time from 7am to 9pm."),
+                            if (time.hour < 7 ||
+                                (time.hour >= 21 && time.minute > 0) ||
+                                time.hour > 21) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const Dialog(
+                                    child: ErrorCard(
+                                        title: "Invalid Time",
+                                        content:
+                                            "The class only supports time from 7am to 9pm."),
+                                  );
+                                },
                               );
-                            },
-                          );
-                        } else {
-                          setState(() {
-                            _endDate = DateTime(
-                                _currentTerm.startDate.year,
-                                _currentTerm.startDate.month,
-                                _currentTerm.startDate.day,
-                                time.hour,
-                                time.minute);
-                          });
-                        }
-                      }
-                    },
-              child: Text(
-                _endDate != null
-                    ? DateFormat.jm().format(_endDate!)
-                    : "Select Time",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                            } else {
+                              setState(() {
+                                _endDate = DateTime(
+                                    _currentTerm.startDate.year,
+                                    _currentTerm.startDate.month,
+                                    _currentTerm.startDate.day,
+                                    time.hour,
+                                    time.minute);
+                              });
+                            }
+                          }
+                        },
+                  child: Text(
+                    _endDate != null
+                        ? DateFormat.jm().format(_endDate!)
+                        : "Select Time",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             )
           ],
         ),
@@ -1047,8 +1092,8 @@ class _AddClassState extends State<AddClass> {
       ..locationID = _selectedLocationID
       ..locationType = _selectedLocationType
       ..frequency = _selection.toList()
-      ..startDate = _startDate!
-      ..endDate = _endDate!
+      ..startDate = _startDate
+      ..endDate = _endDate
       ..notes = _notesCtrl.text;
   }
 }

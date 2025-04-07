@@ -32,7 +32,8 @@ class _EventCourseCardState extends State<EventCourseCard> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ViewCourseEvent(course: widget.subject)));
+                      builder: (context) =>
+                          ViewCourseEvent(course: widget.subject)));
             },
             child: _subjectContainer(context),
           ),
@@ -148,6 +149,19 @@ class _EventCourseCardState extends State<EventCourseCard> {
   Widget _buildSubjectSubtitle(BuildContext context) {
     String subTitle = "";
 
+    if (haveSchedule) {
+      return SizedBox(
+        width: 155,
+        child: Text(
+          "No schedule",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12),
+        ),
+      );
+    }
+
     for (var d in widget.subject.frequency) {
       switch (d) {
         case Day.mon:
@@ -165,8 +179,8 @@ class _EventCourseCardState extends State<EventCourseCard> {
       }
     }
 
-    String startDate = DateFormat.jm().format(widget.subject.startDate);
-    String endDate = DateFormat.jm().format(widget.subject.endDate);
+    String startDate = DateFormat.jm().format(widget.subject.startDate!);
+    String endDate = DateFormat.jm().format(widget.subject.endDate!);
 
     subTitle = "$subTitle $startDate - $endDate";
 
@@ -181,4 +195,9 @@ class _EventCourseCardState extends State<EventCourseCard> {
       ),
     );
   }
+
+  bool get haveSchedule =>
+      widget.subject.frequency.isNotEmpty &&
+      widget.subject.startDate != null &&
+      widget.subject.endDate != null;
 }

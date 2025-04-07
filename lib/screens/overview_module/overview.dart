@@ -96,8 +96,12 @@ class _OverviewState extends State<Overview> {
       );
     }
 
-
-    _subjects = context.watch<SubjectProvider>().getSubjectsByTerm(_term!.id!);
+    _subjects = context
+        .watch<SubjectProvider>()
+        .getSubjectsByTerm(_term!.id!)
+        .where((c) =>
+            c.frequency.isNotEmpty && c.startDate != null && c.endDate != null)
+        .toList();
 
     if (_subjects.isEmpty) {
       return _noSubjectsYet(context);
@@ -106,7 +110,7 @@ class _OverviewState extends State<Overview> {
     _subjectsToday = context
         .watch<SubjectProvider>()
         .getSubjectsByDay(DayMethods.fromInt(_rightNow.weekday), _term!.id!)
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+      ..sort((a, b) => a.startDate!.compareTo(b.startDate!));
 
     if (_subjectsToday.isEmpty) {
       return Column(
@@ -137,10 +141,10 @@ class _OverviewState extends State<Overview> {
 
     // This loops gets the current subject. currentSubject is null if there are no subject at the moment,
     for (int i = 0; i < _subjectsToday.length; i++) {
-      if ((moment.isAfter(_subjectsToday[i].startDate) ||
-              moment.isAtSameMomentAs(_subjectsToday[i].startDate)) &&
-          (moment.isBefore(_subjectsToday[i].endDate) ||
-              moment.isAtSameMomentAs(_subjectsToday[i].endDate))) {
+      if ((moment.isAfter(_subjectsToday[i].startDate!) ||
+              moment.isAtSameMomentAs(_subjectsToday[i].startDate!)) &&
+          (moment.isBefore(_subjectsToday[i].endDate!) ||
+              moment.isAtSameMomentAs(_subjectsToday[i].endDate!))) {
         currentSubject = _subjectsToday[i];
         curSubIndex = i;
         break; // No need to continue looping
@@ -149,7 +153,7 @@ class _OverviewState extends State<Overview> {
 
     if (curSubIndex == null) {
       for (int i = 0; i < _subjectsToday.length; i++) {
-        if (moment.isAfter(_subjectsToday[i].endDate)) {
+        if (moment.isAfter(_subjectsToday[i].endDate!)) {
           curSubIndex = i;
         }
       }
@@ -161,10 +165,10 @@ class _OverviewState extends State<Overview> {
      * Checks if moment is in schedule (equal to or after the first subject's startDate AND
      * equal to or before the last subject's endDate)
      */
-    bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate) ||
+    bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate!) ||
             _subjectsToday[0].startDate == moment) &&
         (_subjectsToday[_subjectsToday.length - 1].endDate == moment ||
-            moment.isBefore(_subjectsToday[_subjectsToday.length - 1].endDate));
+            moment.isBefore(_subjectsToday[_subjectsToday.length - 1].endDate!));
 
     TimeOfDay timeLeft;
 
@@ -172,11 +176,11 @@ class _OverviewState extends State<Overview> {
     if (onSchedule && currentSubject == null) {
       // On break
       Duration diff =
-          _subjectsToday[curSubIndex + 1].startDate.difference(moment);
+          _subjectsToday[curSubIndex + 1].startDate!.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else if (onSchedule) {
       // On class
-      Duration diff = currentSubject!.endDate.difference(moment);
+      Duration diff = currentSubject!.endDate!.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else {
       timeLeft = TimeOfDay(hour: 0, minute: 0);
@@ -186,13 +190,13 @@ class _OverviewState extends State<Overview> {
     Widget nextClass;
 
     // Checks if moment is past today's schedule
-    if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate) ||
+    if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate!) ||
         _subjectsToday.isEmpty)) {
       nextClass = const NextClassCard(
         isLastClass: false,
         emptyMode: true,
       );
-    } else if (moment.isBefore(_subjectsToday[0].startDate)) {
+    } else if (moment.isBefore(_subjectsToday[0].startDate!)) {
       // moment is before the schedule, show first class
       nextClass =
           NextClassCard(isLastClass: false, nextClass: _subjectsToday[0]);
@@ -327,7 +331,7 @@ class _OverviewState extends State<Overview> {
         subtitle = "Until break.";
       } else {
         subtitle =
-            "Until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate)}).";
+            "Until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate!)}).";
       }
     }
 

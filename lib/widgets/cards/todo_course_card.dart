@@ -149,6 +149,19 @@ class _TodoCourseCardState extends State<TodoCourseCard> {
   Widget _buildSubjectSubtitle(BuildContext context) {
     String subTitle = "";
 
+    if (!haveSchedule) {
+      return SizedBox(
+      width: 155,
+      child: Text(
+        "No Schedule",
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontSize: 12),
+      ),
+    );
+    }
+
     for (var d in widget.subject.frequency) {
       switch (d) {
         case Day.mon:
@@ -166,8 +179,8 @@ class _TodoCourseCardState extends State<TodoCourseCard> {
       }
     }
 
-    String startDate = DateFormat.jm().format(widget.subject.startDate);
-    String endDate = DateFormat.jm().format(widget.subject.endDate);
+    String startDate = DateFormat.jm().format(widget.subject.startDate!);
+    String endDate = DateFormat.jm().format(widget.subject.endDate!);
 
     subTitle = "$subTitle $startDate - $endDate";
 
@@ -182,4 +195,9 @@ class _TodoCourseCardState extends State<TodoCourseCard> {
       ),
     );
   }
+
+  bool get haveSchedule =>
+      widget.subject.frequency.isNotEmpty &&
+      widget.subject.startDate != null &&
+      widget.subject.endDate != null;
 }

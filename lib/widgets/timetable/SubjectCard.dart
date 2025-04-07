@@ -78,7 +78,7 @@ class SubjectCard extends StatelessWidget {
   }
 
   num _getMinutesDuration() {
-    return subject.endDate.difference(subject.startDate).inMinutes;
+    return subject.endDate!.difference(subject.startDate!).inMinutes;
   }
 
   double _computeCardHeight() {
@@ -99,13 +99,13 @@ class SubjectCard extends StatelessWidget {
 
   double _getPositionOffset() {
     var minutesDuration = _getMinutesDuration() % 60;
-    var hourOffset = subject.startDate.hour - 6;
+    var hourOffset = subject.startDate!.hour - 6;
 
-    if (subject.startDate.minute == 0) {
+    if (subject.startDate!.minute == 0) {
       minutesDuration = 0;
     }
 
-    if (subject.startDate.hour == 6) {
+    if (subject.startDate!.hour == 6) {
       return 7.5;
     }
 

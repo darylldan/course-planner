@@ -27,7 +27,7 @@ class TimelineCard extends StatelessWidget {
   }
 
   String _getSubjectDuration() {
-    Duration duration = subject.endDate.difference(subject.startDate);
+    Duration duration = subject.endDate!.difference(subject.startDate!);
     var durationString = "";
 
     if (duration.inHours > 0) {
@@ -152,7 +152,7 @@ class TimelineCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           color: Theme.of(context).colorScheme.primaryContainer),
       child: Text(
-        DateFormat.jm().format(subject.startDate),
+        DateFormat.jm().format(subject.startDate!),
         style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimaryContainer,
             fontSize: 12,

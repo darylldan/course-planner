@@ -83,7 +83,7 @@ class _DailyScheduleState extends State<DailySchedule> {
     _subjects = context
         .watch<SubjectProvider>()
         .getSubjectsByDay(_currentDay!, _currentTerm!.id!)
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+      ..sort((a, b) => a.startDate!.compareTo(b.startDate!));
 
     if (_subjects.isEmpty) {
       return Column(

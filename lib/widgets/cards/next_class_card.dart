@@ -105,7 +105,7 @@ class NextClassCard extends StatelessWidget {
         ),
         if (!isLastClass && !emptyMode)
           Text(
-            "${DateFormat.jm().format(nextClass!.startDate)} - ${DateFormat.jm().format(nextClass!.endDate)}",
+            "${DateFormat.jm().format(nextClass!.startDate!)} - ${DateFormat.jm().format(nextClass!.endDate!)}",
             style: TextStyle(
                 fontWeight: FontWeight.w300,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
