@@ -1,5 +1,6 @@
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/CourseGrade.dart';
+import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/DeadlineEvent.dart';
 import 'package:course_planner/models/Note.dart';
 import 'package:course_planner/models/Room.dart';
@@ -32,7 +33,8 @@ class IsarService {
         TodoSchema,
         UserSchema,
         CourseGradeSchema,
-        TermGradeSchema
+        TermGradeSchema,
+        CourseTemplateSchema
       ], directory: dir.path);
     }
 
@@ -98,6 +100,18 @@ class IsarService {
     final isar = await db;
 
     return isar.courseGrades.where().findAll();
+  }
+
+  Future<List<CourseTemplate>> getAllCourseTemplate() async {
+    final isar = await db;
+
+    return isar.courseTemplates.where().findAll();
+  }
+
+  Future<int> getCourseTemplateCount() async {
+    final isar = await db;
+
+    return isar.courseTemplates.count();
   }
 
   // All WRITE
@@ -208,6 +222,14 @@ class IsarService {
     });
 
     return returnID;
+  }
+
+  Future<void> addAllCourseTemplates(List<CourseTemplate> cts) async {
+    final isar = await db;
+
+    await isar.writeTxn(() async {
+      await isar.courseTemplates.putAll(cts);
+    });
   }
 
   // All EDIT
