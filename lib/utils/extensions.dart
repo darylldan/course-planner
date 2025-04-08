@@ -1,4 +1,5 @@
 // Add a copyWith method to your Note class for cleaner code
+import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/Note.dart';
 
 extension NoteCopyWith on Note {
@@ -18,5 +19,15 @@ extension NoteCopyWith on Note {
       ..content = content ?? this.content
       ..created = created ?? this.created
       ..updated = updated ?? this.updated;
+  }
+}
+
+extension CourseTemplateMethods on CourseTemplate {
+  // Convert JSON to Item
+  static CourseTemplate fromJson(Map<String, dynamic> json) {
+    return CourseTemplate()
+      ..courseCode = json["course_code"] as String
+      ..description = json["title"] as String
+      ..units = int.tryParse(json["units"]);
   }
 }
