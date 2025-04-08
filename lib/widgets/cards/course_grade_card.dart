@@ -205,8 +205,7 @@ class _CourseGradeState extends State<CourseGradeCard> {
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
         width: double.infinity,
-        initialSelection:
-            _selectedNumGrade ?? (_selectedNonNumGrade ?? NumericalGrade.g1_00),
+        initialSelection: _selectedNumGrade ?? (_selectedNonNumGrade ?? NumericalGrade.g1_00),
         label: Text("Grade"),
         hintText: "Grade",
         dropdownMenuEntries: _gradeOptions,
@@ -226,6 +225,11 @@ class _CourseGradeState extends State<CourseGradeCard> {
   }
 
   void _showGradePicker(BuildContext context) {
+    if (_selectedNumGrade == null && _selectedNonNumGrade == null) {
+      setState(() {
+        _selectedNumGrade = NumericalGrade.g1_00;
+      });
+    }
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -257,7 +261,6 @@ class _CourseGradeState extends State<CourseGradeCard> {
                                   .onPrimaryContainer)),
                       onPressed: () async {
                         Navigator.pop(context);
-                        // create a note, and then open the edit note screen
                         _courseGrade.grade = _selectedNumGrade;
                         _courseGrade.nonNumericalGrade = _selectedNonNumGrade;
 
@@ -310,7 +313,6 @@ class _CourseGradeState extends State<CourseGradeCard> {
                   title: const Text("Clear Grade"),
                   leading: const Icon(Icons.clear),
                   onTap: () {
-                    // To-Do add modal confimation
                     context
                         .read<CourseGradeProvider>()
                         .clearCourseGrade(_courseGrade);

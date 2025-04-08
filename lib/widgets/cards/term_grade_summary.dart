@@ -86,6 +86,7 @@ class _TermGradeSummaryState extends State<TermGradeSummary> {
   }
 
   Widget _termGradeInformation(BuildContext context) {
+    context.read<TermGradeProvider>().updateState();
     double termGWA = context
         .watch<TermGradeProvider>()
         .getTermGWAFromCourses(widget.term.id!);
