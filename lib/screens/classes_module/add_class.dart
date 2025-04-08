@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/CourseGrade.dart';
+import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/course_grade_provider.dart';
+import 'package:course_planner/providers/course_template_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/screens/buildings_module/select_building_room.dart';
-import 'package:course_planner/widgets/cards/error_card.dart';
+import 'package:course_planner/screens/buildings_module/select_building_room.dart';import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
@@ -41,6 +42,8 @@ class _AddClassState extends State<AddClass> {
   final _instructorCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();
   final _unitsCtrl = TextEditingController();
+
+  final _courseCodeFN = FocusNode();
 
   bool _isCredited = true;
   Color? _courseColor;
@@ -91,6 +94,7 @@ class _AddClassState extends State<AddClass> {
   void initState() {
     super.initState();
     _currentTerm = widget.terms.firstWhere((t) => t.isCurrentTerm);
+    _courseCodeFN.addListener(_autoCompleteCourseDetails);
 
     if (widget.editMode) {
       _courseCodeCtrl.text = widget.course!.courseCode;
@@ -123,6 +127,25 @@ class _AddClassState extends State<AddClass> {
             c.blue == widget.course!.color[3]) {
           _courseColor = c;
         }
+      }
+    }
+  }
+
+  void _autoCompleteCourseDetails() {
+    if (!_courseCodeFN.hasFocus) {
+      CourseTemplate? res =
+          Provider.of<CourseTemplateProvider>(context, listen: false)
+              .findCourse(_courseCodeCtrl.text.trim());
+
+      if (res != null) {
+        setState(() {
+          _courseCodeCtrl.text = res.courseCode;
+          _descCtrl.text = res.description;
+
+          if (res.units != null) {
+            _unitsCtrl.text = res.units.toString();
+          }
+        });
       }
     }
   }
@@ -229,10 +252,12 @@ class _AddClassState extends State<AddClass> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
+
                   Flexible(
                     flex: 2,
                     child: TextFormField(
                       controller: _courseCodeCtrl,
+                      textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
@@ -245,6 +270,7 @@ class _AddClassState extends State<AddClass> {
 
                         return null;
                       },
+                      focusNode: _courseCodeFN,
                     ),
                   ),
                   const SizedBox(
@@ -619,10 +645,12 @@ class _AddClassState extends State<AddClass> {
 
   Widget _roomSelector(BuildContext context) {
     return GestureDetector(
-      onTap: _selectedLocName != null ? () {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(_selectedLocName!)));
-      } : null,
+      onTap: _selectedLocName != null
+          ? () {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(_selectedLocName!)));
+            }
+          : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
