@@ -87,6 +87,7 @@ flutter:
     - assets/images/icon.png
     - assets/images/github-logo.png
     - assets/images/discord-mark-white.png
+    - assets/data/courses.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
