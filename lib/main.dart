@@ -1,5 +1,6 @@
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/course_grade_provider.dart';
+import 'package:course_planner/providers/course_template_provider.dart';
 import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/providers/note_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
@@ -23,7 +24,8 @@ void main() {
       ChangeNotifierProvider(create: ((context) => TodoProvider())),
       ChangeNotifierProvider(create: ((context) => RoomProvider())),
       ChangeNotifierProvider(create: ((context) => TermGradeProvider())),
-      ChangeNotifierProvider(create: ((context) => CourseGradeProvider()))
+      ChangeNotifierProvider(create: ((context) => CourseGradeProvider())),
+      ChangeNotifierProvider(create: ((context) => CourseTemplateProvider()))
     ],
     child: MyApp(),
   ));
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    context.read<CourseTemplateProvider>().loadTemplates();
     final materialTheme = MaterialTheme(TextTheme(
       displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
