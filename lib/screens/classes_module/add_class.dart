@@ -7,7 +7,8 @@ import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/providers/course_grade_provider.dart';
 import 'package:course_planner/providers/course_template_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/screens/buildings_module/select_building_room.dart';import 'package:course_planner/widgets/cards/error_card.dart';
+import 'package:course_planner/screens/buildings_module/select_building_room.dart';
+import 'package:course_planner/widgets/cards/error_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/cards/overlap_warning_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
@@ -141,11 +142,15 @@ class _AddClassState extends State<AddClass> {
         setState(() {
           _courseCodeCtrl.text = res.courseCode;
           _descCtrl.text = res.description;
+          _isCredited = res.credited;
 
           if (res.units != null) {
             _unitsCtrl.text = res.units.toString();
           }
         });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Course details auto-filled.")));
       }
     }
   }
@@ -252,7 +257,6 @@ class _AddClassState extends State<AddClass> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
-
                   Flexible(
                     flex: 2,
                     child: TextFormField(

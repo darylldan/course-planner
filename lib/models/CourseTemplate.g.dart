@@ -22,13 +22,18 @@ const CourseTemplateSchema = CollectionSchema(
       name: r'courseCode',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'credited': PropertySchema(
       id: 1,
+      name: r'credited',
+      type: IsarType.bool,
+    ),
+    r'description': PropertySchema(
+      id: 2,
       name: r'description',
       type: IsarType.string,
     ),
     r'units': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'units',
       type: IsarType.long,
     )
@@ -65,8 +70,9 @@ void _courseTemplateSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.courseCode);
-  writer.writeString(offsets[1], object.description);
-  writer.writeLong(offsets[2], object.units);
+  writer.writeBool(offsets[1], object.credited);
+  writer.writeString(offsets[2], object.description);
+  writer.writeLong(offsets[3], object.units);
 }
 
 CourseTemplate _courseTemplateDeserialize(
@@ -77,9 +83,10 @@ CourseTemplate _courseTemplateDeserialize(
 ) {
   final object = CourseTemplate();
   object.courseCode = reader.readString(offsets[0]);
-  object.description = reader.readString(offsets[1]);
+  object.credited = reader.readBool(offsets[1]);
+  object.description = reader.readString(offsets[2]);
   object.id = id;
-  object.units = reader.readLongOrNull(offsets[2]);
+  object.units = reader.readLongOrNull(offsets[3]);
   return object;
 }
 
@@ -93,8 +100,10 @@ P _courseTemplateDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 2:
+      return (reader.readString(offset)) as P;
+    case 3:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -329,6 +338,16 @@ extension CourseTemplateQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'courseCode',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<CourseTemplate, CourseTemplate, QAfterFilterCondition>
+      creditedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'credited',
+        value: value,
       ));
     });
   }
@@ -639,6 +658,19 @@ extension CourseTemplateQuerySortBy
     });
   }
 
+  QueryBuilder<CourseTemplate, CourseTemplate, QAfterSortBy> sortByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CourseTemplate, CourseTemplate, QAfterSortBy>
+      sortByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
+    });
+  }
+
   QueryBuilder<CourseTemplate, CourseTemplate, QAfterSortBy>
       sortByDescription() {
     return QueryBuilder.apply(this, (query) {
@@ -679,6 +711,19 @@ extension CourseTemplateQuerySortThenBy
       thenByCourseCodeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'courseCode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<CourseTemplate, CourseTemplate, QAfterSortBy> thenByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CourseTemplate, CourseTemplate, QAfterSortBy>
+      thenByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
     });
   }
 
@@ -730,6 +775,12 @@ extension CourseTemplateQueryWhereDistinct
     });
   }
 
+  QueryBuilder<CourseTemplate, CourseTemplate, QDistinct> distinctByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'credited');
+    });
+  }
+
   QueryBuilder<CourseTemplate, CourseTemplate, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -755,6 +806,12 @@ extension CourseTemplateQueryProperty
   QueryBuilder<CourseTemplate, String, QQueryOperations> courseCodeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'courseCode');
+    });
+  }
+
+  QueryBuilder<CourseTemplate, bool, QQueryOperations> creditedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'credited');
     });
   }
 

@@ -9,4 +9,5 @@ class CourseTemplate {
   late String courseCode;
   late String description;
   late int? units;
+  late bool credited;
 }

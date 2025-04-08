@@ -28,6 +28,7 @@ extension CourseTemplateMethods on CourseTemplate {
     return CourseTemplate()
       ..courseCode = json["course_code"] as String
       ..description = json["title"] as String
-      ..units = int.tryParse(json["units"]);
+      ..units = int.tryParse(json["units"])
+      ..credited = json["credited"] == null ? true : json["credited"] as bool;
   }
 }
