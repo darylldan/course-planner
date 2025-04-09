@@ -1,7 +1,10 @@
+import 'package:course_planner/models/DeadlineEvent.dart';
+import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/utils/enums.dart';
 import 'package:course_planner/widgets/cards/current_day_selected.dart';
+import 'package:course_planner/widgets/cards/events_card.dart';
 import 'package:course_planner/widgets/elements/drawer.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
@@ -51,9 +54,54 @@ class _DailyScheduleState extends State<DailySchedule> {
         child: Padding(
           padding:
               const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-          child: _buildTimeline(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleText(
+                title: _screenTitle,
+              ),
+              _buildTimeline(context),
+              SizedBox(
+                height: 10,
+              ),
+              _dividerWithTitle(context, title: "EVENTS TODAY"),
+              SizedBox(
+                height: 10,
+              ),
+              _buildEvents(context),
+              const SizedBox(
+                height: 120,
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildEvents(BuildContext context) {
+    List<DeadlineEvent> events = context
+        .read<DeadlineEventProvider>()
+        .getEventsForDay(_currentDay!, _currentTerm!.id!);
+
+    if (events.isEmpty) {
+      return InfoCard(content: "You don't have any events today.");
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...events.map((e) => EventsCard(event: e)),
+        Center(
+          child: Text(
+            "${events.length} ${events.length == 1 ? "Event" : "Events"}",
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onInverseSurface),
+          ),
+        ),
+      ],
     );
   }
 
@@ -68,9 +116,6 @@ class _DailyScheduleState extends State<DailySchedule> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(
-            title: _screenTitle,
-          ),
           InfoCard(
             content:
                 "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this courses page. The timeline of the courses you created will appear here.",
@@ -89,9 +134,6 @@ class _DailyScheduleState extends State<DailySchedule> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(
-            title: _screenTitle,
-          ),
           _buildCurrentDay(context),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
@@ -111,9 +153,6 @@ class _DailyScheduleState extends State<DailySchedule> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(
-          title: _screenTitle,
-        ),
         _buildCurrentDay(context),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
@@ -123,9 +162,6 @@ class _DailyScheduleState extends State<DailySchedule> {
           ),
         ),
         Center(child: Timeline(subjects: _subjects)),
-        const SizedBox(
-          height: 120,
-        )
       ],
     );
   }
@@ -281,6 +317,36 @@ class _DailyScheduleState extends State<DailySchedule> {
             ),
           ),
         )
+      ],
+    );
+  }
+
+  Widget _dividerWithTitle(BuildContext context, {required String title}) {
+    return Row(
+      children: [
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onInverseSurface,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
       ],
     );
   }
