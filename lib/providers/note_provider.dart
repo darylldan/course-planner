@@ -14,6 +14,10 @@ class NoteProvider extends ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _notes = await isarService.getAllNotes();
     notifyListeners();

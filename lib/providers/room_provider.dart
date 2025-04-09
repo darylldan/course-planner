@@ -14,6 +14,10 @@ class RoomProvider extends ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _rooms = await isarService.getAllRooms();
     notifyListeners();

@@ -24,6 +24,10 @@ class TermProvider with ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _terms = await isarService.getAllTerms();
     if (_terms.isNotEmpty) {

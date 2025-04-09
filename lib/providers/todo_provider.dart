@@ -18,6 +18,10 @@ class TodoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void load() {
+    return;
+  }
+
   List<Todo> getTodoBySubject(int courseId) {
     return _todos.where((t) => t.courseId == courseId).toList();
   }

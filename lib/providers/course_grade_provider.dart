@@ -14,6 +14,10 @@ class CourseGradeProvider with ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _courseGrades = await isarService.getAllCourseGrades();
 

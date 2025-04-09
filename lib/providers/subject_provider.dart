@@ -33,6 +33,10 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void load() {
+    return;
+  }
+
   Subject getSubjectByID(int id) {
     var subject = _subjects.firstWhere((element) => element.id == id);
 

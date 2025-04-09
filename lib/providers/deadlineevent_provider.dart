@@ -14,6 +14,10 @@ class DeadlineEventProvider extends ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _deadlineEvents = await isarService.getAllDeadlineEvents();
     notifyListeners();
@@ -107,6 +111,15 @@ class DeadlineEventProvider extends ChangeNotifier {
 
     return _deadlineEvents
         .where((d) => d.termId == termId)
+        .where((d) => _isSameDate(d.date, today))
+        .toList();
+  }
+
+  List<DeadlineEvent> getAllCourseEventToday(int termId, int courseId) {
+    DateTime today = DateTime.now();
+
+    return _deadlineEvents
+        .where((d) => d.termId == termId && d.courseId == courseId)
         .where((d) => _isSameDate(d.date, today))
         .toList();
   }

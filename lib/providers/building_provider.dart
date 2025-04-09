@@ -13,6 +13,10 @@ class BuildingProvider extends ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _buildings = await isarService.getAllBuildings();
     notifyListeners();
