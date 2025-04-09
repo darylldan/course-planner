@@ -1,10 +1,29 @@
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/CourseGrade.dart';
+import 'package:course_planner/models/DeadlineEvent.dart';
+import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/providers/building_provider.dart';
+import 'package:course_planner/providers/course_grade_provider.dart';
+import 'package:course_planner/providers/deadlineevent_provider.dart';
+import 'package:course_planner/providers/note_provider.dart';
+import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
+import 'package:course_planner/providers/todo_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:course_planner/screens/events_module/view_course_event.dart';
+import 'package:course_planner/screens/grades_module/view_course_grade.dart';
+import 'package:course_planner/screens/misc/view_location.dart';
+import 'package:course_planner/screens/notes_module.dart/view_course_notes.dart';
+import 'package:course_planner/screens/todo_module/view_course_todo.dart';
+import 'package:course_planner/widgets/cards/events_card.dart';
+import 'package:course_planner/widgets/cards/info_card.dart';
+import 'package:course_planner/widgets/cards/location_card.dart';
 import 'package:course_planner/widgets/cards/quick_notes_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/Subject.dart';
@@ -30,6 +49,8 @@ class _ViewClassState extends State<ViewClass> {
     List<Term> terms = context.watch<TermProvider>().terms;
     subject = context.watch<SubjectProvider>().getSubjectByID(widget.subjectID);
 
+    Term term = context.read<TermProvider>().getTermByID(subject.termID);
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -46,6 +67,11 @@ class _ViewClassState extends State<ViewClass> {
                   ));
             },
             icon: const Icon(Icons.edit_rounded),
+          ),
+          IconButton(
+            onPressed: () {},
+            tooltip: "Share this Course",
+            icon: Icon(Icons.share),
           )
         ],
       ),
@@ -53,13 +79,13 @@ class _ViewClassState extends State<ViewClass> {
         child: Padding(
           padding:
               const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-          child: _buildClassInfo(context),
+          child: _buildClassInfo(context, term),
         ),
       ),
     );
   }
 
-  Widget _buildClassInfo(BuildContext context) {
+  Widget _buildClassInfo(BuildContext context, Term term) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -74,6 +100,10 @@ class _ViewClassState extends State<ViewClass> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
+          child: _room(context),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: _schedule(context),
         ),
         if (subject.instructor != "" && subject.instructor != null)
@@ -83,7 +113,7 @@ class _ViewClassState extends State<ViewClass> {
           ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _term(context),
+          child: _term(context, term),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -94,10 +124,200 @@ class _ViewClassState extends State<ViewClass> {
             name: subject.courseCode,
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: _dividerWithTitle(context, title: "EVENTS THIS WEEK"),
+        ),
+        _events(context),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: _dividerWithTitle(context, title: "SHORTCUTS"),
+        ),
+        _shortcuts(context, term),
         const SizedBox(
           height: 150,
         )
       ],
+    );
+  }
+
+  Widget _shortcuts(BuildContext context, Term term) {
+    CourseGrade cg =
+        context.watch<CourseGradeProvider>().getCourseGradeByCourse(subject);
+
+    String grade = "";
+
+    if (cg.grade != null) {
+      String gs = GradeMethods.getStringValue(cg.grade!);
+
+      if (gs == "Incomplete") {
+        grade = "INC";
+      } else if (gs == "Dropped") {
+        grade = "DRP";
+      } else {
+        grade = gs;
+      }
+    } else if (cg.nonNumericalGrade != null) {
+      grade = cg.nonNumericalGrade == NonNumericalGrade.s ? "S" : "US";
+    } else {
+      grade = "--";
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: _shortcutButton(
+                  context,
+                  "Notes",
+                  context
+                      .watch<NoteProvider>()
+                      .getNotesCountByCourse(subject.id!)
+                      .toString(),
+                  MaterialPageRoute(
+                      builder: (context) => ViewCourseNotes(
+                            termId: subject.termID,
+                            subject: subject,
+                          )),
+                  Icons.library_books),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: _shortcutButton(
+                  context,
+                  "To-Do",
+                  context
+                      .watch<TodoProvider>()
+                      .getAllUncompletedTodoByCourse(term.id!, subject.id!)
+                      .length
+                      .toString(),
+                  MaterialPageRoute(
+                      builder: (context) => ViewCourseTodo(
+                            term: term,
+                            course: subject,
+                          )),
+                  Icons.check_box_rounded),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 12,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: _shortcutButton(
+                  context,
+                  "Events",
+                  context
+                      .watch<DeadlineEventProvider>()
+                      .getAllUpcomingDeadlineEventsForSubject(subject.id!)
+                      .length
+                      .toString(),
+                  MaterialPageRoute(
+                      builder: (context) => ViewCourseEvent(
+                            course: subject,
+                            term: term,
+                          )),
+                  Icons.event),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Expanded(
+              child: _shortcutButton(
+                  context,
+                  "Grade",
+                  grade,
+                  MaterialPageRoute(
+                      builder: (context) => ViewCourseGrade(
+                            term: term,
+                          )),
+                  Icons.grading),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _shortcutButton(BuildContext context, String title, String bigText,
+      Route route, IconData icon) {
+    return Material(
+      child: Ink(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.tertiaryContainer,
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          onTap: () => Navigator.push(context, route),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      bigText,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onTertiaryContainer),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          icon,
+                          size: 24,
+                          color:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 28,
+                          color:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _events(BuildContext context) {
+    List<DeadlineEvent> events = context
+        .watch<DeadlineEventProvider>()
+        .getAllDeadlineEventsOfSubjThisWeek(subject.termID, subject.id!);
+
+    if (events.isEmpty) {
+      return InfoCard(content: "Course has no events this week.");
+    }
+
+    return Column(
+      children: events.map((e) => EventsCard(event: e)).toList(),
     );
   }
 
@@ -114,7 +334,7 @@ class _ViewClassState extends State<ViewClass> {
         ),
         Flexible(
           flex: 2,
-          child: _room(context),
+          child: _units(context),
         )
       ],
     );
@@ -195,53 +415,7 @@ class _ViewClassState extends State<ViewClass> {
     );
   }
 
-  Widget _section(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.tertiaryContainer),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Icon(
-                  Icons.groups_rounded,
-                  size: C.cardIconSize,
-                  color: Theme.of(context).colorScheme.onTertiaryContainer,
-                ),
-              ),
-              Text(
-                "Section",
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.onTertiaryContainer,
-                    fontSize: C.titleCardHeaderFontSize),
-              ),
-            ],
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: Text(
-              subject.section,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onTertiaryContainer,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _room(BuildContext context) {
+  Widget _units(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -257,13 +431,13 @@ class _ViewClassState extends State<ViewClass> {
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Icon(
-                  Icons.apartment_rounded,
+                  Icons.punch_clock,
                   size: C.cardIconSize,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
               ),
               Text(
-                "Room",
+                "Units",
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -274,16 +448,189 @@ class _ViewClassState extends State<ViewClass> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              "To be replacced",
+              "${subject.units} (${!subject.credited ? "Credited" : "Non-Credited"})",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _section(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(subject.section)));
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+            vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(C.cardBorderRadius),
+            color: Theme.of(context).colorScheme.secondaryContainer),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Icon(
+                    Icons.groups_rounded,
+                    size: C.cardIconSize,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                ),
+                Text(
+                  "Section",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontSize: C.titleCardHeaderFontSize),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Text(
+                subject.section,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _room(BuildContext context) {
+    LatLng? coords;
+    Object? loc;
+    Building? suppl;
+
+    if (subject.locationType == "bldg") {
+      Building bldg =
+          context.read<BuildingProvider>().getBuildingByID(subject.locationID!);
+
+      if (bldg.latitude != null && bldg.longitude != null) {
+        coords = LatLng(bldg.latitude!, bldg.longitude!);
+        loc = bldg;
+      }
+    } else if (subject.locationType == "room") {
+      Room room = context.read<RoomProvider>().getRoomByID(subject.locationID!);
+      Building bldg =
+          context.read<BuildingProvider>().getBuildingByID(room.buildingId);
+
+      suppl = bldg;
+
+      if (room.long != null && room.lat != null) {
+        coords = LatLng(room.lat!, room.long!);
+        loc = room;
+      } else {
+        // get bldg coords,
+        if (bldg.latitude != null && bldg.longitude != null) {
+          coords = LatLng(bldg.latitude!, bldg.longitude!);
+          loc = room;
+        }
+      }
+    }
+
+    return Material(
+      borderRadius: BorderRadius.circular(C.cardBorderRadius),
+      clipBehavior: Clip.hardEdge,
+      child: Ink(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(C.cardBorderRadius),
+            color: Theme.of(context).colorScheme.onTertiaryContainer),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          onTap: coords != null
+              ? () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewLocation(coords: coords!)));
+                }
+              : null,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+                vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(C.cardBorderRadius),
+                color: Theme.of(context).colorScheme.tertiaryContainer),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.apartment_rounded,
+                        size: C.cardIconSize,
+                        color:
+                            Theme.of(context).colorScheme.onTertiaryContainer,
+                      ),
+                    ),
+                    Text(
+                      "Location",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          color:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                          fontSize: C.titleCardHeaderFontSize),
+                    ),
+                  ],
+                ),
+                if (coords != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: LocationCard(coords: coords),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    loc == null
+                        ? "No location set."
+                        : loc is Building
+                            ? loc.buildingName
+                            : loc is Room
+                                ? loc.roomName
+                                : "Unable to determine location.",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onTertiaryContainer,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                if (loc is Room && suppl != null)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      suppl.buildingName,
+                      style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onTertiaryContainer),
+                    ),
+                  )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -531,9 +878,7 @@ class _ViewClassState extends State<ViewClass> {
     );
   }
 
-  Widget _term(BuildContext context) {
-    Term term = context.read<TermProvider>().getTermByID(subject.termID);
-
+  Widget _term(BuildContext context, Term term) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -589,103 +934,33 @@ class _ViewClassState extends State<ViewClass> {
     );
   }
 
-  Widget _notesWrapper(BuildContext context) {
-    return Material(
-      child: Ink(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          color: Theme.of(context).colorScheme.onInverseSurface,
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditNotes(
-                          subject: subject,
-                        )));
-          },
-          borderRadius: BorderRadius.circular(C.cardBorderRadius),
-          child: _notes(context),
-        ),
-      ),
-    );
-  }
-
-  Widget _notes(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(
-                      Icons.format_list_bulleted_rounded,
-                      size: C.cardIconSize,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  Text(
-                    "Notes",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: C.titleCardHeaderFontSize),
-                  ),
-                ],
-              ),
-              Text(
-                "Tap to Edit",
-                style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: C.titleCardHeaderFontSize),
-              ),
-            ],
+  Widget _dividerWithTitle(BuildContext context, {required String title}) {
+    return Row(
+      children: [
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          _notesContainer(context)
-        ],
-      ),
-    );
-  }
-
-  Widget _notesContainer(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-          vertical: C.titleCardPaddingV, horizontal: C.titleCardPaddingV),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(C.cardBorderRadius),
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Text(
-              (subject.notes == null || subject.notes!.isEmpty)
-                  ? "No notes."
-                  : subject.notes!,
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.onInverseSurface),
-              maxLines: 8,
-              overflow: TextOverflow.ellipsis,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onInverseSurface,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
+      ],
     );
   }
 
