@@ -46,6 +46,11 @@ class _ViewRoomState extends State<ViewRoom> {
 
   @override
   Widget build(BuildContext context) {
+    Building? bldg = widget.room.buildingId != -1
+        ? context
+            .read<BuildingProvider>()
+            .getBuildingByID(widget.room.buildingId)
+        : null;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -56,6 +61,7 @@ class _ViewRoomState extends State<ViewRoom> {
                   MaterialPageRoute(
                     builder: (BuildContext context) => EditRoom(
                       room: widget.room,
+                      bldg: bldg,
                     ),
                   ));
 
@@ -483,8 +489,9 @@ class _ViewRoomState extends State<ViewRoom> {
           content: "No terms yet. Create one via the Terms screen.");
     }
 
-    List<Subject> subjects =
-        context.watch<SubjectProvider>().getSubjectsByRoom(widget.room.id!, currentTerm.id!);
+    List<Subject> subjects = context
+        .watch<SubjectProvider>()
+        .getSubjectsByRoom(widget.room.id!, currentTerm.id!);
     List<Subject> filteredSubjects = subjects;
 
     if (subjects.isEmpty) {
@@ -499,9 +506,8 @@ class _ViewRoomState extends State<ViewRoom> {
           .toList();
     }
 
-    List<ClassCard> roomCard = filteredSubjects
-        .map((s) => ClassCard(subject: s))
-        .toList();
+    List<ClassCard> roomCard =
+        filteredSubjects.map((s) => ClassCard(subject: s)).toList();
 
     return Column(
       children: [
