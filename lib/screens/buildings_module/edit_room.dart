@@ -251,7 +251,7 @@ class _EditRoomState extends State<EditRoom> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Discard building creation?"),
+                title: const Text("Discard building editing?"),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(true),
