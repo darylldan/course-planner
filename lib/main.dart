@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    context.read<CourseTemplateProvider>().loadTemplates();
+    loadAll(context);
+
     final materialTheme = MaterialTheme(TextTheme(
       displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -51,5 +52,16 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       home: const Overview(),
     );
+  }
+
+  void loadAll(BuildContext context) {
+    context.read<CourseTemplateProvider>().loadTemplates();
+    context.read<BuildingProvider>().load();
+    context.read<DeadlineEventProvider>().load();
+    context.read<NoteProvider>().load();
+    context.read<BuildingProvider>().load();
+    context.read<RoomProvider>().load();
+    context.read<TermProvider>().load();
+    context.read<TodoProvider>().load();
   }
 }
