@@ -499,11 +499,8 @@ class _ViewRoomState extends State<ViewRoom> {
           .toList();
     }
 
-    List<Padding> roomCard = filteredSubjects
-        .map((s) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ClassCard(subject: s),
-            ))
+    List<ClassCard> roomCard = filteredSubjects
+        .map((s) => ClassCard(subject: s))
         .toList();
 
     return Column(
