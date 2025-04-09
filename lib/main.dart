@@ -63,5 +63,6 @@ class MyApp extends StatelessWidget {
     context.read<RoomProvider>().load();
     context.read<TermProvider>().load();
     context.read<TodoProvider>().load();
+    context.read<CourseGradeProvider>().load();
   }
 }
