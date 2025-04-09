@@ -52,7 +52,6 @@ dependencies:
   dio_cache_interceptor: ^3.5.1
   markdown_editor_plus: ^0.2.15
   webview_flutter: ^4.10.0
-  flutter_secure_storage: ^4.2.1
   shared_preferences: ^2.5.2
   table_calendar: ^3.1.3
 
