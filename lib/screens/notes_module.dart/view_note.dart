@@ -8,11 +8,13 @@ import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/notes_module.dart/history_manager.dart';
 import 'package:course_planner/utils/extensions.dart';
+import 'package:course_planner/utils/methods.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../utils/constants.dart' as C;
 
 class ViewNote extends StatefulWidget {
@@ -251,6 +253,21 @@ class _ViewNoteState extends State<ViewNote> {
             icon: Icon(Icons.folder_open),
             tooltip: "Organize",
           ),
+          IconButton(
+            onPressed: () async {
+              ShareResult res = await mdToPDF(
+                  title:
+                      "${_titleCtrl.text.isEmpty ? "Untitled Note" : _titleCtrl.text} - ${widget.subject != null ? "${widget.subject!.courseCode} - ${widget.subject!.isLaboratory ? "Lab" : "Lec"}" : ""}",
+                  md: _notesCtrl.text.replaceAll("’", "'"));
+
+              if (res.status == ShareResultStatus.success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Note saved as PDF.")));
+              }
+            },
+            icon: Icon(Icons.picture_as_pdf),
+            tooltip: "Save as PDF",
+          )
         ],
       ),
       body: SingleChildScrollView(
