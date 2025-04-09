@@ -448,7 +448,7 @@ class _ViewClassState extends State<ViewClass> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              "${subject.units} (${!subject.credited ? "Credited" : "Non-Credited"})",
+              "${subject.units} (${subject.credited ? "Credited" : "Non-Credited"})",
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
