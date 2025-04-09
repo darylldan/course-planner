@@ -80,7 +80,7 @@ class SubjectCard extends StatelessWidget {
               subject.section,
               style: const TextStyle(fontSize: 9),
             ),
-            if (diff.inHours > 1)
+            if (diff.inHours >= 1 && diff.inMinutes % 60 >= 30)
               Text(
                 loc == null
                     ? "No location"
@@ -92,6 +92,8 @@ class SubjectCard extends StatelessWidget {
                 style: const TextStyle(fontSize: 7),
                 overflow: TextOverflow.clip,
                 softWrap: true,
+                textAlign: TextAlign.center,
+                maxLines: 3,
               )
           ],
         ),
