@@ -39,7 +39,7 @@ class _ViewBuildingState extends State<ViewBuilding> {
     return FileCacheStore('${dir.path}${Platform.pathSeparator}MapTiles');
   }
 
-  TextEditingController _roomSearchCtrl = TextEditingController();
+  final TextEditingController _roomSearchCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
