@@ -1,5 +1,10 @@
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/providers/building_provider.dart';
+import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../models/Subject.dart';
 
@@ -31,13 +36,31 @@ class SubjectCard extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => ViewClass(subjectID: subject.id!)));
           },
-          child: _subjectCardContainer(),
+          child: _subjectCardContainer(context),
         ),
       ),
     );
   }
 
-  Widget _subjectCardContainer() {
+  Widget _subjectCardContainer(BuildContext context) {
+    Object? loc;
+
+    if (subject.locationType == "bldg") {
+      Building bldg = context
+          .watch<BuildingProvider>()
+          .getBuildingByID(subject.locationID!);
+
+      if (bldg.latitude != null && bldg.longitude != null) {
+        loc = bldg;
+      }
+    } else if (subject.locationType == "room") {
+      Room room =
+          context.watch<RoomProvider>().getRoomByID(subject.locationID!);
+
+      loc = room;
+    }
+
+    Duration diff = subject.endDate!.difference(subject.startDate!);
     return Container(
       width: Constants.subjectCardWidth,
       height: _computeCardHeight(),
@@ -47,30 +70,29 @@ class SubjectCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                subject.courseCode,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
-              ),
+            Text(
+              subject.courseCode,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+              softWrap: true,
+              textAlign: TextAlign.center,
             ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                subject.section,
-                style: const TextStyle(fontSize: 9),
-              ),
+            Text(
+              subject.section,
+              style: const TextStyle(fontSize: 9),
             ),
-            FittedBox(
-              clipBehavior: Clip.hardEdge,
-              fit: BoxFit.none,
-              child: Text(
-                "subject.room",
+            if (diff.inHours > 1)
+              Text(
+                loc == null
+                    ? "No location"
+                    : loc is Building
+                        ? loc.buildingName
+                        : loc is Room
+                            ? loc.roomName
+                            : "Undetermined location",
                 style: const TextStyle(fontSize: 7),
-                overflow: TextOverflow.fade,
-              ),
-            )
+                overflow: TextOverflow.clip,
+                softWrap: true,
+              )
           ],
         ),
       ),
