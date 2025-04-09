@@ -1,10 +1,18 @@
 import 'dart:async';
 
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/DeadlineEvent.dart';
+import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/providers/building_provider.dart';
+import 'package:course_planner/providers/deadlineevent_provider.dart';
+import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:course_planner/utils/enums.dart';
+import 'package:course_planner/widgets/cards/events_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
+import 'package:course_planner/widgets/cards/location_card.dart';
 import 'package:course_planner/widgets/cards/next_class_card.dart';
 import 'package:course_planner/widgets/cards/overview_today_card.dart';
 import 'package:course_planner/widgets/elements/drawer.dart';
@@ -12,6 +20,7 @@ import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/Subject.dart';
@@ -67,22 +76,41 @@ class _OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
+    _term = context.watch<TermProvider>().currentTerm;
+
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(parent: _route),
       body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-          child: _buildOverview(context),
+        padding:
+            const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleText(title: _screenTitle),
+            _buildOverview(context),
+            if (_term != null) ...[
+              _dividerWithTitle("TODAY'S EVENTS"),
+              _events(context),
+            ],
+            const SizedBox(height: 120)
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildOverview(BuildContext context) {
-    _term = context.watch<TermProvider>().currentTerm;
+  Widget _events(BuildContext context) {
+    List<DeadlineEvent> events = context
+        .watch<DeadlineEventProvider>()
+        .getAllOngoingDeadlineEventsToday(_term!.id!);
 
+    return Column(
+      children: events.map((e) => EventsCard(event: e)).toList(),
+    );
+  }
+
+  Widget _buildOverview(BuildContext context) {
     if (_term == null) {
       return _noTermsYet(context);
     }
@@ -90,7 +118,6 @@ class _OverviewState extends State<Overview> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(title: _screenTitle),
           OverviewTodayCard(subjects: []),
         ],
       );
@@ -116,7 +143,6 @@ class _OverviewState extends State<Overview> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(title: _screenTitle),
           OverviewTodayCard(subjects: []),
         ],
       );
@@ -124,7 +150,6 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         OverviewTodayCard(subjects: _subjectsToday),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -135,7 +160,8 @@ class _OverviewState extends State<Overview> {
   }
 
   Widget _content(BuildContext context) {
-    DateTime moment = DateTime(2024, 8, 20, _rightNow.hour, _rightNow.minute);
+    DateTime moment = DateTime(_term!.startDate.year, _term!.startDate.month,
+        _term!.startDate.day, _rightNow.hour, _rightNow.minute);
     Subject? currentSubject;
     int? curSubIndex;
 
@@ -168,7 +194,8 @@ class _OverviewState extends State<Overview> {
     bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate!) ||
             _subjectsToday[0].startDate == moment) &&
         (_subjectsToday[_subjectsToday.length - 1].endDate == moment ||
-            moment.isBefore(_subjectsToday[_subjectsToday.length - 1].endDate!));
+            moment
+                .isBefore(_subjectsToday[_subjectsToday.length - 1].endDate!));
 
     TimeOfDay timeLeft;
 
@@ -228,7 +255,6 @@ class _OverviewState extends State<Overview> {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: _timeline(),
           ),
-        const SizedBox(height: 120)
       ],
     );
   }
@@ -311,11 +337,136 @@ class _OverviewState extends State<Overview> {
                   overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.bold),
             ),
+          ),
+          if (currentSubject != null) ...[
+            SizedBox(height: 5,),
+            _sectionInstructorRow(context, currentSubject)
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionInstructorRow(BuildContext context, Subject course) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 1,
+          child: _section(context, course),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Flexible(
+          flex: 2,
+          child: _instructor(context, course),
+        )
+      ],
+    );
+  }
+
+  Widget _instructor(BuildContext context, Subject course) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          color: Theme.of(context).colorScheme.onTertiary),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.person,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "Instructor",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              course.instructor == null || course.instructor!.isEmpty
+                  ? "Not set."
+                  : course.instructor!,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
           )
         ],
       ),
     );
   }
+
+  Widget _section(BuildContext context, Subject course) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          color: Theme.of(context).colorScheme.onTertiary),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.groups_rounded,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "Section",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              course.section,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  
 
   Widget _timeLeft(BuildContext context, TimeOfDay timeLeft, bool onSchedule,
       int curSubIndex, Subject? curSub) {
@@ -411,7 +562,6 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         InfoCard(
             content:
                 "Welcome! \nBegin by adding a term in the 'Terms' section. Next, populate the 'Courses' screen with your courses. Your daily summary will be displayed here.")
@@ -423,7 +573,6 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         InfoCard(
             content:
                 "You don't have any courses in the current term. Add one on the 'Courses' screen.")
@@ -435,7 +584,7 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _timelineHeader(),
+        _dividerWithTitle("TODAY'S CLASSES"),
         const SizedBox(height: 10),
         Timeline(subjects: _subjectsToday),
         const SizedBox(
@@ -455,8 +604,8 @@ class _OverviewState extends State<Overview> {
     );
   }
 
-  Widget _timelineHeader() {
-    return const Row(
+  Widget _dividerWithTitle(String title) {
+    return Row(
       children: [
         Expanded(
           child: Opacity(
@@ -467,7 +616,7 @@ class _OverviewState extends State<Overview> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
-            "TODAY'S SCHEDULE",
+            title,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
