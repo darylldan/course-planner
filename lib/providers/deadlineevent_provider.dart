@@ -1,4 +1,5 @@
 import 'package:course_planner/models/DeadlineEvent.dart';
+import 'package:course_planner/utils/enums.dart';
 import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 
@@ -129,6 +130,30 @@ class DeadlineEventProvider extends ChangeNotifier {
             (d) => d.date.isAfter(now) && d.date.isBefore(endOfWeekAtMidnight))
         .toList()
       ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  List<DeadlineEvent> getEventsForDay(Day day, int termId) {
+    // Get current date and calculate the start and end of the week
+    final now = DateTime.now();
+    final currentDate = DateTime(now.year, now.month, now.day);
+
+    // Calculate start of week (Monday)
+    final startOfWeek =
+        currentDate.subtract(Duration(days: currentDate.weekday - 1));
+
+    // Calculate the target day by adding the day offset
+    final dayOffset = day.index; // mon=0, tue=1, ..., sat=5
+    final targetDay = startOfWeek.add(Duration(days: dayOffset));
+
+    // Calculate the next day (for end of range)
+    final nextDay = targetDay.add(const Duration(days: 1));
+
+    // Filter events that fall on the target day
+    return _deadlineEvents.where((event) {
+      return event.termId == termId &&
+          event.date.isAfter(targetDay) &&
+          event.date.isBefore(nextDay);
+    }).toList();
   }
 
   List<DeadlineEvent> getAllDeadlineEventsOfSubjThisWeek(
