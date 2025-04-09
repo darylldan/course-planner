@@ -1,7 +1,13 @@
+import 'package:course_planner/models/Building.dart';
+import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/models/Subject.dart';
+import 'package:course_planner/providers/building_provider.dart';
+import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class TimelineCard extends StatelessWidget {
   final Subject subject;
@@ -65,6 +71,23 @@ class TimelineCard extends StatelessWidget {
   }
 
   Widget _subjectContainer(BuildContext context) {
+    Object? loc;
+
+    if (subject.locationType == "bldg") {
+      Building bldg = context
+          .watch<BuildingProvider>()
+          .getBuildingByID(subject.locationID!);
+
+      if (bldg.latitude != null && bldg.longitude != null) {
+        loc = bldg;
+      }
+    } else if (subject.locationType == "room") {
+      Room room =
+          context.watch<RoomProvider>().getRoomByID(subject.locationID!);
+
+      loc = room;
+    }
+
     return Container(
       height: 80,
       width: 350,
@@ -115,9 +138,16 @@ class TimelineCard extends StatelessWidget {
                       SizedBox(
                         width: 220,
                         child: Text(
-                          "subject.room",
+                          loc == null
+                              ? "No location"
+                              : loc is Building
+                                  ? loc.buildingName
+                                  : loc is Room
+                                      ? loc.roomName
+                                      : "Undetermined location",
                           style: TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ])
