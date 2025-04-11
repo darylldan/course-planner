@@ -35,7 +35,8 @@ class IsarService {
         UserSchema,
         CourseGradeSchema,
         TermGradeSchema,
-        CourseTemplateSchema
+        CourseTemplateSchema,
+        UploadedCourseSchema
       ], directory: dir.path);
     }
 
