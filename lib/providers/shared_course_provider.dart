@@ -31,6 +31,10 @@ class ShareCourseProvider with ChangeNotifier {
     return _uploadedCourses.where((u) => u.hash == hash).firstOrNull;
   }
 
+  bool isCourseMine(String docId) {
+    return _uploadedCourses.where((u) => u.documentId == docId).isNotEmpty;
+  }
+
   // Checking of internet connection is done through frontend
   Future<String?> uploadCourse(Subject course) async {
     String hash = SubjectMethods.getStableHash(course);
@@ -47,6 +51,7 @@ class ShareCourseProvider with ChangeNotifier {
         courseCode: course.courseCode,
         isLaboratory: course.isLaboratory,
         description: course.description,
+        section: course.section,
         instructor: course.instructor,
         frequency: course.frequency.map((d) => DayMethods.dayToInt(d)).toList(),
         notes: course.notes,
@@ -85,8 +90,9 @@ class ShareCourseProvider with ChangeNotifier {
       final SharedCourse sc = SharedCourse.fromJson(data);
 
       return sc;
-    } catch (e) {
+    } catch (e, stackTrace) {
       debugPrint("Error downloading course: $e");
+      debugPrint(stackTrace.toString());
       return null;
     }
   }
