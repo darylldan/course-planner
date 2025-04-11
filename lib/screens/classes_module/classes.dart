@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:course_planner/models/Subject.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:course_planner/screens/classes_module/scan_course_subm/scan_course.dart';
 import 'package:course_planner/screens/classes_module/search_class.dart';
 import 'package:course_planner/widgets/cards/current_term_selected.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
@@ -31,6 +34,10 @@ class _ClassesState extends State<Classes> {
 
   @override
   Widget build(BuildContext context) {
+    if (onCurrentTerm) {
+      currentTerm = context.watch<TermProvider>().currentTerm;
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -52,27 +59,90 @@ class _ClassesState extends State<Classes> {
         child: _buildClassesScreen(context),
       ),
       floatingActionButton: _showFab
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddClass(
-                              terms: context.read<TermProvider>().terms,
-                            )));
-              },
-              label: const Text("Create Class"),
-              icon: const Icon(Icons.add_rounded),
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  heroTag: "scanqr",
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  onPressed: () async {
+                    bool isCancelled = false;
+
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Checking for internet connection"),
+                            content: IntrinsicHeight(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    isCancelled = true;
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel"))
+                            ],
+                          );
+                        });
+
+                    bool internet = await hasNetwork();
+
+                    if (context.mounted) Navigator.pop(context);
+
+                    if (isCancelled) return;
+
+                    if (!internet) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Internet connection required for course sharing."),
+                          ),
+                        );
+                      }
+                      return;
+                    }
+
+                    if (context.mounted) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScanCourse(term: currentTerm!,)));
+                    }
+                  },
+                  child: Icon(Icons.qr_code_scanner,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddClass(
+                                  term: currentTerm!,
+                                )));
+                  },
+                  label: const Text("Create Class"),
+                  icon: const Icon(Icons.add_rounded),
+                ),
+              ],
             )
           : null,
     );
   }
 
   Widget _buildClassesScreen(BuildContext context) {
-    if (onCurrentTerm) {
-      currentTerm = context.watch<TermProvider>().currentTerm;
-    }
-
     if (currentTerm == null) {
       _showFab = false;
       return _noTermsYet();
@@ -269,9 +339,9 @@ class _ClassesState extends State<Classes> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
+                backgroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.primaryContainer),
-                foregroundColor: MaterialStatePropertyAll(
+                foregroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.onPrimaryContainer)),
             onPressed: () {
               Navigator.pop(context);
@@ -288,5 +358,14 @@ class _ClassesState extends State<Classes> {
         )
       ],
     );
+  }
+
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
   }
 }
