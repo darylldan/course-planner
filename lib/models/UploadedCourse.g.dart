@@ -25,7 +25,7 @@ const UploadedCourseSchema = CollectionSchema(
     r'hash': PropertySchema(
       id: 1,
       name: r'hash',
-      type: IsarType.long,
+      type: IsarType.string,
     )
   },
   estimateSize: _uploadedCourseEstimateSize,
@@ -49,6 +49,7 @@ int _uploadedCourseEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.documentId.length * 3;
+  bytesCount += 3 + object.hash.length * 3;
   return bytesCount;
 }
 
@@ -59,7 +60,7 @@ void _uploadedCourseSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.documentId);
-  writer.writeLong(offsets[1], object.hash);
+  writer.writeString(offsets[1], object.hash);
 }
 
 UploadedCourse _uploadedCourseDeserialize(
@@ -70,7 +71,7 @@ UploadedCourse _uploadedCourseDeserialize(
 ) {
   final object = UploadedCourse();
   object.documentId = reader.readString(offsets[0]);
-  object.hash = reader.readLong(offsets[1]);
+  object.hash = reader.readString(offsets[1]);
   object.id = id;
   return object;
 }
@@ -85,7 +86,7 @@ P _uploadedCourseDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readLong(offset)) as P;
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -324,49 +325,58 @@ extension UploadedCourseQueryFilter
   }
 
   QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
-      hashEqualTo(int value) {
+      hashEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'hash',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
       hashGreaterThan(
-    int value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'hash',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
       hashLessThan(
-    int value, {
+    String value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'hash',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
       hashBetween(
-    int lower,
-    int upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -375,6 +385,77 @@ extension UploadedCourseQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'hash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'hash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'hash',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'hash',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hash',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UploadedCourse, UploadedCourse, QAfterFilterCondition>
+      hashIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'hash',
+        value: '',
       ));
     });
   }
@@ -538,9 +619,10 @@ extension UploadedCourseQueryWhereDistinct
     });
   }
 
-  QueryBuilder<UploadedCourse, UploadedCourse, QDistinct> distinctByHash() {
+  QueryBuilder<UploadedCourse, UploadedCourse, QDistinct> distinctByHash(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'hash');
+      return query.addDistinctBy(r'hash', caseSensitive: caseSensitive);
     });
   }
 }
@@ -559,7 +641,7 @@ extension UploadedCourseQueryProperty
     });
   }
 
-  QueryBuilder<UploadedCourse, int, QQueryOperations> hashProperty() {
+  QueryBuilder<UploadedCourse, String, QQueryOperations> hashProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'hash');
     });

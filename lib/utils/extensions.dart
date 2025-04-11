@@ -1,7 +1,10 @@
 // Add a copyWith method to your Note class for cleaner code
+import 'dart:convert';
+
 import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/Note.dart';
 import 'package:course_planner/models/Subject.dart';
+import 'package:crypto/crypto.dart';
 
 extension NoteCopyWith on Note {
   Note copyWith({
@@ -35,14 +38,15 @@ extension CourseTemplateMethods on CourseTemplate {
 }
 
 extension SubjectMethods on Subject {
-  static int getHash(Subject subject) {
-    return Object.hash(
-        subject.id,
-        subject.courseCode,
-        subject.units,
-        subject.credited,
-        subject.startDate,
-        subject.endDate,
-        subject.description);
+  static String getStableHash(Subject subject) {
+    final bytes = utf8.encode('${subject.id}'
+        '${subject.courseCode}'
+        '${subject.units}'
+        '${subject.credited}'
+        '${subject.startDate.toString()}'
+        '${subject.endDate.toString()}'
+        '${subject.description}');
+    final digest = sha1.convert(bytes);
+    return digest.toString();
   }
 }

@@ -7,5 +7,5 @@ class UploadedCourse {
   Id? id = Isar.autoIncrement;
 
   late String documentId;
-  late int hash;
+  late String hash;
 }
