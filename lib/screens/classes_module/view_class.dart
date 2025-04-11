@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/CourseGrade.dart';
 import 'package:course_planner/models/DeadlineEvent.dart';
 import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/models/UploadedCourse.dart';
 import 'package:course_planner/providers/building_provider.dart';
 import 'package:course_planner/providers/course_grade_provider.dart';
 import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/providers/note_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/providers/shared_course_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/providers/todo_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:course_planner/screens/classes_module/share_course.dart';
 import 'package:course_planner/screens/events_module/view_course_event.dart';
 import 'package:course_planner/screens/grades_module/view_course_grade.dart';
 import 'package:course_planner/screens/misc/view_location.dart';
@@ -30,7 +35,6 @@ import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as C;
 import '../../utils/enums.dart';
-import 'edit_notes.dart';
 
 class ViewClass extends StatefulWidget {
   final int subjectID;
@@ -43,6 +47,15 @@ class ViewClass extends StatefulWidget {
 class _ViewClassState extends State<ViewClass> {
   final _screenTitle = "View Class";
   late Subject subject;
+
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +79,73 @@ class _ViewClassState extends State<ViewClass> {
                     ),
                   ));
             },
-            icon: const Icon(Icons.edit_rounded),
+            icon: const Icon(Icons.edit),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              bool isCancelled = false;
+
+              UploadedCourse? uc =
+                  context.read<ShareCourseProvider>().getUcOrNull(subject);
+
+              if (uc != null) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShareCourse(course: subject)));
+
+                return;
+              }
+
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Checking for internet connection"),
+                      content: IntrinsicHeight(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              isCancelled = true;
+
+                              Navigator.pop(context);
+                            },
+                            child: Text("Cancel"))
+                      ],
+                    );
+                  });
+
+              bool internetCheck = await hasNetwork();
+
+              if (context.mounted) Navigator.pop(context);
+
+              if (isCancelled) return;
+
+              if (!internetCheck) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          "Internet connection required for course sharing."),
+                    ),
+                  );
+                }
+                return;
+              }
+
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ShareCourse(course: subject)),
+                );
+              }
+            },
             tooltip: "Share this Course",
             icon: Icon(Icons.share),
           )

@@ -22,21 +22,36 @@ class ShareCourseProvider with ChangeNotifier {
     _uploadedCourses = await _isarService.getAllUploadedCourses();
   }
 
+  void load() {
+    return;
+  }
+
+  UploadedCourse? getUcOrNull(Subject course) {
+    String hash = SubjectMethods.getStableHash(course);
+    return _uploadedCourses.where((u) => u.hash == hash).firstOrNull;
+  }
+
   // Checking of internet connection is done through frontend
   Future<String?> uploadCourse(Subject course) async {
-    int hash = SubjectMethods.getHash(course);
+    String hash = SubjectMethods.getStableHash(course);
 
-    // Serialize course into sharedcourse obj
-    if (_uploadedCourses.isNotEmpty) {
-      if (_uploadedCourses.map((u) => u.hash).contains(hash)) {
-        return _uploadedCourses.firstWhere((u) => u.hash == hash).documentId;
-      }
+    // check if course is already uploaded
+    UploadedCourse? uc =
+        _uploadedCourses.where((u) => u.hash == hash).firstOrNull;
+
+    if (uc != null) {
+      return uc.documentId;
     }
 
     SharedCourse sc = SharedCourse(
         courseCode: course.courseCode,
         isLaboratory: course.isLaboratory,
+        description: course.description,
+        instructor: course.instructor,
         frequency: course.frequency.map((d) => DayMethods.dayToInt(d)).toList(),
+        notes: course.notes,
+        startDate: course.startDate,
+        endDate: course.endDate,
         units: course.units,
         credited: course.credited,
         color: course.color);
@@ -45,9 +60,14 @@ class ShareCourseProvider with ChangeNotifier {
         await _firebaseService.uploadSharedCourse(SharedCourse.toJson(sc));
 
     if (id != null) {
-      await _isarService.createUploadedCourse(UploadedCourse()
+      UploadedCourse newUc = UploadedCourse()
         ..documentId = id
-        ..hash = hash);
+        ..hash = hash;
+      int? newId = await _isarService.createUploadedCourse(newUc);
+
+      newUc.id = newId;
+
+      _uploadedCourses.add(newUc);
     }
 
     return id;
@@ -67,6 +87,7 @@ class ShareCourseProvider with ChangeNotifier {
       return sc;
     } catch (e) {
       debugPrint("Error downloading course: $e");
+      return null;
     }
   }
 }
