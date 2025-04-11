@@ -210,14 +210,14 @@ class ClassCard extends StatelessWidget {
                   title: const Text("Edit Course"),
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
-                    List<Term> terms =
-                        Provider.of<TermProvider>(context, listen: false).terms;
+                    Term terms =
+                        Provider.of<TermProvider>(context, listen: false).getTermByID(subject.termID);
                     Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddClass(
-                                  terms: terms,
+                                  term: terms,
                                   course: subject,
                                   editMode: true,
                                 )));

@@ -4,6 +4,7 @@ import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/CourseGrade.dart';
 import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/Room.dart';
+import 'package:course_planner/models/SharedCourse.dart';
 import 'package:course_planner/providers/course_grade_provider.dart';
 import 'package:course_planner/providers/course_template_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
@@ -24,11 +25,19 @@ import '../../utils/constants.dart' as C;
 enum ClassType { lec, lab }
 
 class AddClass extends StatefulWidget {
-  final List<Term> terms;
+  final Term term;
   final bool editMode;
   final Subject? course;
-  const AddClass(
-      {super.key, required this.terms, this.editMode = false, this.course});
+  final SharedCourse? sc;
+  final bool fromSharing;
+  const AddClass({
+    super.key,
+    required this.term,
+    this.editMode = false,
+    this.course,
+    this.sc,
+    this.fromSharing = false,
+  });
 
   @override
   State<AddClass> createState() => _AddClassState();
@@ -49,15 +58,12 @@ class _AddClassState extends State<AddClass> {
   bool _isCredited = true;
   Color? _courseColor;
 
-  int? _selectedTermID;
   int? _selectedLocationID;
   String? _selectedLocationType;
   String? _selectedLocName;
 
   DateTime? _startDate;
   DateTime? _endDate;
-
-  late Term _currentTerm;
 
   Set<Day> _selection = <Day>{};
 
@@ -89,12 +95,10 @@ class _AddClassState extends State<AddClass> {
   // Validation flags
   bool _isFrequencyInvalid = false;
   bool _isDatesInvalid = false;
-  bool _isTermInvalid = false;
 
   @override
   void initState() {
     super.initState();
-    _currentTerm = widget.terms.firstWhere((t) => t.isCurrentTerm);
     _courseCodeFN.addListener(_autoCompleteCourseDetails);
 
     if (widget.editMode) {
@@ -109,7 +113,6 @@ class _AddClassState extends State<AddClass> {
       _descCtrl.text = widget.course!.description ?? "";
       _sectionCtrl.text = widget.course!.section;
       _instructorCtrl.text = widget.course!.instructor ?? "";
-      _selectedTermID = widget.course!.termID;
       _selectedLocationID = widget.course!.locationID;
       _selectedLocationType = widget.course!.locationType;
       _notesCtrl.text = widget.course!.notes ?? "";
@@ -129,6 +132,50 @@ class _AddClassState extends State<AddClass> {
           _courseColor = c;
         }
       }
+    }
+
+    if (widget.fromSharing && widget.sc != null) {
+      _courseCodeCtrl.text = widget.sc!.courseCode;
+      _classTypeSelection =
+          widget.sc!.isLaboratory ? {ClassType.lab} : {ClassType.lec};
+      _descCtrl.text = widget.sc!.description ?? "";
+      _instructorCtrl.text = widget.sc!.instructor ?? "";
+      _sectionCtrl.text = widget.sc!.section;
+      _selection =
+          widget.sc!.frequency.map((f) => DayMethods.intToDay(f)!).toSet();
+      _notesCtrl.text = widget.sc!.notes ?? "";
+      _startDate = widget.sc!.startDate != null
+          ? DateTime(
+              widget.term.startDate.year,
+              widget.term.startDate.month,
+              widget.term.startDate.day,
+              widget.sc!.startDate!.hour,
+              widget.sc!.startDate!.minute)
+          : null;
+      _endDate = widget.sc!.endDate != null
+          ? DateTime(
+              widget.term.startDate.year,
+              widget.term.startDate.month,
+              widget.term.startDate.day,
+              widget.sc!.endDate!.hour,
+              widget.sc!.endDate!.minute)
+          : null;
+      _unitsCtrl.text = widget.sc!.units.toString();
+      _isCredited = widget.sc!.credited;
+      for (var c in _colors) {
+        if (c!.alpha == widget.sc!.color[0] &&
+            c.red == widget.sc!.color[1] &&
+            c.green == widget.sc!.color[2] &&
+            c.blue == widget.sc!.color[3]) {
+          _courseColor = c;
+        }
+      }
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Course downloaded.')),
+        );
+      });
     }
   }
 
@@ -205,7 +252,6 @@ class _AddClassState extends State<AddClass> {
             _descCtrl.text == widget.course!.description &&
             _sectionCtrl.text == widget.course!.section &&
             _instructorCtrl.text == widget.course!.instructor &&
-            _selectedTermID == widget.course!.termID &&
             _selectedLocationID == widget.course!.locationID &&
             _selectedLocationType == widget.course!.locationType &&
             // _startDate!.isAtSameMomentAs(widget.course!.startDate) &&
@@ -227,7 +273,6 @@ class _AddClassState extends State<AddClass> {
             _descCtrl.text.isEmpty &&
             _startDate == null &&
             _endDate == null &&
-            _selectedTermID == null &&
             _classTypeSelection.contains(ClassType.lec);
   }
 
@@ -410,12 +455,6 @@ class _AddClassState extends State<AddClass> {
                     hintText: 'Prof. Juan Dela Cruz',
                     labelText: 'Instructor (Optional)'),
               ),
-            ),
-
-            // Term selector
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: _termSelector(),
             ),
 
             // Location
@@ -614,16 +653,8 @@ class _AddClassState extends State<AddClass> {
     // resetting date flags
     _isDatesInvalid = false;
     _isFrequencyInvalid = false;
-    _isTermInvalid = false;
 
     bool isValidForm = true;
-
-    // Validate term
-    if (_selectedTermID == null) {
-      _isTermInvalid = true;
-    } else {
-      _isTermInvalid = false;
-    }
 
     if (_startDate != null && _endDate == null) {
       _isDatesInvalid = true;
@@ -641,10 +672,7 @@ class _AddClassState extends State<AddClass> {
 
     setState(() {});
 
-    return isValidForm &&
-        !_isTermInvalid &&
-        !_isFrequencyInvalid &&
-        !_isDatesInvalid;
+    return isValidForm && !_isFrequencyInvalid && !_isDatesInvalid;
   }
 
   Widget _roomSelector(BuildContext context) {
@@ -839,9 +867,9 @@ class _AddClassState extends State<AddClass> {
                       } else {
                         setState(() {
                           _startDate = DateTime(
-                              _currentTerm.startDate.year,
-                              _currentTerm.startDate.month,
-                              _currentTerm.startDate.day,
+                              widget.term.startDate.year,
+                              widget.term.startDate.month,
+                              widget.term.startDate.day,
                               time.hour,
                               time.minute);
                         });
@@ -913,9 +941,9 @@ class _AddClassState extends State<AddClass> {
                             } else {
                               setState(() {
                                 _endDate = DateTime(
-                                    _currentTerm.startDate.year,
-                                    _currentTerm.startDate.month,
-                                    _currentTerm.startDate.day,
+                                    widget.term.startDate.year,
+                                    widget.term.startDate.month,
+                                    widget.term.startDate.day,
                                     time.hour,
                                     time.minute);
                               });
@@ -936,63 +964,6 @@ class _AddClassState extends State<AddClass> {
           ],
         ),
       ],
-    );
-  }
-
-  Widget _termSelector() {
-    List<DropdownMenuEntry<int>> entries = [];
-
-    for (var t in widget.terms) {
-      String label = "${t.semester}, ${t.academicYear}";
-
-      // Needed because the new dropdown menu does not catch text overflows
-      if (label.length > 36) {
-        label = "${label.substring(0, 37)}...";
-      }
-      entries.add(DropdownMenuEntry(
-          value: t.id!,
-          label: label,
-          trailingIcon:
-              t.isCurrentTerm ? const Icon(Icons.star_rounded) : null));
-    }
-
-    return ButtonTheme(
-      alignedDropdown: true,
-      child: DropdownMenu<int>(
-        // needed the width because there are no way to set the width so that it takes up the entire width of parent
-        width: 343,
-        initialSelection: null,
-        inputDecorationTheme: InputDecorationTheme(
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-        label: const Text("Term"),
-        dropdownMenuEntries: entries,
-        onSelected: (int? termID) {
-          setState(() {
-            _selectedTermID = termID;
-            _currentTerm = widget.terms.firstWhere((t) => t.isCurrentTerm);
-
-            if (_startDate != null) {
-              _startDate = DateTime(
-                  _currentTerm.startDate.year,
-                  _currentTerm.startDate.month,
-                  _currentTerm.startDate.day,
-                  _startDate!.hour,
-                  _startDate!.minute);
-            }
-
-            if (_endDate != null) {
-              _endDate = DateTime(
-                  _currentTerm.startDate.year,
-                  _currentTerm.startDate.month,
-                  _currentTerm.startDate.day,
-                  _endDate!.hour,
-                  _endDate!.minute);
-            }
-          });
-        },
-        errorText: _isTermInvalid ? "Please select a term." : null,
-      ),
     );
   }
 
@@ -1072,10 +1043,6 @@ class _AddClassState extends State<AddClass> {
       return true;
     }
 
-    if (_selectedTermID != widget.course!.termID) {
-      return true;
-    }
-
     if (_isCredited != widget.course!.credited) {
       return true;
     }
@@ -1116,11 +1083,11 @@ class _AddClassState extends State<AddClass> {
       ]
       ..units = int.parse(_unitsCtrl.text)
       ..isLaboratory = _classTypeSelection.contains(ClassType.lab)
-      ..credited = _isCredited!
+      ..credited = _isCredited
       ..description = _descCtrl.text
       ..section = _sectionCtrl.text
       ..instructor = _instructorCtrl.text
-      ..termID = _selectedTermID!
+      ..termID = widget.term.id!
       ..locationID = _selectedLocationID
       ..locationType = _selectedLocationType
       ..frequency = _selection.toList()

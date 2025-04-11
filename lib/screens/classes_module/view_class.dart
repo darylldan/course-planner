@@ -59,7 +59,6 @@ class _ViewClassState extends State<ViewClass> {
 
   @override
   Widget build(BuildContext context) {
-    List<Term> terms = context.watch<TermProvider>().terms;
     subject = context.watch<SubjectProvider>().getSubjectByID(widget.subjectID);
 
     Term term = context.read<TermProvider>().getTermByID(subject.termID);
@@ -73,7 +72,7 @@ class _ViewClassState extends State<ViewClass> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => AddClass(
-                      terms: terms,
+                      term: term,
                       course: subject,
                       editMode: true,
                     ),
