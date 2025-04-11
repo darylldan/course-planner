@@ -1,6 +1,7 @@
 // Add a copyWith method to your Note class for cleaner code
 import 'package:course_planner/models/CourseTemplate.dart';
 import 'package:course_planner/models/Note.dart';
+import 'package:course_planner/models/Subject.dart';
 
 extension NoteCopyWith on Note {
   Note copyWith({
@@ -30,5 +31,18 @@ extension CourseTemplateMethods on CourseTemplate {
       ..description = json["title"] as String
       ..units = int.tryParse(json["units"])
       ..credited = json["credited"] == null ? true : json["credited"] as bool;
+  }
+}
+
+extension SubjectMethods on Subject {
+  static int getHash(Subject subject) {
+    return Object.hash(
+        subject.id,
+        subject.courseCode,
+        subject.units,
+        subject.credited,
+        subject.startDate,
+        subject.endDate,
+        subject.description);
   }
 }

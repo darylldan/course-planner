@@ -74,6 +74,42 @@ extension DayMethods on Day {
         return "Sat";
     }
   }
+
+  static int dayToInt(Day day) {
+    switch (day) {
+      case Day.mon:
+        return 0;
+      case Day.tue:
+        return 1;
+      case Day.wed:
+        return 2;
+      case Day.thu:
+        return 3;
+      case Day.fri:
+        return 4;
+      case Day.sat:
+        return 5;
+    }
+  }
+
+  static Day? intToDay(int day) {
+    switch (day) {
+      case 0:
+        return Day.mon;
+      case 1:
+        return Day.tue;
+      case 2:
+        return Day.wed;
+      case 3:
+        return Day.thu;
+      case 4:
+        return Day.fri;
+      case 5:
+        return Day.sat;
+      default:
+        return null;
+    }
+  }
 }
 
 extension GradeMethods on NumericalGrade {
