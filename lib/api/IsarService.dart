@@ -6,6 +6,7 @@ import 'package:course_planner/models/Note.dart';
 import 'package:course_planner/models/Room.dart';
 import 'package:course_planner/models/TermGrade.dart';
 import 'package:course_planner/models/Todo.dart';
+import 'package:course_planner/models/UploadedCourse.dart';
 import 'package:course_planner/models/User.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -114,7 +115,26 @@ class IsarService {
     return isar.courseTemplates.count();
   }
 
+  Future<List<UploadedCourse>> getAllUploadedCourses() async {
+    final isar = await db;
+
+    return isar.uploadedCourses.where().findAll();
+  }
+
   // All WRITE
+
+  Future<int?> createUploadedCourse(UploadedCourse u) async {
+    final isar = await db;
+
+    int? returnID;
+
+    await isar.writeTxn(() async {
+      returnID = await isar.uploadedCourses.put(u);
+    });
+
+    return returnID;
+  }
+
   Future<int?> createTerm(Term term) async {
     final isar = await db;
     int? returnID;
