@@ -3,7 +3,8 @@ class SharedCourse {
 
   String courseCode;
   bool isLaboratory;
-  String? description;
+  String? description; 
+  String section;
   String? instructor;
   List<int> frequency;
   String? notes;
@@ -19,6 +20,7 @@ class SharedCourse {
       {this.id,
       required this.courseCode,
       required this.isLaboratory,
+      required this.section,
       this.description,
       this.instructor,
       required this.frequency,
@@ -35,13 +37,14 @@ class SharedCourse {
         isLaboratory: json["isLaboratory"],
         description: json["description"],
         instructor: json["instructor"],
-        frequency: json["frequency"] as List<int>,
+        section: json["section"],
+        frequency: (json["frequency"] as List<dynamic>).cast<int>(),
         notes: json["notes"],
         startDate: json["startDate"]?.toDate(),
         endDate: json["endDate"]?.toDate(),
-        units: int.parse(json["units"]),
+        units: json["units"],
         credited: json["credited"],
-        color: json["color"] as List<int>);
+        color: (json["color"] as List<dynamic>).cast<int>());
   }
 
   // assumes frequency is serialized
@@ -50,6 +53,7 @@ class SharedCourse {
       'courseCode': sc.courseCode,
       'isLaboratory': sc.isLaboratory,
       'description': sc.description,
+      'section': sc.section,
       'instructor': sc.instructor,
       'frequency': sc.frequency,
       'notes': sc.notes,
