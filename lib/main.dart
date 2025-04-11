@@ -4,6 +4,7 @@ import 'package:course_planner/providers/course_template_provider.dart';
 import 'package:course_planner/providers/deadlineevent_provider.dart';
 import 'package:course_planner/providers/note_provider.dart';
 import 'package:course_planner/providers/room_provider.dart';
+import 'package:course_planner/providers/shared_course_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_grade_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
@@ -32,7 +33,8 @@ void main() async {
       ChangeNotifierProvider(create: ((context) => RoomProvider())),
       ChangeNotifierProvider(create: ((context) => TermGradeProvider())),
       ChangeNotifierProvider(create: ((context) => CourseGradeProvider())),
-      ChangeNotifierProvider(create: ((context) => CourseTemplateProvider()))
+      ChangeNotifierProvider(create: ((context) => CourseTemplateProvider())),
+      ChangeNotifierProvider(create: ((context) => ShareCourseProvider()))
     ],
     child: MyApp(),
   ));
