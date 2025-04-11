@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:course_planner/models/Building.dart';
 import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/providers/building_provider.dart';
+
 import 'package:course_planner/providers/deadlineevent_provider.dart';
-import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/providers/subject_provider.dart';
 import 'package:course_planner/providers/term_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:course_planner/utils/enums.dart';
 import 'package:course_planner/widgets/cards/events_card.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/location_card.dart';
 import 'package:course_planner/widgets/cards/next_class_card.dart';
 import 'package:course_planner/widgets/cards/overview_today_card.dart';
 import 'package:course_planner/widgets/elements/drawer.dart';
@@ -20,7 +16,6 @@ import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:course_planner/widgets/timeline/Timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/Subject.dart';
@@ -90,7 +85,10 @@ class _OverviewState extends State<Overview> {
             TitleText(title: _screenTitle),
             _buildOverview(context),
             if (_term != null) ...[
-              _dividerWithTitle("TODAY'S EVENTS"),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: _dividerWithTitle("TODAY'S EVENTS"),
+              ),
               _events(context),
             ],
             const SizedBox(height: 120)
@@ -104,6 +102,13 @@ class _OverviewState extends State<Overview> {
     List<DeadlineEvent> events = context
         .watch<DeadlineEventProvider>()
         .getAllOngoingDeadlineEventsToday(_term!.id!);
+
+    if (events.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: InfoCard(content: "No events today."),
+      );
+    }
 
     return Column(
       children: events.map((e) => EventsCard(event: e)).toList(),
@@ -339,7 +344,9 @@ class _OverviewState extends State<Overview> {
             ),
           ),
           if (currentSubject != null) ...[
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             _sectionInstructorRow(context, currentSubject)
           ],
         ],
@@ -465,8 +472,6 @@ class _OverviewState extends State<Overview> {
       ),
     );
   }
-
-  
 
   Widget _timeLeft(BuildContext context, TimeOfDay timeLeft, bool onSchedule,
       int curSubIndex, Subject? curSub) {
