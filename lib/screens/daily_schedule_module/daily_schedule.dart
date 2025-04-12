@@ -31,7 +31,7 @@ class _DailyScheduleState extends State<DailySchedule> {
   late Day _today;
   Day? _daySelectorValue;
   Day? _currentDay;
-  late Term? _currentTerm;
+  Term? _currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
   bool onCurrentDay = true;
@@ -40,6 +40,9 @@ class _DailyScheduleState extends State<DailySchedule> {
 
   @override
   Widget build(BuildContext context) {
+    if (onCurrentTerm) {
+      _currentTerm = context.watch<TermProvider>().currentTerm;
+    }
     if (_momentDay == 7) {
       _today = Day.mon;
     } else {
@@ -64,11 +67,13 @@ class _DailyScheduleState extends State<DailySchedule> {
               SizedBox(
                 height: 10,
               ),
-              _dividerWithTitle(context, title: "EVENTS TODAY"),
-              SizedBox(
-                height: 10,
-              ),
-              _buildEvents(context),
+              if (_currentTerm != null) ...[
+                _buildEvents(context),
+                _dividerWithTitle(context, title: "EVENTS TODAY"),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
               const SizedBox(
                 height: 120,
               )
@@ -107,10 +112,6 @@ class _DailyScheduleState extends State<DailySchedule> {
 
   Widget _buildTimeline(BuildContext context) {
     _currentDay ??= _today;
-
-    if (onCurrentTerm) {
-      _currentTerm = context.watch<TermProvider>().currentTerm;
-    }
 
     if (_currentTerm == null) {
       return Column(

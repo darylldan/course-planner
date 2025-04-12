@@ -38,8 +38,9 @@ class _NotesState extends State<Notes> {
     _currentTerm ??= currentTerm;
     List<Term> terms = context.read<TermProvider>().terms;
     _ncTermSelectorValue ??= currentTerm;
-    List<Subject> subjects =
-        context.watch<SubjectProvider>().getSubjectsByTerm(_currentTerm!.id!);
+    List<Subject> subjects = _currentTerm != null
+        ? context.watch<SubjectProvider>().getSubjectsByTerm(_currentTerm!.id!)
+        : [];
 
     return Scaffold(
       appBar: AppBar(),
