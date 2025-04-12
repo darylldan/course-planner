@@ -67,23 +67,24 @@ Feel free to contribute to my terrible code! Just submit a PR to `dev` branch an
 - Event Module (est: 3d) -> DONE
 - Todo Module (est: 1d) -> DONE
 - Pomodoro Module (est: 1d) -> IN PROGRESS
-- Subject Module (est: 3d)
-- Overview/WeeklySched/DailySched (est: 1d)
-- Features Screen (est: 1d)
+- Subject Module (est: 3d) -> 
+- Overview/WeeklySched/DailySched (est: 1d) -> DONE
+- Features Screen (est: 1d) -> 
 
 
 ### To-Do:
-- changes to edit class
-- think on how to implement other nuisance of classes
-  - classes that has no sched (sp)
-    - might make the class schedule nullable
-    - if time is selected, a frequency must not be empty
-    - if frequency is not empty, a time must be selected
-- Pomodoro module (quick pls)
--
+- AMIS Import schedule
+  - Get token /
+  - Need to get the ID of user thru https://api-amis.uplb.edu.ph/api/auth/user
+  - request for enlistment of user thru: 
+  https://api-amis.uplb.edu.ph/api/students/enlistments?enlistment_user_id=<userId>&enlistedClasses=true
+  - parse the json to match subject model
+
+- disclaimers
+- google forms
+- message 
 
 
-### Notes:
 - Fix the PopScope implementation on others.
 - Be wary of other theming errors
 - Successfully tested token sniffing, can now import schedule from amis (hopefully)

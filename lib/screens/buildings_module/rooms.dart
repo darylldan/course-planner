@@ -1,10 +1,10 @@
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/providers/room_provider.dart';
-import 'package:course_planner/screens/buildings_module/add_room.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/room_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/providers/room_provider.dart';
+import 'package:iscompanion/screens/buildings_module/add_room.dart';
+import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/room_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

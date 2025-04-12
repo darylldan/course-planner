@@ -27,7 +27,7 @@ const double obleLat = 14.165066352080837;
 const double obleLong = 121.24156452547093;
 
 // App Info
-const appName = "Course Planner";
-const appVersion = "v 1.0.3";
-const appDescription = "A course planner that helps you plan your courses.";
+const appName = "IsCompanion";
+const appVersion = "v 1.0.0";
+const appDescription = "A student-focused organizer app tailored for UPLB Students.";
 const devGithubName = "darylldan";

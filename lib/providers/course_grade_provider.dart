@@ -1,6 +1,6 @@
-import 'package:course_planner/api/IsarService.dart';
-import 'package:course_planner/models/CourseGrade.dart';
-import 'package:course_planner/models/Subject.dart';
+import 'package:iscompanion/api/IsarService.dart';
+import 'package:iscompanion/models/CourseGrade.dart';
+import 'package:iscompanion/models/Subject.dart';
 import 'package:flutter/foundation.dart';
 
 class CourseGradeProvider with ChangeNotifier {

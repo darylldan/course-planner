@@ -1,9 +1,9 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/providers/room_provider.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/providers/room_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:course_planner/utils/constants.dart' as c;
+import 'package:iscompanion/utils/constants.dart' as c;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +34,11 @@ class _LocationPickerState extends State<LocationPicker> {
           FlutterMap(
             mapController: MapController(),
             options: MapOptions(
-                initialCenter: LatLng(_initLat, _initLong),
-                initialZoom: 19),
+                initialCenter: LatLng(_initLat, _initLong), initialZoom: 19),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.course_planner',
+                userAgentPackageName: 'com.example.iscompanion',
               ),
               Center(
                 child: Icon(

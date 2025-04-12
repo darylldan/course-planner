@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:course_planner/models/SharedCourse.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/shared_course_provider.dart';
-import 'package:course_planner/screens/classes_module/add_class.dart';
-import 'package:course_planner/screens/classes_module/scan_course_subm/qr_scanner_screen.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/SharedCourse.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/shared_course_provider.dart';
+import 'package:iscompanion/screens/classes_module/add_class.dart';
+import 'package:iscompanion/screens/classes_module/scan_course_subm/qr_scanner_screen.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../utils/constants.dart' as C;

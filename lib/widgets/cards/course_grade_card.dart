@@ -1,9 +1,9 @@
-import 'package:course_planner/models/CourseGrade.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/course_grade_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_grade_provider.dart';
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/models/CourseGrade.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/course_grade_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_grade_provider.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -205,7 +205,8 @@ class _CourseGradeState extends State<CourseGradeCard> {
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
         width: double.infinity,
-        initialSelection: _selectedNumGrade ?? (_selectedNonNumGrade ?? NumericalGrade.g1_00),
+        initialSelection:
+            _selectedNumGrade ?? (_selectedNonNumGrade ?? NumericalGrade.g1_00),
         label: Text("Grade"),
         hintText: "Grade",
         dropdownMenuEntries: _gradeOptions,

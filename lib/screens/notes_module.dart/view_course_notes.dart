@@ -1,10 +1,10 @@
-import 'package:course_planner/models/Note.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/note_provider.dart';
-import 'package:course_planner/screens/notes_module.dart/view_note.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/note_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Note.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/note_provider.dart';
+import 'package:iscompanion/screens/notes_module.dart/view_note.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/note_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -63,7 +63,10 @@ class _ViewCourseNotesState extends State<ViewCourseNotes> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ViewNote(note: newNote, subject: widget.subject,)));
+                      builder: (context) => ViewNote(
+                            note: newNote,
+                            subject: widget.subject,
+                          )));
             }
           },
           label: Row(

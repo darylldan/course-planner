@@ -1,10 +1,10 @@
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_grade_provider.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_grade_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/overall_gwa_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/utils/enums.dart';
+import 'package:iscompanion/widgets/cards/overall_gwa_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

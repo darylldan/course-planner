@@ -1,13 +1,13 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/providers/room_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/buildings_module/edit_room.dart';
-import 'package:course_planner/screens/buildings_module/view_room.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/providers/room_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/buildings_module/edit_room.dart';
+import 'package:iscompanion/screens/buildings_module/view_room.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -134,8 +134,9 @@ class _RoomCardState extends State<RoomCard> {
 
   Widget _subjectCount(BuildContext context) {
     Term? currentTerm = context.watch<TermProvider>().currentTerm;
-    List<Subject> subjects =
-        context.read<SubjectProvider>().getSubjectsByRoom(widget.room.id!, currentTerm!.id!);
+    List<Subject> subjects = context
+        .read<SubjectProvider>()
+        .getSubjectsByRoom(widget.room.id!, currentTerm!.id!);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),

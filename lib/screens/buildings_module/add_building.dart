@@ -1,8 +1,8 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/elements/location_picker_button.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/elements/location_picker_button.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -76,8 +76,13 @@ class _AddBuildingState extends State<AddBuilding> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LocationPickerButton(onLocationSelected: _onLocationSelected, initialLoc: null,),
-            SizedBox(height: 12,),
+            LocationPickerButton(
+              onLocationSelected: _onLocationSelected,
+              initialLoc: null,
+            ),
+            SizedBox(
+              height: 12,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: TextFormField(

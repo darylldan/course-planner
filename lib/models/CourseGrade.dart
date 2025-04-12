@@ -1,4 +1,4 @@
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:isar/isar.dart';
 
 part 'CourseGrade.g.dart';
@@ -21,7 +21,6 @@ class CourseGrade {
 
   @Enumerated(EnumType.name)
   NumericalGrade? grade;
-
 
   @Enumerated(EnumType.name)
   NonNumericalGrade? nonNumericalGrade;

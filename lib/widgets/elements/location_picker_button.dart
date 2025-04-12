@@ -1,4 +1,4 @@
-import 'package:course_planner/screens/buildings_module/location_picker.dart';
+import 'package:iscompanion/screens/buildings_module/location_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -162,7 +162,7 @@ class _LocationPickerButtonState extends State<LocationPickerButton> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.course_planner',
+                userAgentPackageName: 'com.example.iscompanion',
                 tileProvider: NetworkTileProvider(), // Ensure network loading
               ),
             ],

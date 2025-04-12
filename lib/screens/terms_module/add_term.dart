@@ -1,6 +1,6 @@
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/Term.dart';

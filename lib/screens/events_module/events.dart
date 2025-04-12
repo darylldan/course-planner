@@ -1,21 +1,21 @@
-import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/deadlineevent_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/events_module/add_event.dart';
-import 'package:course_planner/screens/events_module/calendar_event_view.dart';
-import 'package:course_planner/screens/events_module/view_all_events.dart';
-import 'package:course_planner/screens/events_module/view_course_event.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/current_term_selected.dart';
-import 'package:course_planner/widgets/cards/event_course_card.dart';
-import 'package:course_planner/widgets/cards/events_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/unassigned_card.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/DeadlineEvent.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/deadlineevent_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/events_module/add_event.dart';
+import 'package:iscompanion/screens/events_module/calendar_event_view.dart';
+import 'package:iscompanion/screens/events_module/view_all_events.dart';
+import 'package:iscompanion/screens/events_module/view_course_event.dart';
+import 'package:iscompanion/utils/enums.dart';
+import 'package:iscompanion/widgets/cards/current_term_selected.dart';
+import 'package:iscompanion/widgets/cards/event_course_card.dart';
+import 'package:iscompanion/widgets/cards/events_card.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/unassigned_card.dart';
+import 'package:iscompanion/widgets/elements/drawer.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -100,7 +100,9 @@ class _EventsState extends State<Events> {
     Term? currentTerm = context.watch<TermProvider>().currentTerm;
     _currentTerm ??= currentTerm;
     return Scaffold(
-      appBar: CustomAppBar(term: _currentTerm!,),
+      appBar: CustomAppBar(
+        term: _currentTerm!,
+      ),
       drawer: SideDrawer(parent: "/events"),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),

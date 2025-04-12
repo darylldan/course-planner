@@ -1,9 +1,9 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/subject_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

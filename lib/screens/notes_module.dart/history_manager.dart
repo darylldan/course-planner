@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:course_planner/models/Note.dart';
+import 'package:iscompanion/models/Note.dart';
 
 // This class represents a snapshot of note state
 class NoteSnapshot {

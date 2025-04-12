@@ -101,7 +101,7 @@ class _LocationCardState extends State<LocationCard> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.course_planner',
+                  userAgentPackageName: 'com.example.iscompanion',
                   tileProvider: CachedTileProvider(
                       store: cacheStore), // Ensure network loading
                 ),

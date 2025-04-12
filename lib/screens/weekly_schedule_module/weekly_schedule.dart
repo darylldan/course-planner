@@ -1,6 +1,6 @@
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/timetable/Timetable.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/widgets/elements/drawer.dart';
+import 'package:iscompanion/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

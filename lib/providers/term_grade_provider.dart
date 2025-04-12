@@ -1,8 +1,8 @@
-import 'package:course_planner/models/CourseGrade.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/models/TermGrade.dart';
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/models/CourseGrade.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/models/TermGrade.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -292,7 +292,7 @@ class TermGradeProvider with ChangeNotifier {
     if (gradeMultUnitSum == 0 && totalUnitsTaken == 0) {
       return 0.0;
     }
-    
+
     // Return GWA
     return gradeMultUnitSum / totalUnitsTaken;
   }

@@ -1,11 +1,11 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/providers/room_provider.dart';
-import 'package:course_planner/widgets/cards/building_card.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/room_card.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/providers/room_provider.dart';
+import 'package:iscompanion/widgets/cards/building_card.dart';
+import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/room_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -42,10 +42,7 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
           ),
         ),
         body: TabBarView(
-          children: [
-            _buildRooms(context),
-            _buildBuildings(context)
-          ],
+          children: [_buildRooms(context), _buildBuildings(context)],
         ),
       ),
     );
@@ -60,9 +57,12 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
         padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
         child: Column(
           children: [
-            SizedBox(height: 18,),
+            SizedBox(
+              height: 18,
+            ),
             InfoCard(
-                content: "No rooms found. Add one via buildings and rooms screen."),
+                content:
+                    "No rooms found. Add one via buildings and rooms screen."),
           ],
         ),
       );
@@ -90,7 +90,9 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
       padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
       child: Column(
         children: [
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,14 +117,19 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
                     icon: Icon(Icons.clear))
             ],
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           if (filteredRooms.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ErrorCardNoAction(title: "SEARCH RESULT", content: "No rooms found."),
+              child: ErrorCardNoAction(
+                  title: "SEARCH RESULT", content: "No rooms found."),
             ),
           ...roomCard,
-          SizedBox(height: 150,),
+          SizedBox(
+            height: 150,
+          ),
         ],
       ),
     );
@@ -137,9 +144,12 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
         padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
         child: Column(
           children: [
-            SizedBox(height: 18,),
+            SizedBox(
+              height: 18,
+            ),
             InfoCard(
-                content: "No buildings found. Add one via buildings and rooms screen."),
+                content:
+                    "No buildings found. Add one via buildings and rooms screen."),
           ],
         ),
       );
@@ -147,8 +157,9 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
 
     if (_bldgCtrl.text.isNotEmpty) {
       filteredBldgs = buildings
-          .where((r) =>
-              r.buildingName.toLowerCase().contains(_bldgCtrl.text.toLowerCase()))
+          .where((r) => r.buildingName
+              .toLowerCase()
+              .contains(_bldgCtrl.text.toLowerCase()))
           .toList();
     }
 
@@ -167,7 +178,9 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
       padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
       child: Column(
         children: [
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,11 +205,14 @@ class _SelectBuildingRoomState extends State<SelectBuildingRoom> {
                     icon: Icon(Icons.clear))
             ],
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           if (filteredBldgs.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ErrorCardNoAction(title: "SEARCH RESULT", content: "No rooms found."),
+              child: ErrorCardNoAction(
+                  title: "SEARCH RESULT", content: "No rooms found."),
             ),
           ...bldgCard
         ],

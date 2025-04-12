@@ -1,9 +1,9 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/providers/room_provider.dart';
-import 'package:course_planner/screens/classes_module/view_class.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/providers/room_provider.dart';
+import 'package:iscompanion/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

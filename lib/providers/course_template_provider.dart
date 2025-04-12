@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:course_planner/models/CourseTemplate.dart';
-import 'package:course_planner/utils/extensions.dart';
+import 'package:iscompanion/models/CourseTemplate.dart';
+import 'package:iscompanion/utils/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../api/IsarService.dart';
@@ -114,7 +114,6 @@ class CourseTemplateProvider with ChangeNotifier {
           .toList();
 
       return res;
-
     }
 
     return _courseTemplates.skip(offset).take(_pageSize).toList();

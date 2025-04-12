@@ -7,7 +7,6 @@ import 'package:dio_cache_interceptor_file_store/dio_cache_interceptor_file_stor
 import 'package:flutter_map_cache/flutter_map_cache.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class ViewLocation extends StatefulWidget {
   final LatLng coords;
   const ViewLocation({super.key, required this.coords});
@@ -72,7 +71,7 @@ class _ViewLocationState extends State<ViewLocation> {
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.course_planner',
+              userAgentPackageName: 'com.example.iscompanion',
               tileProvider: CachedTileProvider(store: cacheStore),
             ),
             MarkerLayer(markers: [

@@ -1,10 +1,10 @@
-import 'package:course_planner/models/CourseGrade.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/course_grade_provider.dart';
-import 'package:course_planner/widgets/cards/course_grade_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/term_grade_summary.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/CourseGrade.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/course_grade_provider.dart';
+import 'package:iscompanion/widgets/cards/course_grade_card.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/term_grade_summary.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

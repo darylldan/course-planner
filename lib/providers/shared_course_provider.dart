@@ -1,10 +1,10 @@
-import 'package:course_planner/api/FirebaseAPI.dart';
-import 'package:course_planner/api/IsarService.dart';
-import 'package:course_planner/models/SharedCourse.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/UploadedCourse.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/utils/extensions.dart';
+import 'package:iscompanion/api/FirebaseAPI.dart';
+import 'package:iscompanion/api/IsarService.dart';
+import 'package:iscompanion/models/SharedCourse.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/UploadedCourse.dart';
+import 'package:iscompanion/utils/enums.dart';
+import 'package:iscompanion/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ShareCourseProvider with ChangeNotifier {

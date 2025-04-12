@@ -1,4 +1,4 @@
-import 'package:course_planner/models/Note.dart';
+import 'package:iscompanion/models/Note.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';

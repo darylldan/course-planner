@@ -1,11 +1,11 @@
-import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/deadlineevent_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/events_module/add_event.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/DeadlineEvent.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/deadlineevent_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/events_module/add_event.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -147,9 +147,12 @@ class _ViewEventState extends State<ViewEvent> {
         return allEvents.where((event) => isSameDay(event.date, day)).toList();
       },
       calendarStyle: CalendarStyle(
-        todayDecoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer, shape: BoxShape.circle),
-        markerDecoration: BoxDecoration(color: Theme.of(context).colorScheme.onTertiaryContainer, shape: BoxShape.circle)
-      ),
+          todayDecoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              shape: BoxShape.circle),
+          markerDecoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onTertiaryContainer,
+              shape: BoxShape.circle)),
     );
   }
 

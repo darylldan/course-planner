@@ -1,10 +1,10 @@
-import 'package:course_planner/models/Note.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/note_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/notes_module.dart/view_note.dart';
+import 'package:iscompanion/models/Note.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/note_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/notes_module.dart/view_note.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

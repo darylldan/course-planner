@@ -1,7 +1,7 @@
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/classes_module/add_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -140,15 +140,15 @@ class ClassCard extends StatelessWidget {
 
     if (!haveSchedule) {
       return SizedBox(
-      width: 155,
-      child: Text(
-        "No schedule",
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 12),
-      ),
-    );
+        width: 155,
+        child: Text(
+          "No schedule",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12),
+        ),
+      );
     }
 
     for (var d in subject.frequency) {
@@ -211,7 +211,8 @@ class ClassCard extends StatelessWidget {
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
                     Term terms =
-                        Provider.of<TermProvider>(context, listen: false).getTermByID(subject.termID);
+                        Provider.of<TermProvider>(context, listen: false)
+                            .getTermByID(subject.termID);
                     Navigator.pop(context);
                     Navigator.push(
                         context,

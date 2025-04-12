@@ -1,7 +1,7 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/note_provider.dart';
-import 'package:course_planner/screens/notes_module.dart/view_course_notes.dart';
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/note_provider.dart';
+import 'package:iscompanion/screens/notes_module.dart/view_course_notes.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 import 'package:flutter/material.dart';

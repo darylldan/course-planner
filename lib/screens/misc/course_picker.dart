@@ -1,10 +1,10 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/subject_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
@@ -96,13 +96,20 @@ class _CoursePickerState extends State<CoursePicker> {
                   icon: Icon(Icons.clear))
           ],
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         if (courses.isEmpty)
           ErrorCardNoAction(
               title: "Search Result", content: "No courses found.")
         else
-          ...courses.map((c) => ClassCard(subject: c, pickMode: true,)),
-        SizedBox(height: 150,)
+          ...courses.map((c) => ClassCard(
+                subject: c,
+                pickMode: true,
+              )),
+        SizedBox(
+          height: 150,
+        )
       ],
     );
   }

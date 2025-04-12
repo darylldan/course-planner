@@ -1,10 +1,11 @@
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/term_grade_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/overall_gwa_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/term_grade_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/utils/enums.dart';
+import 'package:iscompanion/widgets/cards/overall_gwa_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/constants.dart' as C;
@@ -18,17 +19,61 @@ class GradeInsights extends StatefulWidget {
 }
 
 class _GradeInsightsState extends State<GradeInsights> {
+  final Future<SharedPreferences> _prefsFuture =
+      SharedPreferences.getInstance();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [TitleText(title: "Grade Insights"), _body(context)],
-        ),
-      ),
+    return FutureBuilder(
+      future: _prefsFuture,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        final prefs = snapshot.data!;
+        final nvsDisclaimer = prefs.getBool('nvsDisclaimer') ?? false;
+
+        if (!nvsDisclaimer) {
+          // Schedule the dialog to show after the build completes
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog.adaptive(
+                icon: Icon(Icons.info),
+                title: Text("Disclaimer"),
+                content: Text(
+                    "The data displayed on this screen is based solely on the grades and number of units you have provided. Other factors may influence your Latin honor standing or eligibility for honorific scholarships. For accurate guidance, please consult your registration adviser or the Office of the College Secretary to ensure a proper understanding of the information presented here."),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("Okay"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      prefs.setBool("nvsDisclaimer", true);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Never Show Again"),
+                  ),
+                ],
+              ),
+            );
+          });
+        }
+
+        return Scaffold(
+          appBar: AppBar(),
+          body: SingleChildScrollView(
+            padding:
+                EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [TitleText(title: "Grade Insights"), _body(context)],
+            ),
+          ),
+        );
+      },
     );
   }
 

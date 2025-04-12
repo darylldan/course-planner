@@ -1,9 +1,9 @@
 {
-    "name": "course_planner",
-    "short_name": "course_planner",
+    "name": "iscompanion",
+    "short_name": "iscompanion",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
+    "background_color": "#00000000",
     "theme_color": "#0175C2",
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",

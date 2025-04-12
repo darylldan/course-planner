@@ -1,4 +1,4 @@
-import 'package:course_planner/models/Todo.dart';
+import 'package:iscompanion/models/Todo.dart';
 import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 

@@ -1,4 +1,4 @@
-import 'package:course_planner/screens/misc/edit_quick_notes.dart';
+import 'package:iscompanion/screens/misc/edit_quick_notes.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 
@@ -9,7 +9,11 @@ class QuickNotesCard extends StatefulWidget {
   final String name;
 
   QuickNotesCard(
-      {super.key, required this.notes, required this.id, required this.type, required this.name});
+      {super.key,
+      required this.notes,
+      required this.id,
+      required this.type,
+      required this.name});
 
   @override
   State<QuickNotesCard> createState() => _QuickNotesCardState();
@@ -36,10 +40,12 @@ class _QuickNotesCardState extends State<QuickNotesCard> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => EditQuickNotes(
-                        notes: widget.notes,
-                        onNotesChanged: onNotesChanged,
-                        id: widget.id,
-                        type: widget.type, name: widget.name,)));
+                          notes: widget.notes,
+                          onNotesChanged: onNotesChanged,
+                          id: widget.id,
+                          type: widget.type,
+                          name: widget.name,
+                        )));
           },
           borderRadius: BorderRadius.circular(C.cardBorderRadius),
           child: _notes(context),

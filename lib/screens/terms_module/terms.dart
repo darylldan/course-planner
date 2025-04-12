@@ -1,10 +1,10 @@
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/terms_module/add_term.dart';
-import 'package:course_planner/widgets/cards/current_term_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/term_card.dart';
-import 'package:course_planner/widgets/elements/Drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/terms_module/add_term.dart';
+import 'package:iscompanion/widgets/cards/current_term_card.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/term_card.dart';
+import 'package:iscompanion/widgets/elements/Drawer.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/Term.dart';
@@ -25,7 +25,9 @@ class _TermState extends State<Terms> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      drawer: SideDrawer(parent: _route,),
+      drawer: SideDrawer(
+        parent: _route,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -85,13 +87,14 @@ class _TermState extends State<Terms> {
           child: Text(
             "${terms.length} ${terms.length == 1 ? "Term" : "Terms"}",
             style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.surfaceVariant
-            ),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.surfaceVariant),
           ),
         ),
-        const SizedBox(height: 120,)
+        const SizedBox(
+          height: 120,
+        )
       ],
     );
   }

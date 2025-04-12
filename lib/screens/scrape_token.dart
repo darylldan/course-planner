@@ -1,15 +1,7 @@
-import 'package:course_planner/models/Note.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/screens/notes_module.dart/view_note.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/course_notes_card.dart';
-import 'package:course_planner/widgets/cards/note_card.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
+import 'package:iscompanion/widgets/elements/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:markdown_editor_plus/markdown_editor_plus.dart';
-import 'package:provider/provider.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 import '../utils/constants.dart' as C;
 
@@ -20,11 +12,22 @@ class ScrapeToken extends StatefulWidget {
 }
 
 class _ScrapeTokenState extends State<ScrapeToken> {
-
   late final WebViewController _webViewController;
-  final storage = const FlutterSecureStorage();
   bool _isLoading = true;
-  bool _isLoggedIn = false; // Track login state
+  bool _isLoggedIn = false;
+
+  Future<void> clearWebViewData() async {
+    final cookieManager = WebViewCookieManager();
+    await cookieManager.clearCookies();
+
+    // Clear cache
+    await _webViewController.clearCache();
+
+    // Optional: clear localStorage and sessionStorage
+    await _webViewController.runJavaScript(
+        'window.localStorage.clear(); window.sessionStorage.clear();');
+  }
+  // Track login state
 
   @override
   void initState() {
@@ -45,7 +48,8 @@ class _ScrapeTokenState extends State<ScrapeToken> {
                 !_isLoggedIn) {
               setState(() => _isLoggedIn = true);
               String rawToken = url.split("token=").last;
-                print("Token extracted: token is ${Uri.decodeFull(rawToken)}");
+              print("Token extracted: token is ${Uri.decodeFull(rawToken)}");
+              Navigator.pop(context);
               // if (token != null && mounted) {
               //   await storage.write(key: 'school_token', value: token);
               //   // Navigator.pop(context, token);
@@ -61,6 +65,7 @@ class _ScrapeTokenState extends State<ScrapeToken> {
   @override
   void dispose() {
     super.dispose();
+    clearWebViewData();
   }
 
   @override
@@ -70,6 +75,4 @@ class _ScrapeTokenState extends State<ScrapeToken> {
         drawer: SideDrawer(parent: "/test-screen"),
         body: WebViewWidget(controller: _webViewController));
   }
-
-  
 }

@@ -1,4 +1,4 @@
-import "package:course_planner/models/Subject.dart";
+import "package:iscompanion/models/Subject.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
@@ -28,7 +28,9 @@ class Timeline extends StatelessWidget {
     for (int i = 0; i < subjects.length; i++) {
       // Check if there is break in between subjects, if so adds a break card
       if (i > 0) {
-        if (!subjects[i - 1].endDate!.isAtSameMomentAs(subjects[i].startDate!)) {
+        if (!subjects[i - 1]
+            .endDate!
+            .isAtSameMomentAs(subjects[i].startDate!)) {
           timeline.addAll([
             _breakCard(
               context,

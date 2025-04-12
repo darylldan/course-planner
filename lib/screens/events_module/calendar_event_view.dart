@@ -1,9 +1,9 @@
-import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/deadlineevent_provider.dart';
-import 'package:course_planner/widgets/cards/events_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/DeadlineEvent.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/deadlineevent_provider.dart';
+import 'package:iscompanion/widgets/cards/events_card.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -83,7 +83,7 @@ class _CalendarEventViewState extends State<CalendarEventView> {
                 calendarFormat: _calendarFormat,
                 eventLoader: _getEventsForDay,
                 startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle:  CalendarStyle(
+                calendarStyle: CalendarStyle(
                   outsideDaysVisible: false,
                   // Customize marker appearance
                   markersAutoAligned: true,
@@ -117,9 +117,9 @@ class _CalendarEventViewState extends State<CalendarEventView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ...events.map((event) => EventsCard(
-                        event: event.deadlineEvent,
-                        key: ValueKey(event.deadlineEvent.id),
-                      )),
+                            event: event.deadlineEvent,
+                            key: ValueKey(event.deadlineEvent.id),
+                          )),
                       Center(
                         child: Text(
                           "${events.length} ${events.length == 1 ? "Event" : "Events"}",

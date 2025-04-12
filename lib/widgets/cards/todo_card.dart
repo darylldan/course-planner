@@ -1,5 +1,5 @@
-import 'package:course_planner/models/Todo.dart';
-import 'package:course_planner/providers/todo_provider.dart';
+import 'package:iscompanion/models/Todo.dart';
+import 'package:iscompanion/providers/todo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -126,7 +126,10 @@ class _TodoCardState extends State<TodoCard> {
         child: TextField(
           focusNode: _focusNode,
           controller: _taskCtrl,
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300, overflow: TextOverflow.ellipsis),
+          style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w300,
+              overflow: TextOverflow.ellipsis),
           decoration: InputDecoration(
             border: InputBorder.none, // Remove underline if needed
             isDense: true,

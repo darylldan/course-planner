@@ -1,17 +1,17 @@
-import 'package:course_planner/models/Building.dart';
-import 'package:course_planner/models/Room.dart';
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/models/Term.dart';
-import 'package:course_planner/providers/building_provider.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/buildings_module/edit_room.dart';
-import 'package:course_planner/screens/misc/view_location.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/quick_notes_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/models/Building.dart';
+import 'package:iscompanion/models/Room.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/models/Term.dart';
+import 'package:iscompanion/providers/building_provider.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/providers/term_provider.dart';
+import 'package:iscompanion/screens/buildings_module/edit_room.dart';
+import 'package:iscompanion/screens/misc/view_location.dart';
+import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
+import 'package:iscompanion/widgets/cards/info_card.dart';
+import 'package:iscompanion/widgets/cards/quick_notes_card.dart';
+import 'package:iscompanion/widgets/cards/subject_card.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -268,8 +268,7 @@ class _ViewRoomState extends State<ViewRoom> {
                             TileLayer(
                                 urlTemplate:
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName:
-                                    'com.example.course_planner',
+                                userAgentPackageName: 'com.example.iscompanion',
                                 tileProvider:
                                     CachedTileProvider(store: cacheStore)),
                             Center(

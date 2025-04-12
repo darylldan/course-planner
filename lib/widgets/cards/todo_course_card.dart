@@ -1,7 +1,7 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/todo_provider.dart';
-import 'package:course_planner/screens/todo_module/view_course_todo.dart';
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/models/Subject.dart';
+import 'package:iscompanion/providers/todo_provider.dart';
+import 'package:iscompanion/screens/todo_module/view_course_todo.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 import 'package:flutter/material.dart';
@@ -151,15 +151,15 @@ class _TodoCourseCardState extends State<TodoCourseCard> {
 
     if (!haveSchedule) {
       return SizedBox(
-      width: 155,
-      child: Text(
-        "No Schedule",
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 12),
-      ),
-    );
+        width: 155,
+        child: Text(
+          "No Schedule",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12),
+        ),
+      );
     }
 
     for (var d in widget.subject.frequency) {

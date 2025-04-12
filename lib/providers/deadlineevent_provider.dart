@@ -1,5 +1,5 @@
-import 'package:course_planner/models/DeadlineEvent.dart';
-import 'package:course_planner/utils/enums.dart';
+import 'package:iscompanion/models/DeadlineEvent.dart';
+import 'package:iscompanion/utils/enums.dart';
 import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 

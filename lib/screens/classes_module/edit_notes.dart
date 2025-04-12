@@ -1,5 +1,5 @@
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iscompanion/providers/subject_provider.dart';
+import 'package:iscompanion/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

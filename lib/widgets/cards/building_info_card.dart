@@ -1,4 +1,4 @@
-import 'package:course_planner/models/Building.dart';
+import 'package:iscompanion/models/Building.dart';
 import 'package:flutter/material.dart';
 
 class BuildingInfoCard extends StatefulWidget {

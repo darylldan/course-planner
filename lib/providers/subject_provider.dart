@@ -1,5 +1,5 @@
-import 'package:course_planner/models/CourseGrade.dart';
-import 'package:course_planner/models/Room.dart';
+import 'package:iscompanion/models/CourseGrade.dart';
+import 'package:iscompanion/models/Room.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';

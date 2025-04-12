@@ -1,4 +1,4 @@
-import 'package:course_planner/models/CourseTemplate.dart';
+import 'package:iscompanion/models/CourseTemplate.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 
@@ -85,7 +85,9 @@ class CourseTemplateCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10,)
+                          SizedBox(
+                            width: 10,
+                          )
                         ],
                         Expanded(
                           child: Text(

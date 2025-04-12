@@ -1,17 +1,17 @@
 import 'dart:math';
 
-import 'package:course_planner/screens/buildings_module/buildings.dart';
-import 'package:course_planner/screens/classes_module/classes.dart';
-import 'package:course_planner/screens/daily_schedule_module/daily_schedule.dart';
-import 'package:course_planner/screens/events_module/events.dart';
-import 'package:course_planner/screens/grades_module/grades.dart';
-import 'package:course_planner/screens/misc/about.dart';
-import 'package:course_planner/screens/notes_module.dart/note.dart';
-import 'package:course_planner/screens/overview_module/overview.dart';
-import 'package:course_planner/screens/terms_module/terms.dart';
-import 'package:course_planner/screens/test_screen.dart';
-import 'package:course_planner/screens/todo_module/todo.dart';
-import 'package:course_planner/screens/weekly_schedule_module/weekly_schedule.dart';
+import 'package:iscompanion/screens/buildings_module/buildings.dart';
+import 'package:iscompanion/screens/classes_module/classes.dart';
+import 'package:iscompanion/screens/daily_schedule_module/daily_schedule.dart';
+import 'package:iscompanion/screens/events_module/events.dart';
+import 'package:iscompanion/screens/grades_module/grades.dart';
+import 'package:iscompanion/screens/misc/about.dart';
+import 'package:iscompanion/screens/notes_module.dart/note.dart';
+import 'package:iscompanion/screens/overview_module/overview.dart';
+import 'package:iscompanion/screens/terms_module/terms.dart';
+import 'package:iscompanion/screens/test_screen.dart';
+import 'package:iscompanion/screens/todo_module/todo.dart';
+import 'package:iscompanion/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
 
 /*
@@ -161,16 +161,6 @@ class _SideDrawerState extends State<SideDrawer> {
         },
       ),
       ListTile(
-        leading: Icon(Icons.meeting_room_rounded),
-        title: const Text(
-          "Buildings and Rooms",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        onTap: () {
-          _navigateTo(context, "/buildings", const Buildings());
-        },
-      ),
-      ListTile(
         leading: Icon(Icons.library_books),
         title: const Text(
           "Notes",
@@ -191,16 +181,6 @@ class _SideDrawerState extends State<SideDrawer> {
         },
       ),
       ListTile(
-        leading: Icon(Icons.grading),
-        title: const Text(
-          "Grades",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        onTap: () {
-          _navigateTo(context, "/grades", const Grades());
-        },
-      ),
-      ListTile(
         leading: Icon(Icons.event),
         title: const Text(
           "Events",
@@ -211,13 +191,23 @@ class _SideDrawerState extends State<SideDrawer> {
         },
       ),
       ListTile(
-        leading: Icon(Icons.flag),
+        leading: Icon(Icons.grading),
         title: const Text(
-          "Testing Screen",
+          "Grades",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         onTap: () {
-          _navigateTo(context, "/test-screen", const TestScreen());
+          _navigateTo(context, "/grades", const Grades());
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.meeting_room_rounded),
+        title: const Text(
+          "Buildings and Rooms",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        onTap: () {
+          _navigateTo(context, "/buildings", const Buildings());
         },
       ),
       ListTile(
