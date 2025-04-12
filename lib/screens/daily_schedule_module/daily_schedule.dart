@@ -68,11 +68,11 @@ class _DailyScheduleState extends State<DailySchedule> {
                 height: 10,
               ),
               if (_currentTerm != null) ...[
-                _buildEvents(context),
                 _dividerWithTitle(context, title: "EVENTS TODAY"),
                 SizedBox(
                   height: 10,
                 ),
+                _buildEvents(context),
               ],
               const SizedBox(
                 height: 120,
