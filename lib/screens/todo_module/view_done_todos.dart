@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Todo.dart';
-import 'package:iscompanion/providers/todo_provider.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/todo_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Todo.dart';
+import 'package:iskotrack/providers/todo_provider.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/todo_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

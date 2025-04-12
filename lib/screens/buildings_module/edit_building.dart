@@ -1,8 +1,8 @@
-import 'package:iscompanion/models/Building.dart';
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/elements/location_picker_button.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/location_picker_button.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';

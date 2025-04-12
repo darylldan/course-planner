@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/subject_card.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

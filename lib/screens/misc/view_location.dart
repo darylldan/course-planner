@@ -71,7 +71,7 @@ class _ViewLocationState extends State<ViewLocation> {
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.iscompanion',
+              userAgentPackageName: 'com.example.iskotrack',
               tileProvider: CachedTileProvider(store: cacheStore),
             ),
             MarkerLayer(markers: [

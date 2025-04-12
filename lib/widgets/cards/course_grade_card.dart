@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/CourseGrade.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/course_grade_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_grade_provider.dart';
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/models/CourseGrade.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/course_grade_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_grade_provider.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

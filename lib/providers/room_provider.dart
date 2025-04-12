@@ -1,4 +1,4 @@
-import 'package:iscompanion/models/Room.dart';
+import 'package:iskotrack/models/Room.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';

@@ -1,17 +1,17 @@
 import 'dart:math';
 
-import 'package:iscompanion/screens/buildings_module/buildings.dart';
-import 'package:iscompanion/screens/classes_module/classes.dart';
-import 'package:iscompanion/screens/daily_schedule_module/daily_schedule.dart';
-import 'package:iscompanion/screens/events_module/events.dart';
-import 'package:iscompanion/screens/grades_module/grades.dart';
-import 'package:iscompanion/screens/misc/about.dart';
-import 'package:iscompanion/screens/notes_module.dart/note.dart';
-import 'package:iscompanion/screens/overview_module/overview.dart';
-import 'package:iscompanion/screens/terms_module/terms.dart';
-import 'package:iscompanion/screens/test_screen.dart';
-import 'package:iscompanion/screens/todo_module/todo.dart';
-import 'package:iscompanion/screens/weekly_schedule_module/weekly_schedule.dart';
+import 'package:iskotrack/screens/buildings_module/buildings.dart';
+import 'package:iskotrack/screens/classes_module/classes.dart';
+import 'package:iskotrack/screens/daily_schedule_module/daily_schedule.dart';
+import 'package:iskotrack/screens/events_module/events.dart';
+import 'package:iskotrack/screens/grades_module/grades.dart';
+import 'package:iskotrack/screens/misc/about.dart';
+import 'package:iskotrack/screens/notes_module.dart/note.dart';
+import 'package:iskotrack/screens/overview_module/overview.dart';
+import 'package:iskotrack/screens/terms_module/terms.dart';
+import 'package:iskotrack/screens/test_screen.dart';
+import 'package:iskotrack/screens/todo_module/todo.dart';
+import 'package:iskotrack/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
 
 /*

@@ -1,8 +1,8 @@
-import 'package:iscompanion/models/TermGrade.dart';
-import 'package:iscompanion/providers/term_grade_provider.dart';
-import 'package:iscompanion/utils/enums.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/TermGrade.dart';
+import 'package:iskotrack/providers/term_grade_provider.dart';
+import 'package:iskotrack/utils/enums.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

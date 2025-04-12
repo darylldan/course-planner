@@ -1,10 +1,10 @@
-import 'package:iscompanion/models/CourseGrade.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/course_grade_provider.dart';
-import 'package:iscompanion/widgets/cards/course_grade_card.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/term_grade_summary.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/CourseGrade.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/course_grade_provider.dart';
+import 'package:iskotrack/widgets/cards/course_grade_card.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/term_grade_summary.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:iscompanion/models/CourseTemplate.dart';
-import 'package:iscompanion/utils/extensions.dart';
+import 'package:iskotrack/models/CourseTemplate.dart';
+import 'package:iskotrack/utils/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../api/IsarService.dart';

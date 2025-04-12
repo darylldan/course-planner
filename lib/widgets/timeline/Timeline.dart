@@ -1,4 +1,4 @@
-import "package:iscompanion/models/Subject.dart";
+import "package:iskotrack/models/Subject.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 

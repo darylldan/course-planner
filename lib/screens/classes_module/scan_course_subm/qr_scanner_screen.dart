@@ -2,10 +2,10 @@
 
 import 'dart:io';
 
-import 'package:iscompanion/models/SharedCourse.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/shared_course_provider.dart';
-import 'package:iscompanion/screens/classes_module/add_class.dart';
+import 'package:iskotrack/models/SharedCourse.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/shared_course_provider.dart';
+import 'package:iskotrack/screens/classes_module/add_class.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';

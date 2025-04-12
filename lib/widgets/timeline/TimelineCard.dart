@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/Building.dart';
-import 'package:iscompanion/models/Room.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/providers/room_provider.dart';
-import 'package:iscompanion/screens/classes_module/view_class.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/models/Room.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/room_provider.dart';
+import 'package:iskotrack/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

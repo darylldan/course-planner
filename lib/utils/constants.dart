@@ -27,7 +27,8 @@ const double obleLat = 14.165066352080837;
 const double obleLong = 121.24156452547093;
 
 // App Info
-const appName = "IsCompanion";
+const appName = "iskotrack";
 const appVersion = "v 1.0.0";
-const appDescription = "A student-focused organizer app tailored for UPLB Students.";
+const appDescription =
+    "A student-focused organizer app tailored for UPLB Students.";
 const devGithubName = "darylldan";

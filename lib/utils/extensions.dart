@@ -1,9 +1,9 @@
 // Add a copyWith method to your Note class for cleaner code
 import 'dart:convert';
 
-import 'package:iscompanion/models/CourseTemplate.dart';
-import 'package:iscompanion/models/Note.dart';
-import 'package:iscompanion/models/Subject.dart';
+import 'package:iskotrack/models/CourseTemplate.dart';
+import 'package:iskotrack/models/Note.dart';
+import 'package:iskotrack/models/Subject.dart';
 import 'package:crypto/crypto.dart';
 
 extension NoteCopyWith on Note {

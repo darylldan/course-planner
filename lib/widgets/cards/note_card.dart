@@ -1,10 +1,10 @@
-import 'package:iscompanion/models/Note.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/note_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/screens/notes_module.dart/view_note.dart';
+import 'package:iskotrack/models/Note.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/note_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/notes_module.dart/view_note.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

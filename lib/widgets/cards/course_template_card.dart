@@ -1,4 +1,4 @@
-import 'package:iscompanion/models/CourseTemplate.dart';
+import 'package:iskotrack/models/CourseTemplate.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 

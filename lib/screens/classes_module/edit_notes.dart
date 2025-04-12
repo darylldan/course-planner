@@ -1,5 +1,5 @@
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

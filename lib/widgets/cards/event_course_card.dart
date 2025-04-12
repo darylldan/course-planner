@@ -1,7 +1,7 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/deadlineevent_provider.dart';
-import 'package:iscompanion/screens/events_module/view_course_event.dart';
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/screens/events_module/view_course_event.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 import 'package:flutter/material.dart';

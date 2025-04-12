@@ -1,4 +1,4 @@
-import 'package:iscompanion/models/Todo.dart';
+import 'package:iskotrack/models/Todo.dart';
 import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 

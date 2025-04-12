@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/Building.dart';
-import 'package:iscompanion/models/Room.dart';
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/providers/room_provider.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/models/Room.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/room_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:iscompanion/utils/constants.dart' as c;
+import 'package:iskotrack/utils/constants.dart' as c;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class _LocationPickerState extends State<LocationPicker> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.iscompanion',
+                userAgentPackageName: 'com.example.iskotrack',
               ),
               Center(
                 child: Icon(

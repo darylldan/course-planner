@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'package:iscompanion/models/Note.dart';
+import 'package:iskotrack/models/Note.dart';
 
 // This class represents a snapshot of note state
 class NoteSnapshot {

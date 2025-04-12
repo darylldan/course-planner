@@ -1,6 +1,6 @@
 {
-    "name": "iscompanion",
-    "short_name": "iscompanion",
+    "name": "iskotrack",
+    "short_name": "iskotrack",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#00000000",

@@ -1,8 +1,8 @@
-import 'package:iscompanion/models/CourseGrade.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/models/TermGrade.dart';
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/models/CourseGrade.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/models/TermGrade.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:iscompanion/widgets/cards/error_card.dart';
-import 'package:iscompanion/widgets/elements/drawer.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/cards/error_card.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher_string.dart';

@@ -1,5 +1,5 @@
-import 'package:iscompanion/models/DeadlineEvent.dart';
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/models/DeadlineEvent.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 

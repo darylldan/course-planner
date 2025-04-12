@@ -1,10 +1,10 @@
-import 'package:iscompanion/api/FirebaseAPI.dart';
-import 'package:iscompanion/api/IsarService.dart';
-import 'package:iscompanion/models/SharedCourse.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/UploadedCourse.dart';
-import 'package:iscompanion/utils/enums.dart';
-import 'package:iscompanion/utils/extensions.dart';
+import 'package:iskotrack/api/FirebaseAPI.dart';
+import 'package:iskotrack/api/IsarService.dart';
+import 'package:iskotrack/models/SharedCourse.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/UploadedCourse.dart';
+import 'package:iskotrack/utils/enums.dart';
+import 'package:iskotrack/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ShareCourseProvider with ChangeNotifier {

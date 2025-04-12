@@ -1,4 +1,4 @@
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:isar/isar.dart';
 
 part 'CourseGrade.g.dart';

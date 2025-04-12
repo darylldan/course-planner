@@ -1,6 +1,6 @@
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/widgets/elements/drawer.dart';
-import 'package:iscompanion/widgets/timetable/Timetable.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

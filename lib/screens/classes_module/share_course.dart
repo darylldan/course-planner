@@ -1,8 +1,8 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/shared_course_provider.dart';
-import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/shared_course_provider.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

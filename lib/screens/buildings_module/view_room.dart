@@ -1,17 +1,17 @@
-import 'package:iscompanion/models/Building.dart';
-import 'package:iscompanion/models/Room.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/screens/buildings_module/edit_room.dart';
-import 'package:iscompanion/screens/misc/view_location.dart';
-import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/quick_notes_card.dart';
-import 'package:iscompanion/widgets/cards/subject_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/models/Room.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/buildings_module/edit_room.dart';
+import 'package:iskotrack/screens/misc/view_location.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/quick_notes_card.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -268,7 +268,7 @@ class _ViewRoomState extends State<ViewRoom> {
                             TileLayer(
                                 urlTemplate:
                                     'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName: 'com.example.iscompanion',
+                                userAgentPackageName: 'com.example.iskotrack',
                                 tileProvider:
                                     CachedTileProvider(store: cacheStore)),
                             Center(

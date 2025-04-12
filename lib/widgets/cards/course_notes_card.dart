@@ -1,7 +1,7 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/providers/note_provider.dart';
-import 'package:iscompanion/screens/notes_module.dart/view_course_notes.dart';
-import 'package:iscompanion/utils/enums.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/note_provider.dart';
+import 'package:iskotrack/screens/notes_module.dart/view_course_notes.dart';
+import 'package:iskotrack/utils/enums.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 import 'package:flutter/material.dart';

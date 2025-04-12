@@ -1,4 +1,4 @@
-import 'package:iscompanion/screens/misc/edit_quick_notes.dart';
+import 'package:iskotrack/screens/misc/edit_quick_notes.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 

@@ -1,10 +1,10 @@
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/subject_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;

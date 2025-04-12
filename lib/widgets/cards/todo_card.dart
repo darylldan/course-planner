@@ -1,5 +1,5 @@
-import 'package:iscompanion/models/Todo.dart';
-import 'package:iscompanion/providers/todo_provider.dart';
+import 'package:iskotrack/models/Todo.dart';
+import 'package:iskotrack/providers/todo_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

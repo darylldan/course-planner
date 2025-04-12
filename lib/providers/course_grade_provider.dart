@@ -1,6 +1,6 @@
-import 'package:iscompanion/api/IsarService.dart';
-import 'package:iscompanion/models/CourseGrade.dart';
-import 'package:iscompanion/models/Subject.dart';
+import 'package:iskotrack/api/IsarService.dart';
+import 'package:iskotrack/models/CourseGrade.dart';
+import 'package:iskotrack/models/Subject.dart';
 import 'package:flutter/foundation.dart';
 
 class CourseGradeProvider with ChangeNotifier {

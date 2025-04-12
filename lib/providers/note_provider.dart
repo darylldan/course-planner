@@ -1,4 +1,4 @@
-import 'package:iscompanion/models/Note.dart';
+import 'package:iskotrack/models/Note.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';

@@ -1,4 +1,4 @@
-import 'package:iscompanion/models/Building.dart';
+import 'package:iskotrack/models/Building.dart';
 import 'package:flutter/material.dart';
 
 class BuildingInfoCard extends StatefulWidget {

@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/DeadlineEvent.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/deadlineevent_provider.dart';
-import 'package:iscompanion/widgets/cards/events_card.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/DeadlineEvent.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/widgets/cards/events_card.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';

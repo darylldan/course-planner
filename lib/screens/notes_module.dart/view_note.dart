@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:iscompanion/models/Note.dart';
-import 'package:iscompanion/models/Subject.dart';
-import 'package:iscompanion/models/Term.dart';
-import 'package:iscompanion/providers/note_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/screens/notes_module.dart/history_manager.dart';
-import 'package:iscompanion/utils/extensions.dart';
-import 'package:iscompanion/utils/methods.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Note.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/note_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/notes_module.dart/history_manager.dart';
+import 'package:iskotrack/utils/extensions.dart';
+import 'package:iskotrack/utils/methods.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:markdown_editor_plus/markdown_editor_plus.dart';

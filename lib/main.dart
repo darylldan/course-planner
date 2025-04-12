@@ -1,16 +1,16 @@
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/providers/course_grade_provider.dart';
-import 'package:iscompanion/providers/course_template_provider.dart';
-import 'package:iscompanion/providers/deadlineevent_provider.dart';
-import 'package:iscompanion/providers/note_provider.dart';
-import 'package:iscompanion/providers/room_provider.dart';
-import 'package:iscompanion/providers/shared_course_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_grade_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/providers/todo_provider.dart';
-import 'package:iscompanion/screens/overview_module/overview.dart';
-import 'package:iscompanion/styles/theme.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/course_grade_provider.dart';
+import 'package:iskotrack/providers/course_template_provider.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/note_provider.dart';
+import 'package:iskotrack/providers/room_provider.dart';
+import 'package:iskotrack/providers/shared_course_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_grade_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/providers/todo_provider.dart';
+import 'package:iskotrack/screens/overview_module/overview.dart';
+import 'package:iskotrack/styles/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       // Add more text styles as needed
     ));
     return MaterialApp(
-      title: 'Course Planner',
+      title: 'IskoTrack',
       theme: materialTheme.light(),
       darkTheme: materialTheme.dark(),
       themeMode: ThemeMode.system,

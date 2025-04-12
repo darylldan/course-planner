@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:iscompanion/models/DeadlineEvent.dart';
+import 'package:iskotrack/models/DeadlineEvent.dart';
 
-import 'package:iscompanion/providers/deadlineevent_provider.dart';
-import 'package:iscompanion/providers/subject_provider.dart';
-import 'package:iscompanion/providers/term_provider.dart';
-import 'package:iscompanion/screens/classes_module/view_class.dart';
-import 'package:iscompanion/utils/enums.dart';
-import 'package:iscompanion/widgets/cards/events_card.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/cards/next_class_card.dart';
-import 'package:iscompanion/widgets/cards/overview_today_card.dart';
-import 'package:iscompanion/widgets/elements/drawer.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
-import 'package:iscompanion/widgets/timeline/Timeline.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/classes_module/view_class.dart';
+import 'package:iskotrack/utils/enums.dart';
+import 'package:iskotrack/widgets/cards/events_card.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/next_class_card.dart';
+import 'package:iskotrack/widgets/cards/overview_today_card.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/timeline/Timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

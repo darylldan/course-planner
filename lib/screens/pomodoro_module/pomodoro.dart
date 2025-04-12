@@ -1,4 +1,4 @@
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as C;
 

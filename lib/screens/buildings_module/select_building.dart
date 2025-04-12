@@ -1,9 +1,9 @@
-import 'package:iscompanion/models/Building.dart';
-import 'package:iscompanion/providers/building_provider.dart';
-import 'package:iscompanion/widgets/cards/building_card.dart';
-import 'package:iscompanion/widgets/cards/error_card_no_action.dart';
-import 'package:iscompanion/widgets/cards/info_card.dart';
-import 'package:iscompanion/widgets/elements/title_text.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/widgets/cards/building_card.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
