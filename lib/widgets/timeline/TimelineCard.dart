@@ -6,7 +6,6 @@ import 'package:course_planner/providers/room_provider.dart';
 import 'package:course_planner/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 class TimelineCard extends StatelessWidget {

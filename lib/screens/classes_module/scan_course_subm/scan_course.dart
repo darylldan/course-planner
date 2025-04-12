@@ -5,7 +5,6 @@ import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/shared_course_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
 import 'package:course_planner/screens/classes_module/scan_course_subm/qr_scanner_screen.dart';
-import 'package:course_planner/utils/extensions.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
