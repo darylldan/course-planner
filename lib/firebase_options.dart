@@ -42,17 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyA_crptHsY8Pt-vBi2SZ5H8qc7LMRg3-t4',
-    appId: '1:188836983499:web:95abded27bb5df05e1a14e',
+    appId: '1:188836983499:web:0c107d752758d954e1a14e',
     messagingSenderId: '188836983499',
     projectId: 'course-planner-dec45',
     authDomain: 'course-planner-dec45.firebaseapp.com',
     storageBucket: 'course-planner-dec45.firebasestorage.app',
-    measurementId: 'G-3K79SQR0J0',
+    measurementId: 'G-4QE2FGXJNN',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDGSDu7bXL5lufEzg509gHpRqowgW2C5oM',
-    appId: '1:188836983499:android:bb4125b0b191502ae1a14e',
+    appId: '1:188836983499:android:db4473e56d7f20d5e1a14e',
     messagingSenderId: '188836983499',
     projectId: 'course-planner-dec45',
     storageBucket: 'course-planner-dec45.firebasestorage.app',
@@ -60,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBihYKGg6sR-U4tFNWCj6l4Y9_5VdLLmy4',
-    appId: '1:188836983499:ios:9c5d4c2f89df971ee1a14e',
+    appId: '1:188836983499:ios:c1df13181b294e1be1a14e',
     messagingSenderId: '188836983499',
     projectId: 'course-planner-dec45',
     storageBucket: 'course-planner-dec45.firebasestorage.app',
@@ -78,11 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyA_crptHsY8Pt-vBi2SZ5H8qc7LMRg3-t4',
-    appId: '1:188836983499:web:0c107d752758d954e1a14e',
+    appId: '1:188836983499:web:f2e6676ea1d525a3e1a14e',
     messagingSenderId: '188836983499',
     projectId: 'course-planner-dec45',
     authDomain: 'course-planner-dec45.firebaseapp.com',
     storageBucket: 'course-planner-dec45.firebasestorage.app',
-    measurementId: 'G-4QE2FGXJNN',
+    measurementId: 'G-HLYWDXZQ6S',
   );
+
 }

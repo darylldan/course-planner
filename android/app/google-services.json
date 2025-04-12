@@ -9,6 +9,25 @@
       "client_info": {
         "mobilesdk_app_id": "1:188836983499:android:bb4125b0b191502ae1a14e",
         "android_client_info": {
+          "package_name": "com.darylldancc.iscompanion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGSDu7bXL5lufEzg509gHpRqowgW2C5oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188836983499:android:db4473e56d7f20d5e1a14e",
+        "android_client_info": {
           "package_name": "com.darylldancc.iskotrack"
         }
       },
