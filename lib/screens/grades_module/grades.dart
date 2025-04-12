@@ -20,8 +20,6 @@ class Grades extends StatefulWidget {
   State<Grades> createState() => _GradesState();
 }
 
-bool showFab = false;
-
 class _GradesState extends State<Grades> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _totalUnitsCtrl = TextEditingController();
@@ -29,30 +27,27 @@ class _GradesState extends State<Grades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [_totalUnitsButton(context)],
-      ),
-      drawer: SideDrawer(parent: "/grades"),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [TitleText(title: "Grades"), _buildBody(context)],
+        appBar: AppBar(
+          actions: [_totalUnitsButton(context)],
         ),
-      ),
-      floatingActionButton: showFab
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddTermGrade()),
-                );
-              },
-              label: const Text("Add Term Grade"),
-              icon: const Icon(Icons.add_rounded),
-            )
-          : null,
-    );
+        drawer: SideDrawer(parent: "/grades"),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [TitleText(title: "Grades"), _buildBody(context)],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddTermGrade()),
+            );
+          },
+          label: const Text("Add Term Grade"),
+          icon: const Icon(Icons.add_rounded),
+        ));
   }
 
   Widget _totalUnitsButton(BuildContext context) {
@@ -74,12 +69,6 @@ class _GradesState extends State<Grades> {
       return InfoCard(
           content:
               "There are no terms yet. Add a grade term below to input your general weighted average without creating a term or individual courses.");
-    }
-
-    if (!showFab) {
-      setState(() {
-        showFab = true;
-      });
     }
 
     bool isGradesEmpty = context.watch<TermGradeProvider>().isGradesEmpty();
