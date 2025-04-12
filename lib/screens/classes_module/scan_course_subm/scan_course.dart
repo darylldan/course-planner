@@ -4,6 +4,7 @@ import 'package:course_planner/models/SharedCourse.dart';
 import 'package:course_planner/models/Term.dart';
 import 'package:course_planner/providers/shared_course_provider.dart';
 import 'package:course_planner/screens/classes_module/add_class.dart';
+import 'package:course_planner/screens/classes_module/scan_course_subm/qr_scanner_screen.dart';
 import 'package:course_planner/utils/extensions.dart';
 import 'package:course_planner/widgets/cards/info_card.dart';
 import 'package:course_planner/widgets/elements/title_text.dart';
@@ -58,7 +59,58 @@ class _ScanCourseState extends State<ScanCourse> {
                     Theme.of(context).colorScheme.onSecondaryContainer),
                 backgroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.secondaryContainer)),
-            onPressed: () {},
+            onPressed: () async {
+              bool isCancelled = false;
+
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Checking for internet connection"),
+                      content: IntrinsicHeight(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              isCancelled = true;
+
+                              Navigator.pop(context);
+                            },
+                            child: Text("Cancel"))
+                      ],
+                    );
+                  });
+
+              bool internetCheck = await hasNetwork();
+
+              if (context.mounted) Navigator.pop(context);
+
+              if (isCancelled) return;
+
+              if (!internetCheck) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          "Internet connection required for course sharing."),
+                    ),
+                  );
+                }
+                return;
+              }
+
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QrScannerScreen(term: widget.term)),
+                );
+              }
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,8 +160,8 @@ class _ScanCourseState extends State<ScanCourse> {
               if (context
                   .read<ShareCourseProvider>()
                   .isCourseMine(_codeCtrl.text.trim())) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("This course is yours.")));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("This course is yours.")));
                 return;
               }
               bool isCancelled = false;
