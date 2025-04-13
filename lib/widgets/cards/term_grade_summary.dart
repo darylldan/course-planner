@@ -101,6 +101,7 @@ class _TermGradeSummaryState extends State<TermGradeSummary> {
         context.watch<TermGradeProvider>().encodedGradesCount(widget.term.id!);
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _termGwa(context, termGWA),
