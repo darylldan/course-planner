@@ -235,6 +235,28 @@ class DeadlineEventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateEventBounds(
+      int termId, DateTime startDate, DateTime endDate) async {
+    List<DeadlineEvent> affectedEvents =
+        _deadlineEvents.where((e) => e.termId == termId).toList();
+
+    for (DeadlineEvent e in affectedEvents) {
+      if (e.date.isBefore(startDate)) {
+        e.date = DateTime(startDate.year, startDate.month, startDate.day,
+            e.date.hour, e.date.minute);
+      }
+
+      if (e.date.isAfter(endDate)) {
+        e.date = DateTime(endDate.year, endDate.month, endDate.day,
+            e.date.hour, e.date.minute);
+      }
+
+      await editDeadlineEvent(e);
+    }
+
+    notifyListeners();
+  }
+
   Future<void> deleteDeadlineEvent(int id) async {
     await isarService.deleteDeadlineEvent(id);
     _deadlineEvents.removeWhere((d) => d.id == id);

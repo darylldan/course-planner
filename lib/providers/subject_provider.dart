@@ -93,6 +93,28 @@ class SubjectProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateCourseDate(int termId, DateTime date) async {
+    List<Subject> affectedCourses =
+        _subjects.where((s) => s.termID == termId).toList();
+
+    for (Subject c in affectedCourses) {
+      if (c.startDate != null) {
+        c.startDate = DateTime(date.year, date.month, date.day,
+            c.startDate!.hour, c.startDate!.minute);
+      }
+
+      if (c.endDate != null) {
+        c.endDate = DateTime(date.year, date.month, date.day, c.endDate!.hour,
+            c.endDate!.minute);
+      }
+
+      await isarService.editSubject(c);
+      _subjects[_subjects.indexWhere((s) => s.id! == c.id!)] = c;
+    }
+
+    notifyListeners();
+  }
+
   int getTermUnits(int termId, {bool credited = true}) {
     final Set<String> uniqueCourseAndUnits = {};
 

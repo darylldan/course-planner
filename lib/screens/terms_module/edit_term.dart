@@ -1,3 +1,5 @@
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
 import 'package:iskotrack/providers/term_provider.dart';
 import 'package:iskotrack/widgets/cards/current_term_card.dart';
 import 'package:iskotrack/widgets/cards/info_card.dart';
@@ -166,12 +168,29 @@ class _EditTermState extends State<EditTerm> {
                       if (_formKey.currentState!.validate() && isDatesValid) {
                         _formKey.currentState?.save();
 
-                        widget.term.academicYear = _acadYearCtrl.text;
-                        widget.term.semester = _semesterCtrl.text;
-                        widget.term.startDate = _startDate!;
-                        widget.term.endDate = _endDate!;
+                        Term newTerm = widget.term;
+
+                        newTerm
+                          ..academicYear = _acadYearCtrl.text
+                          ..semester = _semesterCtrl.text
+                          ..startDate = _startDate!
+                          ..endDate = _endDate!;
 
                         context.read<TermProvider>().editTerm(widget.term);
+
+                        // Also update the dates of courses and events:
+                        if (_startDate!
+                                .isAtSameMomentAs(widget.term.startDate) ||
+                            _endDate!.isAtSameMomentAs(widget.term.endDate)) {
+                          context
+                              .read<SubjectProvider>()
+                              .updateCourseDate(widget.term.id!, _startDate!);
+
+                          context
+                              .read<DeadlineEventProvider>()
+                              .updateEventBounds(
+                                  widget.term.id!, _startDate!, _endDate!);
+                        }
 
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
