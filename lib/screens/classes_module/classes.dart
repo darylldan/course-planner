@@ -225,7 +225,7 @@ class _ClassesState extends State<Classes> {
         TitleText(title: _screenTitle),
         InfoCard(
           content:
-              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this page",
+              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this page. Courses that you've added on IskoTrack will appear here.",
         )
       ],
     );

@@ -50,7 +50,7 @@ class _RoomsState extends State<Rooms> {
 
     if (rooms.isEmpty) {
       return InfoCard(
-          content: "No rooms yet. Create one by pressing the button below.");
+          content: "No rooms yet. Create one by pressing the button below. The rooms you've created will be shown here.");
     }
 
     if (_roomSearchCtrl.text.isNotEmpty) {

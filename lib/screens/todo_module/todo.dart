@@ -65,7 +65,8 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget _body(BuildContext context, currentTerm) {
     if (currentTerm == null) {
       return InfoCard(
-          content: "There are no terms yet. Create one via the terms screen.");
+          content:
+              "There are no terms yet. Create one via the terms screen. The to-dos that you've created will appear here.");
     }
 
     if (_onCurrentTerm == true) {
@@ -89,7 +90,7 @@ class _TodoScreenState extends State<TodoScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: InfoCard(
-                content: "No courses yet. Create one via the Courses screen."),
+                content: "No courses yet. Create one via the Courses screen to create course-specific to-dos."),
           ),
           SizedBox(
             height: 8,

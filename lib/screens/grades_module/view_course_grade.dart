@@ -41,7 +41,7 @@ class _ViewCourseGradeState extends State<ViewCourseGrade> {
     if (courseGrades.isEmpty) {
       return InfoCard(
           content:
-              "No courses yet. Begin by adding a course on the Courses screen.");
+              "No courses yet. Begin by adding a course on the Courses screen. You can set the grade of your courses here and IskoTrack will automatically compute and analyze it for you.");
     }
 
     return Column(

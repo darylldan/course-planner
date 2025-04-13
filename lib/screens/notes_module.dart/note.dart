@@ -215,7 +215,7 @@ class _NotesState extends State<Notes> {
       BuildContext context, Term? currentTerm, List<Subject> subjects) {
     if (currentTerm == null) {
       return InfoCard(
-          content: "There are no terms yet. Create one via the terms screen.");
+          content: "There are no terms yet. Create one via the Terms screen. The notes you've created will appear here.");
     }
 
     if (_onCurrentTerm == true) {

@@ -170,7 +170,7 @@ class _EventsState extends State<Events> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: InfoCard(
                 content:
-                    "No courses yet. Create one via the Courses screen. You can insert your events such as deadlines, org events, etc. here."),
+                    "No courses yet. Create one via the Courses screen to create course-specific events."),
           ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),

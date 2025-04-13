@@ -580,7 +580,7 @@ class _OverviewState extends State<Overview> {
       children: [
         InfoCard(
             content:
-                "You don't have any courses in the current term. Add one on the 'Courses' screen.")
+                "You don't have any courses in the current term. Add one on the 'Courses' screen. Your daily summary will be displayed here.")
       ],
     );
   }

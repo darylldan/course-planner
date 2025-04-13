@@ -183,6 +183,6 @@ class _BuildingsState extends State<Buildings> {
   Widget _emptyBuilding(BuildContext context) {
     return InfoCard(
         content:
-            "Begin adding buildings by cliking the 'Create Building' button below.");
+            "Begin adding buildings by cliking the 'Create Building' button below. The buildings that you've added will be shown here.");
   }
 }

@@ -68,7 +68,7 @@ class _GradesState extends State<Grades> {
     if (terms.isEmpty && termGrade.isEmpty) {
       return InfoCard(
           content:
-              "There are no terms yet. Add a grade term below to input your general weighted average without creating a term or individual courses.");
+              "There are no terms yet. Add a grade term below to input your general weighted average without creating a term or individual courses. Your grade computation and analysis will appear in this screen once necessary information is provided.");
     }
 
     bool isGradesEmpty = context.watch<TermGradeProvider>().isGradesEmpty();
