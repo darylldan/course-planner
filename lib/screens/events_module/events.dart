@@ -21,7 +21,7 @@ import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as C;
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Term term;
+  final Term? term;
   const CustomAppBar({super.key, required this.term});
 
   @override
@@ -44,6 +44,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.term == null) {
+      return AppBar();
+    }
+
     return AppBar(
       actions: [
         AnimatedSize(
@@ -56,7 +60,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                CalendarEventView(term: widget.term)));
+                                CalendarEventView(term: widget.term!)));
                   },
                   child: Row(
                     children: [
@@ -72,7 +76,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                CalendarEventView(term: widget.term)));
+                                CalendarEventView(term: widget.term!)));
                   },
                   tooltip: "Calendar View",
                   icon: Icon(Icons.calendar_month), // Just the icon
@@ -101,7 +105,7 @@ class _EventsState extends State<Events> {
     _currentTerm ??= currentTerm;
     return Scaffold(
       appBar: CustomAppBar(
-        term: _currentTerm!,
+        term: _currentTerm,
       ),
       drawer: SideDrawer(parent: "/events"),
       body: SingleChildScrollView(
@@ -138,7 +142,8 @@ class _EventsState extends State<Events> {
   Widget _body(BuildContext context, Term? currentTerm) {
     if (currentTerm == null) {
       return InfoCard(
-          content: "There are no terms yet. Create one via the terms screen.");
+          content:
+              "There are no terms yet. Create one via the terms screen. You can insert your events such as deadlines, org events, etc. here.");
     }
 
     if (_onCurrentTerm == true) {
@@ -164,7 +169,8 @@ class _EventsState extends State<Events> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: InfoCard(
-                content: "No courses yet. Create one via the Courses screen."),
+                content:
+                    "No courses yet. Create one via the Courses screen. You can insert your events such as deadlines, org events, etc. here."),
           ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
