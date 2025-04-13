@@ -9,7 +9,7 @@ import 'package:iskotrack/screens/misc/about.dart';
 import 'package:iskotrack/screens/notes_module.dart/note.dart';
 import 'package:iskotrack/screens/overview_module/overview.dart';
 import 'package:iskotrack/screens/terms_module/terms.dart';
-import 'package:iskotrack/screens/test_screen.dart';
+// import 'package:iskotrack/screens/test_screen.dart';
 import 'package:iskotrack/screens/todo_module/todo.dart';
 import 'package:iskotrack/screens/weekly_schedule_module/weekly_schedule.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +143,7 @@ class _SideDrawerState extends State<SideDrawer> {
       ListTile(
         leading: Icon(Icons.book_rounded),
         title: const Text(
-          "Classes",
+          "Courses",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         onTap: () {
