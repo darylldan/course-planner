@@ -343,6 +343,7 @@ class IsarService {
     List<Subject> linkedCourses = await isar.subjects
         .filter()
         .courseCodeEqualTo(courseCode, caseSensitive: false)
+        .unitsEqualTo(course.units)
         .findAll();
 
     await isar.writeTxn(() async {
@@ -372,6 +373,9 @@ class IsarService {
       for (Subject s in affectedSubjects) {
         await deleteSubject(s.id!);
       }
+
+      await isar.deadlineEvents.filter().termIdEqualTo(id).deleteAll();
+      await isar.todos.filter().termIdEqualTo(id).deleteAll();
 
       // Deleting unassinged notes
       await isar.notes.filter().termIdEqualTo(id).deleteAll();
