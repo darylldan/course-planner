@@ -102,10 +102,6 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _feedback(context),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _nerdHeader(),
-        ),
         const SizedBox(
           height: 150,
         )
@@ -113,36 +109,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _nerdHeader() {
-    return Row(
-      children: [
-        const Expanded(
-          child: Opacity(
-            opacity: 0.5,
-            child: Divider(),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            "NERD SECTION",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onInverseSurface,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const Expanded(
-          child: Opacity(
-            opacity: 0.5,
-            child: Divider(),
-          ),
-        ),
-      ],
-    );
-  }
-
+  
   Widget _feedback(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -151,7 +118,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
             backgroundColor: WidgetStatePropertyAll(
                 Theme.of(context).colorScheme.primaryContainer)),
         onPressed: () async {
-          String url = "https://forms.gle/DwKwhx2G12tZ2DB69";
+          String url = "https://forms.gle/A2mYTymSqLDxCway8";
           var urlLaunchable = await canLaunchUrlString(url);
           if (urlLaunchable) {
             await launchUrlString(
