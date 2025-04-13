@@ -364,15 +364,16 @@ class IsarService {
 
   Future<void> deleteTerm(int id) async {
     final isar = await db;
+
+    List<Subject> affectedSubjects =
+        await isar.subjects.filter().termIDEqualTo(id).findAll();
+
+    for (Subject s in affectedSubjects) {
+      await deleteSubject(s.id!);
+    }
+    
     await isar.writeTxn(() async {
       await isar.terms.delete(id);
-
-      List<Subject> affectedSubjects =
-          await isar.subjects.filter().termIDEqualTo(id).findAll();
-
-      for (Subject s in affectedSubjects) {
-        await deleteSubject(s.id!);
-      }
 
       await isar.deadlineEvents.filter().termIdEqualTo(id).deleteAll();
       await isar.todos.filter().termIdEqualTo(id).deleteAll();
