@@ -160,14 +160,17 @@ class _GradesState extends State<Grades> {
     _totalUnitsCtrl.text = initValue != null ? initValue.toString() : "";
 
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
-          return SizedBox(
-            height: 300,
+          return Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: C.screenHorizontalPadding, vertical: 24),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
                     "Set Total Units",
