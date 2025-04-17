@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:iskotrack/models/Building.dart';
 import 'package:iskotrack/models/CourseGrade.dart';
 import 'package:iskotrack/models/CourseTemplate.dart';
@@ -9,7 +10,9 @@ import 'package:iskotrack/models/Todo.dart';
 import 'package:iskotrack/models/UploadedCourse.dart';
 import 'package:iskotrack/models/User.dart';
 import 'package:isar/isar.dart';
+import 'package:iskotrack/providers/room_provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import '../models/Subject.dart';
 import '../models/Term.dart';
 
@@ -371,7 +374,7 @@ class IsarService {
     for (Subject s in affectedSubjects) {
       await deleteSubject(s.id!);
     }
-    
+
     await isar.writeTxn(() async {
       await isar.terms.delete(id);
 
@@ -406,13 +409,28 @@ class IsarService {
     });
   }
 
-  Future<void> deleteBuilding(int id) async {
+  Future<void> deleteBuilding(int id, BuildContext context) async {
     final isar = await db;
 
     await isar.writeTxn(() async {
       await isar.buildings.delete(id);
       await isar.rooms.filter().buildingIdEqualTo(id).deleteAll();
     });
+
+    List<Subject> affectedCourses = await isar.subjects
+        .filter()
+        .locationTypeEqualTo("bldg")
+        .locationIDEqualTo(id)
+        .findAll();
+
+    for (Subject c in affectedCourses) {
+      c.locationType = null;
+      c.locationID = null;
+
+      await editSubject(c);
+    }
+
+    if (context.mounted) context.read<RoomProvider>().init();
   }
 
   Future<void> deleteDeadlineEvent(int id) async {

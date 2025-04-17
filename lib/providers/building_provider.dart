@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:iskotrack/models/Building.dart';
-import 'package:flutter/foundation.dart';
 import '../api/IsarService.dart';
 
 class BuildingProvider extends ChangeNotifier {
@@ -42,8 +42,8 @@ class BuildingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteBuilding(int id) async {
-    await isarService.deleteBuilding(id);
+  Future<void> deleteBuilding(int id, BuildContext context) async {
+    await isarService.deleteBuilding(id, context);
     _buildings.removeWhere((e) => e.id == id);
 
     notifyListeners();

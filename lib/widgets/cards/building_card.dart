@@ -277,11 +277,13 @@ class _BuildingCardState extends State<BuildingCard> {
                 ListTile(
                   title: const Text("Delete Building"),
                   leading: const Icon(Icons.delete_forever_rounded),
-                  onTap: () {
+                  onTap: () async {
                     // To-Do add modal confimation
                     context
                         .read<BuildingProvider>()
-                        .deleteBuilding(widget.bldg.id!);
+                        .deleteBuilding(widget.bldg.id!, context);
+
+                    context.read<RoomProvider>().init();
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

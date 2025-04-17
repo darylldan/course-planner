@@ -62,7 +62,7 @@ class _RoomsState extends State<Rooms> {
     }
 
     List<Padding> roomCards = filteredRooms
-        .where((r) => r.buildingId != -1)
+        .where((r) => r.buildingId != -1) 
         .map((r) => Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
               child: RoomCard(room: r),
