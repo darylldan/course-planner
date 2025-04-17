@@ -385,7 +385,7 @@ class _TermGradeInsightsState extends State<TermGradeInsights> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _title(context,
-                title: "Current Latin Honor",
+                title: "Current Honorific Scholarship",
                 icon: Icons.emoji_events,
                 color: Theme.of(context).colorScheme.onTertiaryContainer),
             Text(

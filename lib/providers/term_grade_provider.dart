@@ -393,7 +393,7 @@ class TermGradeProvider with ChangeNotifier {
       return HonorificScholarship.ineligibleUnderload;
     }
 
-    if (courseGrade.any((cg) => GradeMethods.getValue(cg.grade!)! < 3.0)) {
+    if (courseGrade.any((cg) => GradeMethods.getValue(cg.grade!)! > 3.0)) {
       return HonorificScholarship.ineligibleLowGrade;
     }
 
@@ -426,10 +426,6 @@ class TermGradeProvider with ChangeNotifier {
         .map((c) => c.units.toInt())
         .fold(0, (a, b) => a + b);
 
-    if (totalUnits <= takenUnits) {
-      return gwaGoal;
-    }
-
     int remainingUnits = totalUnits - takenUnits;
 
     gwaGoal["remainingUnits"] = remainingUnits;
@@ -448,7 +444,7 @@ class TermGradeProvider with ChangeNotifier {
         .map((cg) => GradeMethods.getValue(cg.grade!)! * cg.units)
         .reduce((a, b) => a + b);
 
-    if (takenUnits < 15) {
+    if (totalUnits < 15) {
       return gwaGoal;
     }
 
