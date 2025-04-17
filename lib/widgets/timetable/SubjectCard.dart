@@ -72,13 +72,13 @@ class SubjectCard extends StatelessWidget {
           children: [
             Text(
               subject.courseCode,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9, color: Colors.white),
               softWrap: true,
               textAlign: TextAlign.center,
             ),
             Text(
               subject.section,
-              style: const TextStyle(fontSize: 9),
+              style: const TextStyle(fontSize: 9 , color: Colors.white),
             ),
             if (diff.inHours > 1 ||
                 (diff.inHours == 1 && diff.inMinutes % 60 >= 30))
@@ -90,7 +90,7 @@ class SubjectCard extends StatelessWidget {
                         : loc is Room
                             ? loc.roomName
                             : "Undetermined location",
-                style: const TextStyle(fontSize: 7),
+                style: const TextStyle(fontSize: 7, color: Colors.white),
                 overflow: TextOverflow.clip,
                 softWrap: true,
                 textAlign: TextAlign.center,
