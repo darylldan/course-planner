@@ -603,8 +603,9 @@ class _ViewClassState extends State<ViewClass> {
       }
     } else if (subject.locationType == "room") {
       Room room = context.read<RoomProvider>().getRoomByID(subject.locationID!);
-      Building bldg =
-          context.read<BuildingProvider>().getBuildingByID(room.buildingId);
+      Building? bldg = room.buildingId != -1
+          ? context.read<BuildingProvider>().getBuildingByID(room.buildingId)
+          : null;
 
       suppl = bldg;
 
@@ -613,8 +614,8 @@ class _ViewClassState extends State<ViewClass> {
         loc = room;
       } else {
         // get bldg coords,
-        if (bldg.latitude != null && bldg.longitude != null) {
-          coords = LatLng(bldg.latitude!, bldg.longitude!);
+        if (bldg?.latitude != null && bldg?.longitude != null) {
+          coords = LatLng(bldg!.latitude!, bldg.longitude!);
           loc = room;
         }
       }
