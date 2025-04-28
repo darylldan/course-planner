@@ -143,7 +143,7 @@ class _NotesCardState extends State<NotesCard> {
           ),
           IconButton(
             onPressed: () {
-              // _showActions(context);
+              _showActions(context);
             },
             icon: Icon(Icons.more_vert_rounded),
           )
