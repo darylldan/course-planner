@@ -318,99 +318,105 @@ class _TodoScreenState extends State<TodoScreen> {
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setModalState) {
-            return Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              height: 500,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: C.screenHorizontalPadding, vertical: 24),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "Create To-Do",
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-                      ),
-                      const SizedBox(height: 20),
-                      Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          controller: _todoCtrl,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                              hintText: 'Enter task',
-                              labelText: 'Task'),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter a task.";
-                            }
-                
-                            return null;
-                          },
+          return Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
+              return Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                height: 500,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: C.screenHorizontalPadding, vertical: 24),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Create To-Do",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 26),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Opacity(
-                        opacity: 0.5,
-                        child: Divider(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _coursePicker(context, setModalState),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                  Theme.of(context).colorScheme.primaryContainer),
-                              foregroundColor: WidgetStatePropertyAll(
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer)),
-                          onPressed: () async {
-                            // create a note, and then open the edit note screen
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                
-                              Todo newTodo = Todo()
-                                ..courseId = _selectedCourse == null
-                                    ? -1
-                                    : _selectedCourse!.id!
-                                ..isDone = false
-                                ..termId = _currentTerm!.id!
-                                ..task = _todoCtrl.text;
-                
-                              context.read<TodoProvider>().addTodo(newTodo);
-                
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("To-do created.")));
-                
-                              setModalState(() {
-                                _todoCtrl.clear();
-                                _selectedCourse = null;
-                              });
-                
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: const Text(
-                            "Create To-Do",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        const SizedBox(height: 20),
+                        Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: _todoCtrl,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                hintText: 'Enter task',
+                                labelText: 'Task'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please enter a task.";
+                              }
+
+                              return null;
+                            },
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        Opacity(
+                          opacity: 0.5,
+                          child: Divider(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: _coursePicker(context, setModalState),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer),
+                                foregroundColor: WidgetStatePropertyAll(
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer)),
+                            onPressed: () async {
+                              // create a note, and then open the edit note screen
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+
+                                Todo newTodo = Todo()
+                                  ..courseId = _selectedCourse == null
+                                      ? -1
+                                      : _selectedCourse!.id!
+                                  ..isDone = false
+                                  ..termId = _currentTerm!.id!
+                                  ..task = _todoCtrl.text;
+
+                                context.read<TodoProvider>().addTodo(newTodo);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("To-do created.")));
+
+                                setModalState(() {
+                                  _todoCtrl.clear();
+                                  _selectedCourse = null;
+                                });
+
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text(
+                              "Create To-Do",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          });
+              );
+            }),
+          );
         });
   }
 }
