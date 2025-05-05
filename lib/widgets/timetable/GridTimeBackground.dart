@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class GridTimeBackground extends StatelessWidget {
-  var hours;
-  GridTimeBackground({super.key, required this.hours});
+  final int hours;
+  const GridTimeBackground({super.key, required this.hours});
 
   @override
   Widget build(BuildContext context) {

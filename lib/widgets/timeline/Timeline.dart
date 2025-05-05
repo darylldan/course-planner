@@ -1,8 +1,7 @@
-import "package:course_planner/models/Subject.dart";
+import "package:iskotrack/models/Subject.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
-import "../../utils/enums.dart";
 import "TimelineCard.dart";
 
 /*
@@ -10,9 +9,9 @@ import "TimelineCard.dart";
  */
 
 class Timeline extends StatelessWidget {
-  List<Subject> subjects;
+  final List<Subject> subjects;
 
-  Timeline({super.key, required this.subjects});
+  const Timeline({super.key, required this.subjects});
   // Timeline({super.key});
 
   @override
@@ -29,12 +28,14 @@ class Timeline extends StatelessWidget {
     for (int i = 0; i < subjects.length; i++) {
       // Check if there is break in between subjects, if so adds a break card
       if (i > 0) {
-        if (!subjects[i - 1].endDate.isAtSameMomentAs(subjects[i].startDate)) {
+        if (!subjects[i - 1]
+            .endDate!
+            .isAtSameMomentAs(subjects[i].startDate!)) {
           timeline.addAll([
             _breakCard(
               context,
-              subjects[i - 1].endDate,
-              subjects[i].startDate.difference(subjects[i - 1].endDate),
+              subjects[i - 1].endDate!,
+              subjects[i].startDate!.difference(subjects[i - 1].endDate!),
             ),
             _verticalLine(context, 15, 1),
           ]);
@@ -46,7 +47,7 @@ class Timeline extends StatelessWidget {
 
       if (i == subjects.length - 1) {
         timeline.addAll(
-            [_freeCard(context, subjects[i].endDate), _endIndicator(context)]);
+            [_freeCard(context, subjects[i].endDate!), _endIndicator(context)]);
       }
     }
 

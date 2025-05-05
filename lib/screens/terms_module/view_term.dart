@@ -1,11 +1,12 @@
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/terms_module/edit_term.dart';
-import 'package:course_planner/widgets/cards/current_term_selected.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/terms_module/edit_term.dart';
+import 'package:iskotrack/widgets/cards/current_term_selected.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/Subject.dart';
 import '../../models/Term.dart';
@@ -50,6 +51,8 @@ class _ViewTermState extends State<ViewTerm> {
   }
 
   Widget _buildTermInfo(BuildContext context) {
+    List<Subject> subjects =
+        context.watch<SubjectProvider>().getSubjectsByTerm(_term!.id!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,43 +68,98 @@ class _ViewTermState extends State<ViewTerm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
-            children: [
-              const Expanded(
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Divider(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  "SUBJECTS",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.surfaceVariant),
-                ),
-              ),
-              const Expanded(
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Divider(),
-                ),
-              ),
-            ],
+            children: [Expanded(child: _buildDateRange(context))],
           ),
         ),
-        _buildClasses(context)
+        if (subjects.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Divider(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    "COURSERS",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onInverseSurface),
+                  ),
+                ),
+                const Expanded(
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Divider(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        _buildClasses(context, subjects)
       ],
     );
   }
 
-  Widget _buildClasses(BuildContext context) {
-    List<Subject> subjects =
-        context.watch<SubjectProvider>().getSubjectsByTerm(_term!.id!);
+  Widget _buildDateRange(BuildContext context) {
+    int weekCount =
+        (_term!.endDate.difference(_term!.startDate).inDays / 7).ceil();
 
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: C.titleCardPaddingH, vertical: C.titleCardPaddingV),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          color: Theme.of(context).colorScheme.secondaryContainer),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.calendar_month,
+                  size: C.cardIconSize,
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
+              ),
+              Text(
+                "Semester Duration",
+                style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    fontSize: C.titleCardHeaderFontSize),
+              )
+            ],
+          ),
+          Text(
+            "${DateFormat("MMM dd, yyyy").format(_term!.startDate)} - ${DateFormat("MMM dd, yyyy").format(_term!.endDate)}",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.bold,
+                fontSize: 18),
+          ),
+          Text(
+            "About $weekCount week${weekCount == 1 ? "" : "s"}.",
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                fontSize: C.titleCardHeaderFontSize),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClasses(BuildContext context, List<Subject> subjects) {
     return Column(
       children: subjects.map<Widget>((s) {
         return ClassCard(subject: s);
@@ -116,11 +174,11 @@ class _ViewTermState extends State<ViewTerm> {
           ),
           Center(
             child: Text(
-              "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
+              "${subjects.length} ${subjects.length == 1 ? "Course" : "Courses"}",
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.surfaceVariant),
+                  color: Theme.of(context).colorScheme.inverseSurface),
             ),
           ),
           const SizedBox(

@@ -1,6 +1,6 @@
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/timetable/Timetable.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/timetable/Timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +54,8 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         .watch<SubjectProvider>()
         .subjects
         .where((e) => e.termID == currentTerm!.id)
+        .where((e) =>
+            e.startDate != null && e.endDate != null && e.frequency.isNotEmpty)
         .toList();
 
     return Column(
@@ -199,7 +201,7 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
         TitleText(title: _screenTitle),
         InfoCard(
           content:
-              "Add a term on the terms page, then create subjects under it on the subject page. Your created subjects will be displayed here.",
+              "Add a term on the terms page, then create courses under it on the Courses page. Your created courses will be displayed here.",
         )
       ],
     );

@@ -1,0 +1,52 @@
+// Add a copyWith method to your Note class for cleaner code
+import 'dart:convert';
+
+import 'package:iskotrack/models/CourseTemplate.dart';
+import 'package:iskotrack/models/Note.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:crypto/crypto.dart';
+
+extension NoteCopyWith on Note {
+  Note copyWith({
+    int? courseId,
+    int? termId,
+    String? title,
+    String? content,
+    DateTime? created,
+    DateTime? updated,
+  }) {
+    return Note()
+      ..id = this.id
+      ..courseId = courseId ?? this.courseId
+      ..termId = termId ?? this.termId
+      ..title = title ?? this.title
+      ..content = content ?? this.content
+      ..created = created ?? this.created
+      ..updated = updated ?? this.updated;
+  }
+}
+
+extension CourseTemplateMethods on CourseTemplate {
+  // Convert JSON to Item
+  static CourseTemplate fromJson(Map<String, dynamic> json) {
+    return CourseTemplate()
+      ..courseCode = json["course_code"] as String
+      ..description = json["title"] as String
+      ..units = int.tryParse(json["units"])
+      ..credited = json["credited"] == null ? true : json["credited"] as bool;
+  }
+}
+
+extension SubjectMethods on Subject {
+  static String getStableHash(Subject subject) {
+    final bytes = utf8.encode('${subject.id}'
+        '${subject.courseCode}'
+        '${subject.units}'
+        '${subject.credited}'
+        '${subject.startDate.toString()}'
+        '${subject.endDate.toString()}'
+        '${subject.description}');
+    final digest = sha1.convert(bytes);
+    return digest.toString();
+  }
+}

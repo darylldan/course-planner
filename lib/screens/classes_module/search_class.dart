@@ -1,9 +1,9 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/cards/error_card_no_action.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/widgets/cards/error_card_no_action.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +27,6 @@ class _SearchClassState extends State<SearchClass> {
   List<Term> _terms = [];
   Term? _globalCurrentTerm;
 
-  final Day _today = DayMethods.fromInt(DateTime.now().weekday);
   Term? _currentTerm;
 
   int? _termFilter;
@@ -89,11 +88,11 @@ class _SearchClassState extends State<SearchClass> {
         child: TextFormField(
           decoration: InputDecoration(
             suffixIcon: IconButton(
-            onPressed: () {
-              _searchValue.clear();
-            },
-            icon: const Icon(Icons.clear_rounded),
-          ),
+              onPressed: () {
+                _searchValue.clear();
+              },
+              icon: const Icon(Icons.clear_rounded),
+            ),
           ),
           controller: _searchValue,
           onChanged: (value) {
@@ -207,11 +206,11 @@ class _SearchClassState extends State<SearchClass> {
         ),
         Center(
           child: Text(
-            "${resultsCard.length} ${resultsCard.length == 1 ? "Subject" : "Subjects"}",
+            "${resultsCard.length} ${resultsCard.length == 1 ? "Course" : "Courses"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.surfaceVariant),
+                color: Theme.of(context).colorScheme.onInverseSurface),
           ),
         ),
         const SizedBox(
@@ -235,7 +234,7 @@ class _SearchClassState extends State<SearchClass> {
           child: Text(
             "SEARCH RESULT",
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.onInverseSurface,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -347,9 +346,9 @@ class _SearchClassState extends State<SearchClass> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          foregroundColor: MaterialStatePropertyAll(
+                          foregroundColor: WidgetStatePropertyAll(
                               Theme.of(context).colorScheme.onPrimaryContainer),
-                          backgroundColor: MaterialStatePropertyAll(
+                          backgroundColor: WidgetStatePropertyAll(
                               Theme.of(context).colorScheme.primaryContainer)),
                       onPressed: () {
                         Navigator.pop(context);

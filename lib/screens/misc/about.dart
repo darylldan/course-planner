@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:course_planner/widgets/cards/error_card.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/cards/error_card.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -45,12 +45,12 @@ class Item {
 
 // Main view
 class View extends StatefulWidget {
-  late final int numberOfItems;
+  final int numberOfItems;
 
-  View({Key? key, required this.numberOfItems}) : super(key: key);
+  const View({super.key, required this.numberOfItems});
 
   @override
-  _ViewState createState() => _ViewState();
+  State<View> createState() => _ViewState();
 }
 
 class _ViewState extends State<View> with SingleTickerProviderStateMixin {
@@ -100,15 +100,7 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _feedback(),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _nerdHeader(),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: _nerdContent(),
+          child: _feedback(context),
         ),
         const SizedBox(
           height: 150,
@@ -117,104 +109,16 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _nerdHeader() {
-    return Row(
-      children: [
-        const Expanded(
-          child: Opacity(
-            opacity: 0.5,
-            child: Divider(),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            "NERD SECTION",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.surfaceVariant,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const Expanded(
-          child: Opacity(
-            opacity: 0.5,
-            child: Divider(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _nerdContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          width: double.infinity,
-          child: FlutterLogo(size: 80),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text(
-          "Made with Flutter, this app utilizes Provider for state management and the Isar database for data persistence. All widgets are native Material widgets, and interfaces such as the weekly timetable and daily schedule employ containers and sized boxes.\n\nImage assets, such as the Github logo and the Discord logo, were obtained from their respective branding guideline websites. The Android version uses the \"Inter\" font, while the iOS app utilizes the default font.\n\nThe sunflower rain (click the app logo!) originates from a piece of code posted by @Josteve on StackOverflow.\n\nThis app is a side project of mine and is not entirely bug-free. It operates entirely offline, ensuring that no user data is collected (mainly because idk how jk). All data used by the app is stored locally.\n\nTo explore the source code of this project, click the button below.\n",
-          textAlign: TextAlign.center,
-          softWrap: true,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            String url = "https://github.com/darylldan/course-planner";
-            var urlLaunchable = await canLaunchUrlString(url);
-            if (urlLaunchable) {
-              await launchUrlString(url,
-                  mode: Platform.isAndroid
-                      ? LaunchMode.externalApplication
-                      : LaunchMode.platformDefault);
-            } else {
-              if (context.mounted) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return const Dialog(
-                      child: ErrorCard(
-                        title: "ERROR",
-                        content: "Failed to launch link.",
-                      ),
-                    );
-                  },
-                );
-              }
-            }
-          },
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Check the code on GitHub",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(Icons.navigate_next_rounded)
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _feedback() {
+  
+  Widget _feedback(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.primaryContainer)),
         onPressed: () async {
-          String url = "https://forms.gle/DwKwhx2G12tZ2DB69";
+          String url = "https://forms.gle/A2mYTymSqLDxCway8";
           var urlLaunchable = await canLaunchUrlString(url);
           if (urlLaunchable) {
             await launchUrlString(
@@ -239,9 +143,23 @@ class _ViewState extends State<View> with SingleTickerProviderStateMixin {
             }
           }
         },
-        child: const Text(
-          "Report Bug or Suggest Feature",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Answer the Evaluation Form",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            )
+          ],
         ),
       ),
     );

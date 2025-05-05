@@ -1,10 +1,13 @@
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/current_day_selected.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
-import 'package:course_planner/widgets/timeline/Timeline.dart';
+import 'package:iskotrack/models/DeadlineEvent.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/utils/enums.dart';
+import 'package:iskotrack/widgets/cards/current_day_selected.dart';
+import 'package:iskotrack/widgets/cards/events_card.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/timeline/Timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +31,7 @@ class _DailyScheduleState extends State<DailySchedule> {
   late Day _today;
   Day? _daySelectorValue;
   Day? _currentDay;
-  late Term? _currentTerm;
+  Term? _currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
   bool onCurrentDay = true;
@@ -37,6 +40,9 @@ class _DailyScheduleState extends State<DailySchedule> {
 
   @override
   Widget build(BuildContext context) {
+    if (onCurrentTerm) {
+      _currentTerm = context.watch<TermProvider>().currentTerm;
+    }
     if (_momentDay == 7) {
       _today = Day.mon;
     } else {
@@ -51,29 +57,69 @@ class _DailyScheduleState extends State<DailySchedule> {
         child: Padding(
           padding:
               const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-          child: _buildTimeline(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleText(
+                title: _screenTitle,
+              ),
+              _buildTimeline(context),
+              SizedBox(
+                height: 10,
+              ),
+              if (_currentTerm != null) ...[
+                _dividerWithTitle(context, title: "EVENTS TODAY"),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildEvents(context),
+              ],
+              const SizedBox(
+                height: 120,
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildEvents(BuildContext context) {
+    List<DeadlineEvent> events = context
+        .read<DeadlineEventProvider>()
+        .getEventsForDay(_currentDay!, _currentTerm!.id!);
+
+    if (events.isEmpty) {
+      return InfoCard(content: "You don't have any events today.");
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...events.map((e) => EventsCard(event: e)),
+        Center(
+          child: Text(
+            "${events.length} ${events.length == 1 ? "Event" : "Events"}",
+            style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onInverseSurface),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildTimeline(BuildContext context) {
     _currentDay ??= _today;
 
-    if (onCurrentTerm) {
-      _currentTerm = context.watch<TermProvider>().currentTerm;
-    }
-
     if (_currentTerm == null) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(
-            title: _screenTitle,
-          ),
           InfoCard(
             content:
-                "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a subject under that term on this subjects page. The timeline of the subjects you created will appear here.",
+                "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this courses page. The timeline of the courses you created will appear here.",
           )
         ],
       );
@@ -83,15 +129,12 @@ class _DailyScheduleState extends State<DailySchedule> {
     _subjects = context
         .watch<SubjectProvider>()
         .getSubjectsByDay(_currentDay!, _currentTerm!.id!)
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+      ..sort((a, b) => a.startDate!.compareTo(b.startDate!));
 
     if (_subjects.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(
-            title: _screenTitle,
-          ),
           _buildCurrentDay(context),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 8),
@@ -111,9 +154,6 @@ class _DailyScheduleState extends State<DailySchedule> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(
-          title: _screenTitle,
-        ),
         _buildCurrentDay(context),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 8),
@@ -123,9 +163,6 @@ class _DailyScheduleState extends State<DailySchedule> {
           ),
         ),
         Center(child: Timeline(subjects: _subjects)),
-        const SizedBox(
-          height: 120,
-        )
       ],
     );
   }
@@ -257,9 +294,9 @@ class _DailyScheduleState extends State<DailySchedule> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
+                backgroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.primaryContainer),
-                foregroundColor: MaterialStatePropertyAll(
+                foregroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.onPrimaryContainer)),
             onPressed: () {
               Navigator.pop(context);
@@ -281,6 +318,36 @@ class _DailyScheduleState extends State<DailySchedule> {
             ),
           ),
         )
+      ],
+    );
+  }
+
+  Widget _dividerWithTitle(BuildContext context, {required String title}) {
+    return Row(
+      children: [
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onInverseSurface,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Expanded(
+          child: Opacity(
+            opacity: 0.5,
+            child: Divider(),
+          ),
+        ),
       ],
     );
   }

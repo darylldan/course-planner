@@ -1,5 +1,10 @@
-import 'package:course_planner/screens/classes_module/view_class.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/models/Room.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/room_provider.dart';
+import 'package:iskotrack/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../models/Subject.dart';
 
@@ -31,13 +36,31 @@ class SubjectCard extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => ViewClass(subjectID: subject.id!)));
           },
-          child: _subjectCardContainer(),
+          child: _subjectCardContainer(context),
         ),
       ),
     );
   }
 
-  Widget _subjectCardContainer() {
+  Widget _subjectCardContainer(BuildContext context) {
+    Object? loc;
+
+    if (subject.locationType == "bldg") {
+      Building bldg = context
+          .watch<BuildingProvider>()
+          .getBuildingByID(subject.locationID!);
+
+      if (bldg.latitude != null && bldg.longitude != null) {
+        loc = bldg;
+      }
+    } else if (subject.locationType == "room") {
+      Room room =
+          context.watch<RoomProvider>().getRoomByID(subject.locationID!);
+
+      loc = room;
+    }
+
+    Duration diff = subject.endDate!.difference(subject.startDate!);
     return Container(
       width: Constants.subjectCardWidth,
       height: _computeCardHeight(),
@@ -47,30 +70,32 @@ class SubjectCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                subject.courseCode,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
-              ),
+            Text(
+              subject.courseCode,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 9, color: Colors.white),
+              softWrap: true,
+              textAlign: TextAlign.center,
             ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                subject.section,
-                style: const TextStyle(fontSize: 9),
-              ),
+            Text(
+              subject.section,
+              style: const TextStyle(fontSize: 9 , color: Colors.white),
             ),
-            FittedBox(
-              clipBehavior: Clip.hardEdge,
-              fit: BoxFit.none,
-              child: Text(
-                subject.room,
-                style: const TextStyle(fontSize: 7),
-                overflow: TextOverflow.fade,
-              ),
-            )
+            if (diff.inHours > 1 ||
+                (diff.inHours == 1 && diff.inMinutes % 60 >= 30))
+              Text(
+                loc == null
+                    ? "No location"
+                    : loc is Building
+                        ? loc.buildingName
+                        : loc is Room
+                            ? loc.roomName
+                            : "Undetermined location",
+                style: const TextStyle(fontSize: 7, color: Colors.white),
+                overflow: TextOverflow.clip,
+                softWrap: true,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+              )
           ],
         ),
       ),
@@ -78,7 +103,7 @@ class SubjectCard extends StatelessWidget {
   }
 
   num _getMinutesDuration() {
-    return subject.endDate.difference(subject.startDate).inMinutes;
+    return subject.endDate!.difference(subject.startDate!).inMinutes;
   }
 
   double _computeCardHeight() {
@@ -99,13 +124,13 @@ class SubjectCard extends StatelessWidget {
 
   double _getPositionOffset() {
     var minutesDuration = _getMinutesDuration() % 60;
-    var hourOffset = subject.startDate.hour - 6;
+    var hourOffset = subject.startDate!.hour - 6;
 
-    if (subject.startDate.minute == 0) {
+    if (subject.startDate!.minute == 0) {
       minutesDuration = 0;
     }
 
-    if (subject.startDate.hour == 6) {
+    if (subject.startDate!.hour == 6) {
       return 7.5;
     }
 

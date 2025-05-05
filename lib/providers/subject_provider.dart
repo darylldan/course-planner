@@ -1,3 +1,5 @@
+import 'package:iskotrack/models/CourseGrade.dart';
+import 'package:iskotrack/models/Room.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/IsarService.dart';
@@ -31,6 +33,10 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void load() {
+    return;
+  }
+
   Subject getSubjectByID(int id) {
     var subject = _subjects.firstWhere((element) => element.id == id);
 
@@ -52,8 +58,110 @@ class SubjectProvider with ChangeNotifier {
     return subjects;
   }
 
+  List<Subject> getSubjectsByRoom(int roomID, int termID) {
+    return _subjects
+        .where((element) =>
+            element.locationType == "room" &&
+            element.locationID == roomID &&
+            element.termID == termID)
+        .toList();
+  }
+
+  CourseComponents getCourseComponents(
+      String courseCode, int termId, int units) {
+    List<Subject> foundCourses = _subjects
+        .where((s) =>
+            s.termID == termId &&
+            s.courseCode.toLowerCase() == courseCode.toLowerCase() &&
+            s.units == units)
+        .toList();
+
+    Set<CourseComponents> foundComponents = {};
+
+    for (Subject s in foundCourses) {
+      if (s.isLaboratory) {
+        foundComponents.add(CourseComponents.lab);
+      } else {
+        foundComponents.add(CourseComponents.lec);
+      }
+    }
+
+    if (foundComponents.length == 1) {
+      return foundComponents.first;
+    } else {
+      return CourseComponents.both;
+    }
+  }
+
+  Future<void> updateCourseDate(int termId, DateTime date) async {
+    List<Subject> affectedCourses =
+        _subjects.where((s) => s.termID == termId).toList();
+
+    for (Subject c in affectedCourses) {
+      if (c.startDate != null) {
+        c.startDate = DateTime(date.year, date.month, date.day,
+            c.startDate!.hour, c.startDate!.minute);
+      }
+
+      if (c.endDate != null) {
+        c.endDate = DateTime(date.year, date.month, date.day, c.endDate!.hour,
+            c.endDate!.minute);
+      }
+
+      await isarService.editSubject(c);
+      _subjects[_subjects.indexWhere((s) => s.id! == c.id!)] = c;
+    }
+
+    notifyListeners();
+  }
+
+  int getTermUnits(int termId, {bool credited = true}) {
+    final Set<String> uniqueCourseAndUnits = {};
+
+    return _subjects
+        .where((s) => s.termID == termId && s.credited == credited)
+        .fold(0, (totalUnits, subject) {
+      final String key = "${subject.courseCode}-${subject.units}";
+      if (!uniqueCourseAndUnits.contains(key)) {
+        uniqueCourseAndUnits.add(key);
+        return totalUnits + subject.units;
+      }
+      return totalUnits;
+    });
+  }
+
+  int getCourseCount(int termId) {
+    return _subjects.where((s) => s.termID == termId).length;
+  }
+
+  List<Subject> getLinkedCoursesFromCG(CourseGrade courseGrade) {
+    return _subjects
+        .where((s) =>
+            s.termID == courseGrade.termId &&
+            s.courseCode.toLowerCase() ==
+                courseGrade.courseCode.toLowerCase() &&
+            s.units == courseGrade.units)
+        .toList();
+  }
+
+  Future<List<Subject>> getSubjectByBuilding(int buildingID) async {
+    List<Room> rooms = await isarService.getAllRooms();
+
+    List<Subject> results = [];
+
+    results.addAll(_subjects.where(
+        (e) => e.locationType == "building" && e.locationID == buildingID));
+    results.addAll(_subjects.where((e) =>
+        e.locationType == "room" &&
+        rooms.firstWhere((r) => r.id == e.locationID).buildingId ==
+            buildingID));
+
+    return results;
+  }
+
   Future<void> createSubject(Subject subject) async {
-    await isarService.createSubject(subject);
+    int? newID = await isarService.createSubject(subject);
+    subject.id = newID;
     _subjects.add(subject);
 
     notifyListeners();
@@ -68,9 +176,9 @@ class SubjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteSubjects(List<int> ids) async {
-    await isarService.deleteSubjects(ids);
-    _subjects.removeWhere((subject) => ids.contains(subject.id));
+  Future<void> deleteSubject(int id) async {
+    await isarService.deleteSubject(id);
+    _subjects.removeWhere((subject) => id == subject.id);
 
     notifyListeners();
   }
@@ -87,14 +195,17 @@ class SubjectProvider with ChangeNotifier {
       _subjects
           .where((sub) =>
               sub.frequency.contains(d) && sub.termID == subject.termID)
+          .where((s) =>
+              s.frequency.isNotEmpty &&
+              s.startDate != null &&
+              s.endDate != null)
           .any((s) {
-        print(s.startDate);
         if (subject.endDate == s.startDate || s.endDate == subject.startDate) {
           return false;
         }
 
-        if (!(subject.endDate.isBefore(s.startDate) ||
-            s.endDate.isBefore(subject.startDate))) {
+        if (!(subject.endDate!.isBefore(s.startDate!) ||
+            s.endDate!.isBefore(subject.startDate!))) {
           returnVal['overlapSubjectIDs'].add(s.id);
           return true;
         }
@@ -122,9 +233,5 @@ class SubjectProvider with ChangeNotifier {
     await isarService.wipeDB();
     _subjects = [];
     notifyListeners();
-  }
-
-  Stream<List<Subject>> listenToSubjectsByTerm(int termID) async* {
-    yield* isarService.listenToSubjectsByTerm(termID);
   }
 }

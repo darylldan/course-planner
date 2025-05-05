@@ -17,7 +17,7 @@ class OverviewTodayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     subjects.sort(
       (a, b) {
-        return a.startDate.compareTo(b.startDate);
+        return a.startDate!.compareTo(b.startDate!);
       },
     );
 
@@ -209,7 +209,7 @@ class OverviewTodayCard extends StatelessWidget {
             _iconTitleRow(context, Icons.alarm_rounded, "Earliest Class"),
             _bigContentSmallLabel(
                 context,
-                DateFormat.jm().format(subjects[0].startDate),
+                DateFormat.jm().format(subjects[0].startDate!),
                 "${subjects[0].courseCode} ${subjects[0].isLaboratory ? "Lab" : "Lec"}")
           ],
         ),
@@ -218,7 +218,7 @@ class OverviewTodayCard extends StatelessWidget {
             _iconTitleRow(context, Icons.check_circle_rounded, "Free By"),
             _bigContentSmallLabel(
                 context,
-                DateFormat.jm().format(subjects[subjects.length - 1].endDate),
+                DateFormat.jm().format(subjects[subjects.length - 1].endDate!),
                 "After ${subjects[subjects.length - 1].courseCode} ${subjects[subjects.length - 1].isLaboratory ? "Lab" : "Lec"}")
           ],
         ),

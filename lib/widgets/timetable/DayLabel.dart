@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../utils/enums.dart';
 
 class DayLabel extends StatelessWidget {
-  var isOpaque;
-  Day day;
+  final bool isOpaque;
+  final Day day;
 
-  DayLabel({super.key, required this.day ,required this.isOpaque});
+  const DayLabel({super.key, required this.day, required this.isOpaque});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class DayLabel extends StatelessWidget {
   Widget _opaqueLabel(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.onInverseSurface,
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       width: 48,
       height: 17,
@@ -39,10 +39,9 @@ class DayLabel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-            width: 1.5,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            strokeAlign: BorderSide.strokeAlignInside
-          ),
+              width: 1.5,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              strokeAlign: BorderSide.strokeAlignInside),
           borderRadius: const BorderRadius.all(Radius.circular(4))),
       width: 48,
       height: 17,

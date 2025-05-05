@@ -1,12 +1,17 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/screens/classes_module/view_class.dart';
+import 'package:iskotrack/models/Building.dart';
+import 'package:iskotrack/models/Room.dart';
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/building_provider.dart';
+import 'package:iskotrack/providers/room_provider.dart';
+import 'package:iskotrack/screens/classes_module/view_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TimelineCard extends StatelessWidget {
-  Subject subject;
+  final Subject subject;
 
-  TimelineCard({super.key, required this.subject});
+  const TimelineCard({super.key, required this.subject});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,7 @@ class TimelineCard extends StatelessWidget {
   }
 
   String _getSubjectDuration() {
-    Duration duration = subject.endDate.difference(subject.startDate);
+    Duration duration = subject.endDate!.difference(subject.startDate!);
     var durationString = "";
 
     if (duration.inHours > 0) {
@@ -36,8 +41,7 @@ class TimelineCard extends StatelessWidget {
     }
 
     if (duration.inMinutes % 60 > 0) {
-      durationString =
-          "$durationString ${duration.inMinutes % 60} m";
+      durationString = "$durationString ${duration.inMinutes % 60} m";
     }
 
     return durationString;
@@ -49,15 +53,15 @@ class TimelineCard extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.onInverseSurface,
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ViewClass(subjectID: subject.id!))
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ViewClass(subjectID: subject.id!)));
           },
           child: _subjectContainer(context),
         ),
@@ -66,6 +70,23 @@ class TimelineCard extends StatelessWidget {
   }
 
   Widget _subjectContainer(BuildContext context) {
+    Object? loc;
+
+    if (subject.locationType == "bldg") {
+      Building bldg = context
+          .watch<BuildingProvider>()
+          .getBuildingByID(subject.locationID!);
+
+      if (bldg.latitude != null && bldg.longitude != null) {
+        loc = bldg;
+      }
+    } else if (subject.locationType == "room") {
+      Room room =
+          context.watch<RoomProvider>().getRoomByID(subject.locationID!);
+
+      loc = room;
+    }
+
     return Container(
       height: 80,
       width: 350,
@@ -116,9 +137,16 @@ class TimelineCard extends StatelessWidget {
                       SizedBox(
                         width: 220,
                         child: Text(
-                          subject.room,
+                          loc == null
+                              ? "No location"
+                              : loc is Building
+                                  ? loc.buildingName
+                                  : loc is Room
+                                      ? loc.roomName
+                                      : "Undetermined location",
                           style: TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ])
@@ -153,7 +181,7 @@ class TimelineCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           color: Theme.of(context).colorScheme.primaryContainer),
       child: Text(
-        DateFormat.jm().format(subject.startDate),
+        DateFormat.jm().format(subject.startDate!),
         style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimaryContainer,
             fontSize: 12,

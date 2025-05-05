@@ -1,5 +1,7 @@
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/screens/classes_module/edit_class.dart';
+import 'package:iskotrack/models/Term.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/classes_module/add_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +13,8 @@ import '../../utils/enums.dart';
 
 class ClassCard extends StatelessWidget {
   final Subject subject;
-  const ClassCard({super.key, required this.subject});
+  final bool pickMode;
+  const ClassCard({super.key, required this.subject, this.pickMode = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +23,23 @@ class ClassCard extends StatelessWidget {
       child: Material(
         child: Ink(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.onInverseSurface,
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(C.cardBorderRadius),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ViewClass(
-                            subjectID: subject.id!,
-                          )));
-            },
+            onTap: pickMode
+                ? () {
+                    Navigator.pop(context, subject);
+                  }
+                : () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewClass(
+                                  subjectID: subject.id!,
+                                )));
+                  },
             onLongPress: () {
               _showActions(context);
             },
@@ -50,68 +57,72 @@ class ClassCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 2, right: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Color.fromARGB(
-                        subject.color[0],
-                        subject.color[1],
-                        subject.color[2],
-                        subject.color[3],
-                      )),
-                  width: 4,
-                  height: 50,
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 229,
-                    child: Text(
-                      "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).colorScheme.onSurfaceVariant),
-                    ),
+          Expanded(
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, right: 12),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color.fromARGB(
+                          subject.color[0],
+                          subject.color[1],
+                          subject.color[2],
+                          subject.color[3],
+                        )),
+                    width: 4,
+                    height: 50,
                   ),
-                  Row(children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      constraints: BoxConstraints(maxWidth: 60),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: SizedBox(
-                        child: Center(
-                          child: Text(
-                            subject.section,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surfaceVariant,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${subject.courseCode} - ${subject.isLaboratory ? 'Laboratory' : 'Lecture'}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant),
+                      ),
+                      Row(children: [
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          constraints: BoxConstraints(maxWidth: 60),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              borderRadius: BorderRadius.circular(4)),
+                          child: SizedBox(
+                            child: Center(
+                              child: Text(
+                                subject.section,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainerHighest,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _buildSubjectSubtitle(context),
-                  ])
-                ],
-              ),
-            ],
+                        SizedBox(
+                          width: 10,
+                        ),
+                        _buildSubjectSubtitle(context),
+                      ])
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           IconButton(
             onPressed: () {
@@ -126,6 +137,19 @@ class ClassCard extends StatelessWidget {
 
   Widget _buildSubjectSubtitle(BuildContext context) {
     String subTitle = "";
+
+    if (!haveSchedule) {
+      return SizedBox(
+        width: 155,
+        child: Text(
+          "No schedule",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12),
+        ),
+      );
+    }
 
     for (var d in subject.frequency) {
       switch (d) {
@@ -144,8 +168,8 @@ class ClassCard extends StatelessWidget {
       }
     }
 
-    String startDate = DateFormat.jm().format(subject.startDate);
-    String endDate = DateFormat.jm().format(subject.endDate);
+    String startDate = DateFormat.jm().format(subject.startDate!);
+    String endDate = DateFormat.jm().format(subject.endDate!);
 
     subTitle = "$subTitle $startDate - $endDate";
 
@@ -183,29 +207,32 @@ class ClassCard extends StatelessWidget {
                   height: 20,
                 ),
                 ListTile(
-                  title: const Text("Edit Subject"),
+                  title: const Text("Edit Course"),
                   leading: const Icon(Icons.edit_rounded),
                   onTap: () {
+                    Term terms =
+                        Provider.of<TermProvider>(context, listen: false)
+                            .getTermByID(subject.termID);
                     Navigator.pop(context);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EditClass(
-                                  subject: subject,
+                            builder: (context) => AddClass(
+                                  term: terms,
+                                  course: subject,
+                                  editMode: true,
                                 )));
                   },
                 ),
                 ListTile(
-                  title: const Text("Delete Subject"),
+                  title: const Text("Delete Course"),
                   leading: const Icon(Icons.delete_forever_rounded),
                   onTap: () {
-                    context
-                        .read<SubjectProvider>()
-                        .deleteSubjects([subject.id!]);
+                    context.read<SubjectProvider>().deleteSubject(subject.id!);
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Subject deleted."),
+                        content: Text("Course deleted."),
                       ));
                       Navigator.pop(context);
                     }
@@ -218,4 +245,9 @@ class ClassCard extends StatelessWidget {
       },
     );
   }
+
+  bool get haveSchedule =>
+      subject.frequency.isNotEmpty &&
+      subject.startDate != null &&
+      subject.endDate != null;
 }

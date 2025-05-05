@@ -55,3 +55,36 @@ Choose one of the following methods to install the app:
 Feel free to contribute to my terrible code! Just submit a PR to `dev` branch and I will review them whenever I am available.
 
 [Link](https://www.figma.com/file/QTETttMa7UlVkCQTof1Ret/Course-Planner?type=design&node-id=0%3A1&mode=design&t=BNRJdFKncQpnlUCf-1) to the Figma file I used when creating mock ups of screens.
+
+---
+## Milestones
+- Complete Backend Functions -> DONE
+- Term Module -> DONE
+- Rooms Module -> DONE
+- Building Module -> DONE
+- Note Module (est: 1d) -> DONE
+- Grades Module (est: 1d) -> DONE
+- Event Module (est: 3d) -> DONE
+- Todo Module (est: 1d) -> DONE
+- Pomodoro Module (est: 1d) -> IN PROGRESS
+- Subject Module (est: 3d) -> 
+- Overview/WeeklySched/DailySched (est: 1d) -> DONE
+- Features Screen (est: 1d) -> 
+
+
+### To-Do:
+- AMIS Import schedule
+  - Get token /
+  - Need to get the ID of user thru https://api-amis.uplb.edu.ph/api/auth/user
+  - request for enlistment of user thru: 
+  https://api-amis.uplb.edu.ph/api/students/enlistments?enlistment_user_id=<userId>&enlistedClasses=true
+  - parse the json to match subject model
+
+- disclaimers
+- google forms
+- message 
+
+
+- Fix the PopScope implementation on others.
+- Be wary of other theming errors
+- Successfully tested token sniffing, can now import schedule from amis (hopefully)

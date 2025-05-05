@@ -1,15 +1,19 @@
 import 'dart:async';
 
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/classes_module/view_class.dart';
-import 'package:course_planner/utils/enums.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/next_class_card.dart';
-import 'package:course_planner/widgets/cards/overview_today_card.dart';
-import 'package:course_planner/widgets/elements/drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
-import 'package:course_planner/widgets/timeline/Timeline.dart';
+import 'package:iskotrack/models/DeadlineEvent.dart';
+
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/classes_module/view_class.dart';
+import 'package:iskotrack/utils/enums.dart';
+import 'package:iskotrack/widgets/cards/events_card.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/next_class_card.dart';
+import 'package:iskotrack/widgets/cards/overview_today_card.dart';
+import 'package:iskotrack/widgets/elements/drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
+import 'package:iskotrack/widgets/timeline/Timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -67,37 +71,69 @@ class _OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
+    _term = context.watch<TermProvider>().currentTerm;
+
     return Scaffold(
       appBar: AppBar(),
       drawer: SideDrawer(parent: _route),
       body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
-          child: _buildOverview(context),
+        padding:
+            const EdgeInsets.symmetric(horizontal: C.screenHorizontalPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleText(title: _screenTitle),
+            _buildOverview(context),
+            if (_term != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: _dividerWithTitle("TODAY'S EVENTS"),
+              ),
+              _events(context),
+            ],
+            const SizedBox(height: 120)
+          ],
         ),
       ),
     );
   }
 
+  Widget _events(BuildContext context) {
+    List<DeadlineEvent> events = context
+        .watch<DeadlineEventProvider>()
+        .getAllOngoingDeadlineEventsToday(_term!.id!);
+
+    if (events.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: InfoCard(content: "No events today."),
+      );
+    }
+
+    return Column(
+      children: events.map((e) => EventsCard(event: e)).toList(),
+    );
+  }
+
   Widget _buildOverview(BuildContext context) {
+    if (_term == null) {
+      return _noTermsYet(context);
+    }
     if (_rightNow.weekday == 7) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(title: _screenTitle),
           OverviewTodayCard(subjects: []),
         ],
       );
     }
 
-    _term = context.watch<TermProvider>().currentTerm;
-
-    if (_term == null) {
-      return _noTermsYet(context);
-    }
-
-    _subjects = context.watch<SubjectProvider>().getSubjectsByTerm(_term!.id!);
+    _subjects = context
+        .watch<SubjectProvider>()
+        .getSubjectsByTerm(_term!.id!)
+        .where((c) =>
+            c.frequency.isNotEmpty && c.startDate != null && c.endDate != null)
+        .toList();
 
     if (_subjects.isEmpty) {
       return _noSubjectsYet(context);
@@ -106,13 +142,12 @@ class _OverviewState extends State<Overview> {
     _subjectsToday = context
         .watch<SubjectProvider>()
         .getSubjectsByDay(DayMethods.fromInt(_rightNow.weekday), _term!.id!)
-      ..sort((a, b) => a.startDate.compareTo(b.startDate));
+      ..sort((a, b) => a.startDate!.compareTo(b.startDate!));
 
     if (_subjectsToday.isEmpty) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleText(title: _screenTitle),
           OverviewTodayCard(subjects: []),
         ],
       );
@@ -120,7 +155,6 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         OverviewTodayCard(subjects: _subjectsToday),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -131,16 +165,17 @@ class _OverviewState extends State<Overview> {
   }
 
   Widget _content(BuildContext context) {
-    DateTime moment = DateTime(2024, 8, 20, _rightNow.hour, _rightNow.minute);
+    DateTime moment = DateTime(_term!.startDate.year, _term!.startDate.month,
+        _term!.startDate.day, _rightNow.hour, _rightNow.minute);
     Subject? currentSubject;
     int? curSubIndex;
 
     // This loops gets the current subject. currentSubject is null if there are no subject at the moment,
     for (int i = 0; i < _subjectsToday.length; i++) {
-      if ((moment.isAfter(_subjectsToday[i].startDate) ||
-              moment.isAtSameMomentAs(_subjectsToday[i].startDate)) &&
-          (moment.isBefore(_subjectsToday[i].endDate) ||
-              moment.isAtSameMomentAs(_subjectsToday[i].endDate))) {
+      if ((moment.isAfter(_subjectsToday[i].startDate!) ||
+              moment.isAtSameMomentAs(_subjectsToday[i].startDate!)) &&
+          (moment.isBefore(_subjectsToday[i].endDate!) ||
+              moment.isAtSameMomentAs(_subjectsToday[i].endDate!))) {
         currentSubject = _subjectsToday[i];
         curSubIndex = i;
         break; // No need to continue looping
@@ -149,7 +184,7 @@ class _OverviewState extends State<Overview> {
 
     if (curSubIndex == null) {
       for (int i = 0; i < _subjectsToday.length; i++) {
-        if (moment.isAfter(_subjectsToday[i].endDate)) {
+        if (moment.isAfter(_subjectsToday[i].endDate!)) {
           curSubIndex = i;
         }
       }
@@ -161,10 +196,11 @@ class _OverviewState extends State<Overview> {
      * Checks if moment is in schedule (equal to or after the first subject's startDate AND
      * equal to or before the last subject's endDate)
      */
-    bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate) ||
+    bool onSchedule = (moment.isAfter(_subjectsToday[0].startDate!) ||
             _subjectsToday[0].startDate == moment) &&
         (_subjectsToday[_subjectsToday.length - 1].endDate == moment ||
-            moment.isBefore(_subjectsToday[_subjectsToday.length - 1].endDate));
+            moment
+                .isBefore(_subjectsToday[_subjectsToday.length - 1].endDate!));
 
     TimeOfDay timeLeft;
 
@@ -172,11 +208,11 @@ class _OverviewState extends State<Overview> {
     if (onSchedule && currentSubject == null) {
       // On break
       Duration diff =
-          _subjectsToday[curSubIndex! + 1].startDate.difference(moment);
+          _subjectsToday[curSubIndex + 1].startDate!.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else if (onSchedule) {
       // On class
-      Duration diff = currentSubject!.endDate.difference(moment);
+      Duration diff = currentSubject!.endDate!.difference(moment);
       timeLeft = TimeOfDay(hour: diff.inHours, minute: diff.inMinutes % 60);
     } else {
       timeLeft = TimeOfDay(hour: 0, minute: 0);
@@ -186,13 +222,13 @@ class _OverviewState extends State<Overview> {
     Widget nextClass;
 
     // Checks if moment is past today's schedule
-    if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate) ||
+    if ((moment.isAfter(_subjectsToday[_subjectsToday.length - 1].endDate!) ||
         _subjectsToday.isEmpty)) {
       nextClass = const NextClassCard(
         isLastClass: false,
         emptyMode: true,
       );
-    } else if (moment.isBefore(_subjectsToday[0].startDate)) {
+    } else if (moment.isBefore(_subjectsToday[0].startDate!)) {
       // moment is before the schedule, show first class
       nextClass =
           NextClassCard(isLastClass: false, nextClass: _subjectsToday[0]);
@@ -200,7 +236,7 @@ class _OverviewState extends State<Overview> {
       nextClass = const NextClassCard(isLastClass: true);
     } else {
       nextClass = NextClassCard(
-          isLastClass: false, nextClass: _subjectsToday[curSubIndex! + 1]);
+          isLastClass: false, nextClass: _subjectsToday[curSubIndex + 1]);
     }
 
     return Column(
@@ -213,7 +249,7 @@ class _OverviewState extends State<Overview> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: _timeLeft(
-              context, timeLeft, onSchedule, curSubIndex!, currentSubject),
+              context, timeLeft, onSchedule, curSubIndex, currentSubject),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -224,7 +260,6 @@ class _OverviewState extends State<Overview> {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: _timeline(),
           ),
-        const SizedBox(height: 120)
       ],
     );
   }
@@ -307,6 +342,131 @@ class _OverviewState extends State<Overview> {
                   overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.bold),
             ),
+          ),
+          if (currentSubject != null) ...[
+            SizedBox(
+              height: 5,
+            ),
+            _sectionInstructorRow(context, currentSubject)
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionInstructorRow(BuildContext context, Subject course) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          flex: 1,
+          child: _section(context, course),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Flexible(
+          flex: 2,
+          child: _instructor(context, course),
+        )
+      ],
+    );
+  }
+
+  Widget _instructor(BuildContext context, Subject course) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          color: Theme.of(context).colorScheme.onTertiary),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.person,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "Instructor",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              course.instructor == null || course.instructor!.isEmpty
+                  ? "Not set."
+                  : course.instructor!,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _section(BuildContext context, Subject course) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(C.cardBorderRadius),
+          color: Theme.of(context).colorScheme.onTertiary),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.groups_rounded,
+                  size: 14,
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  "Section",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Theme.of(context).colorScheme.onTertiaryContainer,
+                    fontSize: 12,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              course.section,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
           )
         ],
       ),
@@ -327,7 +487,7 @@ class _OverviewState extends State<Overview> {
         subtitle = "Until break.";
       } else {
         subtitle =
-            "Until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate)}).";
+            "Until ${_subjectsToday[curSubIndex + 1].courseCode} - ${_subjectsToday[curSubIndex + 1].isLaboratory ? "Laboratory" : "Lecture"} (${DateFormat.jm().format(_subjectsToday[curSubIndex + 1].startDate!)}).";
       }
     }
 
@@ -407,10 +567,9 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         InfoCard(
             content:
-                "Welcome! \nBegin by adding a term in the 'Terms' section. Next, populate the 'Classes' screen with your classes. Your daily summary will be displayed here.")
+                "Welcome! \nBegin by adding a term in the 'Terms' section. Next, populate the 'Courses' screen with your courses. Your daily summary will be displayed here.")
       ],
     );
   }
@@ -419,10 +578,9 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: _screenTitle),
         InfoCard(
             content:
-                "You don't have any classes in the current term. Add one on the 'Classes' screen.")
+                "You don't have any courses in the current term. Add one on the 'Courses' screen. Your daily summary will be displayed here.")
       ],
     );
   }
@@ -431,7 +589,7 @@ class _OverviewState extends State<Overview> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _timelineHeader(),
+        _dividerWithTitle("TODAY'S CLASSES"),
         const SizedBox(height: 10),
         Timeline(subjects: _subjectsToday),
         const SizedBox(
@@ -451,8 +609,8 @@ class _OverviewState extends State<Overview> {
     );
   }
 
-  Widget _timelineHeader() {
-    return const Row(
+  Widget _dividerWithTitle(String title) {
+    return Row(
       children: [
         Expanded(
           child: Opacity(
@@ -463,7 +621,7 @@ class _OverviewState extends State<Overview> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
-            "TODAY'S SCHEDULE",
+            title,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,

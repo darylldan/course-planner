@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "188836983499",
+    "project_id": "course-planner-dec45",
+    "storage_bucket": "course-planner-dec45.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188836983499:android:bb4125b0b191502ae1a14e",
+        "android_client_info": {
+          "package_name": "com.darylldancc.iscompanion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGSDu7bXL5lufEzg509gHpRqowgW2C5oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188836983499:android:db4473e56d7f20d5e1a14e",
+        "android_client_info": {
+          "package_name": "com.darylldancc.iskotrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGSDu7bXL5lufEzg509gHpRqowgW2C5oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188836983499:android:e82cf0d92344ee99e1a14e",
+        "android_client_info": {
+          "package_name": "com.example.course_planner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGSDu7bXL5lufEzg509gHpRqowgW2C5oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

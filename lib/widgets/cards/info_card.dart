@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../utils/constants.dart' as Constants;
 
 class InfoCard extends StatelessWidget {
-  double fontSize;
-  late String content;
+  final double fontSize;
+  final String content;
 
-  InfoCard({super.key, required this.content, this.fontSize = 18});
+  const InfoCard({super.key, required this.content, this.fontSize = 18});
 
   @override
   Widget build(BuildContext context) {

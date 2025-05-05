@@ -27,55 +27,70 @@ const SubjectSchema = CollectionSchema(
       name: r'courseCode',
       type: IsarType.string,
     ),
-    r'description': PropertySchema(
+    r'credited': PropertySchema(
       id: 2,
+      name: r'credited',
+      type: IsarType.bool,
+    ),
+    r'description': PropertySchema(
+      id: 3,
       name: r'description',
       type: IsarType.string,
     ),
     r'endDate': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'endDate',
       type: IsarType.dateTime,
     ),
     r'frequency': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'frequency',
       type: IsarType.stringList,
       enumMap: _SubjectfrequencyEnumValueMap,
     ),
     r'instructor': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'instructor',
       type: IsarType.string,
     ),
     r'isLaboratory': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isLaboratory',
       type: IsarType.bool,
     ),
+    r'locationID': PropertySchema(
+      id: 8,
+      name: r'locationID',
+      type: IsarType.long,
+    ),
+    r'locationType': PropertySchema(
+      id: 9,
+      name: r'locationType',
+      type: IsarType.string,
+    ),
     r'notes': PropertySchema(
-      id: 7,
+      id: 10,
       name: r'notes',
       type: IsarType.string,
     ),
-    r'room': PropertySchema(
-      id: 8,
-      name: r'room',
-      type: IsarType.string,
-    ),
     r'section': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'section',
       type: IsarType.string,
     ),
     r'startDate': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'startDate',
       type: IsarType.dateTime,
     ),
     r'termID': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'termID',
+      type: IsarType.long,
+    ),
+    r'units': PropertySchema(
+      id: 14,
+      name: r'units',
       type: IsarType.long,
     )
   },
@@ -121,12 +136,17 @@ int _subjectEstimateSize(
     }
   }
   {
+    final value = object.locationType;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.notes;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.room.length * 3;
   bytesCount += 3 + object.section.length * 3;
   return bytesCount;
 }
@@ -139,17 +159,20 @@ void _subjectSerialize(
 ) {
   writer.writeLongList(offsets[0], object.color);
   writer.writeString(offsets[1], object.courseCode);
-  writer.writeString(offsets[2], object.description);
-  writer.writeDateTime(offsets[3], object.endDate);
+  writer.writeBool(offsets[2], object.credited);
+  writer.writeString(offsets[3], object.description);
+  writer.writeDateTime(offsets[4], object.endDate);
   writer.writeStringList(
-      offsets[4], object.frequency.map((e) => e.name).toList());
-  writer.writeString(offsets[5], object.instructor);
-  writer.writeBool(offsets[6], object.isLaboratory);
-  writer.writeString(offsets[7], object.notes);
-  writer.writeString(offsets[8], object.room);
-  writer.writeString(offsets[9], object.section);
-  writer.writeDateTime(offsets[10], object.startDate);
-  writer.writeLong(offsets[11], object.termID);
+      offsets[5], object.frequency.map((e) => e.name).toList());
+  writer.writeString(offsets[6], object.instructor);
+  writer.writeBool(offsets[7], object.isLaboratory);
+  writer.writeLong(offsets[8], object.locationID);
+  writer.writeString(offsets[9], object.locationType);
+  writer.writeString(offsets[10], object.notes);
+  writer.writeString(offsets[11], object.section);
+  writer.writeDateTime(offsets[12], object.startDate);
+  writer.writeLong(offsets[13], object.termID);
+  writer.writeLong(offsets[14], object.units);
 }
 
 Subject _subjectDeserialize(
@@ -161,21 +184,24 @@ Subject _subjectDeserialize(
   final object = Subject();
   object.color = reader.readLongList(offsets[0]) ?? [];
   object.courseCode = reader.readString(offsets[1]);
-  object.description = reader.readStringOrNull(offsets[2]);
-  object.endDate = reader.readDateTime(offsets[3]);
+  object.credited = reader.readBool(offsets[2]);
+  object.description = reader.readStringOrNull(offsets[3]);
+  object.endDate = reader.readDateTimeOrNull(offsets[4]);
   object.frequency = reader
-          .readStringList(offsets[4])
+          .readStringList(offsets[5])
           ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
           .toList() ??
       [];
   object.id = id;
-  object.instructor = reader.readStringOrNull(offsets[5]);
-  object.isLaboratory = reader.readBool(offsets[6]);
-  object.notes = reader.readStringOrNull(offsets[7]);
-  object.room = reader.readString(offsets[8]);
-  object.section = reader.readString(offsets[9]);
-  object.startDate = reader.readDateTime(offsets[10]);
-  object.termID = reader.readLong(offsets[11]);
+  object.instructor = reader.readStringOrNull(offsets[6]);
+  object.isLaboratory = reader.readBool(offsets[7]);
+  object.locationID = reader.readLongOrNull(offsets[8]);
+  object.locationType = reader.readStringOrNull(offsets[9]);
+  object.notes = reader.readStringOrNull(offsets[10]);
+  object.section = reader.readString(offsets[11]);
+  object.startDate = reader.readDateTimeOrNull(offsets[12]);
+  object.termID = reader.readLong(offsets[13]);
+  object.units = reader.readLong(offsets[14]);
   return object;
 }
 
@@ -191,28 +217,34 @@ P _subjectDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 3:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
       return (reader
               .readStringList(offset)
               ?.map((e) => _SubjectfrequencyValueEnumMap[e] ?? Day.mon)
               .toList() ??
           []) as P;
-    case 5:
-      return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readBool(offset)) as P;
-    case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 13:
+      return (reader.readLong(offset)) as P;
+    case 14:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -592,6 +624,16 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> creditedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'credited',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -739,8 +781,24 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'endDate',
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'endDate',
@@ -750,7 +808,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -763,7 +821,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -776,8 +834,8 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> endDateBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1236,6 +1294,223 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'locationID',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'locationID',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'locationID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'locationID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'locationID',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationIDBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'locationID',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'locationType',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition>
+      locationTypeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'locationType',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'locationType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'locationType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'locationType',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> locationTypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'locationType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition>
+      locationTypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'locationType',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> notesIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1382,136 +1657,6 @@ extension SubjectQueryFilter
     });
   }
 
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'room',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'room',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'room',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'room',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterFilterCondition> roomIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'room',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<Subject, Subject, QAfterFilterCondition> sectionEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1642,8 +1787,24 @@ extension SubjectQueryFilter
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'startDate',
+      ));
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateEqualTo(
-      DateTime value) {
+      DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'startDate',
@@ -1653,7 +1814,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateGreaterThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1666,7 +1827,7 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateLessThan(
-    DateTime value, {
+    DateTime? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1679,8 +1840,8 @@ extension SubjectQueryFilter
   }
 
   QueryBuilder<Subject, Subject, QAfterFilterCondition> startDateBetween(
-    DateTime lower,
-    DateTime upper, {
+    DateTime? lower,
+    DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1747,6 +1908,59 @@ extension SubjectQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'units',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'units',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'units',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterFilterCondition> unitsBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'units',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension SubjectQueryObject
@@ -1765,6 +1979,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByCourseCodeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'courseCode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
     });
   }
 
@@ -1816,6 +2042,30 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByLocationID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationID', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByLocationIDDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationID', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByLocationType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByLocationTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationType', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByNotes() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.asc);
@@ -1825,18 +2075,6 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
   QueryBuilder<Subject, Subject, QAfterSortBy> sortByNotesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoom() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> sortByRoomDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.desc);
     });
   }
 
@@ -1875,6 +2113,18 @@ extension SubjectQuerySortBy on QueryBuilder<Subject, Subject, QSortBy> {
       return query.addSortBy(r'termID', Sort.desc);
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> sortByUnitsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.desc);
+    });
+  }
 }
 
 extension SubjectQuerySortThenBy
@@ -1888,6 +2138,18 @@ extension SubjectQuerySortThenBy
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByCourseCodeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'courseCode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByCreditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credited', Sort.desc);
     });
   }
 
@@ -1951,6 +2213,30 @@ extension SubjectQuerySortThenBy
     });
   }
 
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByLocationID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationID', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByLocationIDDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationID', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByLocationType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByLocationTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'locationType', Sort.desc);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByNotes() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.asc);
@@ -1960,18 +2246,6 @@ extension SubjectQuerySortThenBy
   QueryBuilder<Subject, Subject, QAfterSortBy> thenByNotesDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'notes', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoom() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QAfterSortBy> thenByRoomDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'room', Sort.desc);
     });
   }
 
@@ -2010,6 +2284,18 @@ extension SubjectQuerySortThenBy
       return query.addSortBy(r'termID', Sort.desc);
     });
   }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QAfterSortBy> thenByUnitsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'units', Sort.desc);
+    });
+  }
 }
 
 extension SubjectQueryWhereDistinct
@@ -2024,6 +2310,12 @@ extension SubjectQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'courseCode', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QDistinct> distinctByCredited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'credited');
     });
   }
 
@@ -2059,17 +2351,23 @@ extension SubjectQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Subject, Subject, QDistinct> distinctByLocationID() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'locationID');
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QDistinct> distinctByLocationType(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'locationType', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Subject, Subject, QDistinct> distinctByNotes(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'notes', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Subject, Subject, QDistinct> distinctByRoom(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'room', caseSensitive: caseSensitive);
     });
   }
 
@@ -2089,6 +2387,12 @@ extension SubjectQueryWhereDistinct
   QueryBuilder<Subject, Subject, QDistinct> distinctByTermID() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'termID');
+    });
+  }
+
+  QueryBuilder<Subject, Subject, QDistinct> distinctByUnits() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'units');
     });
   }
 }
@@ -2113,13 +2417,19 @@ extension SubjectQueryProperty
     });
   }
 
+  QueryBuilder<Subject, bool, QQueryOperations> creditedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'credited');
+    });
+  }
+
   QueryBuilder<Subject, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
     });
   }
 
-  QueryBuilder<Subject, DateTime, QQueryOperations> endDateProperty() {
+  QueryBuilder<Subject, DateTime?, QQueryOperations> endDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endDate');
     });
@@ -2143,15 +2453,21 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, String?, QQueryOperations> notesProperty() {
+  QueryBuilder<Subject, int?, QQueryOperations> locationIDProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'notes');
+      return query.addPropertyName(r'locationID');
     });
   }
 
-  QueryBuilder<Subject, String, QQueryOperations> roomProperty() {
+  QueryBuilder<Subject, String?, QQueryOperations> locationTypeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'room');
+      return query.addPropertyName(r'locationType');
+    });
+  }
+
+  QueryBuilder<Subject, String?, QQueryOperations> notesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'notes');
     });
   }
 
@@ -2161,7 +2477,7 @@ extension SubjectQueryProperty
     });
   }
 
-  QueryBuilder<Subject, DateTime, QQueryOperations> startDateProperty() {
+  QueryBuilder<Subject, DateTime?, QQueryOperations> startDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'startDate');
     });
@@ -2170,6 +2486,12 @@ extension SubjectQueryProperty
   QueryBuilder<Subject, int, QQueryOperations> termIDProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'termID');
+    });
+  }
+
+  QueryBuilder<Subject, int, QQueryOperations> unitsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'units');
     });
   }
 }

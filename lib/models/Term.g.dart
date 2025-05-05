@@ -22,15 +22,25 @@ const TermSchema = CollectionSchema(
       name: r'academicYear',
       type: IsarType.string,
     ),
-    r'isCurrentTerm': PropertySchema(
+    r'endDate': PropertySchema(
       id: 1,
+      name: r'endDate',
+      type: IsarType.dateTime,
+    ),
+    r'isCurrentTerm': PropertySchema(
+      id: 2,
       name: r'isCurrentTerm',
       type: IsarType.bool,
     ),
     r'semester': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'semester',
       type: IsarType.string,
+    ),
+    r'startDate': PropertySchema(
+      id: 4,
+      name: r'startDate',
+      type: IsarType.dateTime,
     )
   },
   estimateSize: _termEstimateSize,
@@ -65,8 +75,10 @@ void _termSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.academicYear);
-  writer.writeBool(offsets[1], object.isCurrentTerm);
-  writer.writeString(offsets[2], object.semester);
+  writer.writeDateTime(offsets[1], object.endDate);
+  writer.writeBool(offsets[2], object.isCurrentTerm);
+  writer.writeString(offsets[3], object.semester);
+  writer.writeDateTime(offsets[4], object.startDate);
 }
 
 Term _termDeserialize(
@@ -77,9 +89,11 @@ Term _termDeserialize(
 ) {
   final object = Term();
   object.academicYear = reader.readString(offsets[0]);
+  object.endDate = reader.readDateTime(offsets[1]);
   object.id = id;
-  object.isCurrentTerm = reader.readBool(offsets[1]);
-  object.semester = reader.readString(offsets[2]);
+  object.isCurrentTerm = reader.readBool(offsets[2]);
+  object.semester = reader.readString(offsets[3]);
+  object.startDate = reader.readDateTime(offsets[4]);
   return object;
 }
 
@@ -93,9 +107,13 @@ P _termDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
+      return (reader.readBool(offset)) as P;
+    case 3:
       return (reader.readString(offset)) as P;
+    case 4:
+      return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -319,6 +337,59 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Term, Term, QAfterFilterCondition> endDateEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> endDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> endDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'endDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> endDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'endDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Term, Term, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -525,6 +596,59 @@ extension TermQueryFilter on QueryBuilder<Term, Term, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> startDateEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> startDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> startDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'startDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterFilterCondition> startDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'startDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension TermQueryObject on QueryBuilder<Term, Term, QFilterCondition> {}
@@ -541,6 +665,18 @@ extension TermQuerySortBy on QueryBuilder<Term, Term, QSortBy> {
   QueryBuilder<Term, Term, QAfterSortBy> sortByAcademicYearDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'academicYear', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> sortByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> sortByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
     });
   }
 
@@ -567,6 +703,18 @@ extension TermQuerySortBy on QueryBuilder<Term, Term, QSortBy> {
       return query.addSortBy(r'semester', Sort.desc);
     });
   }
+
+  QueryBuilder<Term, Term, QAfterSortBy> sortByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> sortByStartDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.desc);
+    });
+  }
 }
 
 extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
@@ -579,6 +727,18 @@ extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
   QueryBuilder<Term, Term, QAfterSortBy> thenByAcademicYearDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'academicYear', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> thenByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> thenByEndDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'endDate', Sort.desc);
     });
   }
 
@@ -617,6 +777,18 @@ extension TermQuerySortThenBy on QueryBuilder<Term, Term, QSortThenBy> {
       return query.addSortBy(r'semester', Sort.desc);
     });
   }
+
+  QueryBuilder<Term, Term, QAfterSortBy> thenByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Term, Term, QAfterSortBy> thenByStartDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'startDate', Sort.desc);
+    });
+  }
 }
 
 extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
@@ -624,6 +796,12 @@ extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'academicYear', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Term, Term, QDistinct> distinctByEndDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'endDate');
     });
   }
 
@@ -637,6 +815,12 @@ extension TermQueryWhereDistinct on QueryBuilder<Term, Term, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'semester', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Term, Term, QDistinct> distinctByStartDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'startDate');
     });
   }
 }
@@ -654,6 +838,12 @@ extension TermQueryProperty on QueryBuilder<Term, Term, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Term, DateTime, QQueryOperations> endDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'endDate');
+    });
+  }
+
   QueryBuilder<Term, bool, QQueryOperations> isCurrentTermProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isCurrentTerm');
@@ -663,6 +853,12 @@ extension TermQueryProperty on QueryBuilder<Term, Term, QQueryProperty> {
   QueryBuilder<Term, String, QQueryOperations> semesterProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'semester');
+    });
+  }
+
+  QueryBuilder<Term, DateTime, QQueryOperations> startDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'startDate');
     });
   }
 }

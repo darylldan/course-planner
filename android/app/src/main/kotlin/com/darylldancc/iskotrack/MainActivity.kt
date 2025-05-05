@@ -1,4 +1,4 @@
-package com.example.course_planner
+package com.darylldancc.iskotrack
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,19 +1,17 @@
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/terms_module/view_term.dart';
-import 'package:course_planner/widgets/timetable/SubjectCard.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/terms_module/view_term.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/Subject.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
 import '../../screens/terms_module/edit_term.dart';
 
 class TermCard extends StatelessWidget {
-  late Term term;
+  final Term term;
 
-  TermCard({super.key, required this.term});
+  const TermCard({super.key, required this.term});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class TermCard extends StatelessWidget {
         child: Material(
           child: Ink(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.onInverseSurface,
                 borderRadius:
                     BorderRadius.circular(Constants.cardBorderRadius)),
             child: InkWell(
@@ -57,7 +55,7 @@ class TermCard extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).colorScheme.onSurfaceVariant),
+                      color: Theme.of(context).colorScheme.onSurface),
                   width: 4,
                   height: 50,
                 ),
@@ -124,9 +122,9 @@ class TermCard extends StatelessWidget {
     if (subjectCount == 0) {
       subjectStr = "NO CLASSES";
     } else if (subjectCount == 1) {
-      subjectStr = "$subjectCount SUBJECT";
+      subjectStr = "$subjectCount Course";
     } else {
-      subjectStr = "$subjectCount SUBJECTS";
+      subjectStr = "$subjectCount Courses";
     }
 
     return Container(
@@ -140,7 +138,7 @@ class TermCard extends StatelessWidget {
             subjectStr,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.onInverseSurface,
                 fontWeight: FontWeight.bold,
                 fontSize: 11),
           ),

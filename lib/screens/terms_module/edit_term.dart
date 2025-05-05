@@ -1,11 +1,16 @@
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/widgets/cards/current_term_card.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'package:iskotrack/providers/deadlineevent_provider.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/widgets/cards/current_term_card.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/Term.dart';
 import '../../utils/constants.dart' as Constants;
+import 'package:intl/intl.dart';
+
+enum DatePickerType { start, end }
 
 class EditTerm extends StatefulWidget {
   final Term term;
@@ -20,12 +25,25 @@ class _EditTermState extends State<EditTerm> {
   final TextEditingController _semesterCtrl = TextEditingController();
   final TextEditingController _acadYearCtrl = TextEditingController();
 
+  late DateTime? _startDate;
+  late DateTime? _endDate;
+
   final _formKey = GlobalKey<FormState>();
+
+  bool _isStarDateInvalid = false;
+  bool _isEndDateInvalid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _semesterCtrl.text = widget.term.semester;
+    _acadYearCtrl.text = widget.term.academicYear;
+    _startDate = widget.term.startDate;
+    _endDate = widget.term.endDate;
+  }
 
   @override
   Widget build(BuildContext context) {
-    _semesterCtrl.text = widget.term.semester;
-    _acadYearCtrl.text = widget.term.academicYear;
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -57,134 +75,210 @@ class _EditTermState extends State<EditTerm> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      onWillPop: () async {
-        if (_acadYearCtrl.text == widget.term.academicYear &&
-            _semesterCtrl.text == widget.term.semester) {
-          return true;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          // Check if form is empty
+          bool isFormEmpty = _acadYearCtrl.text.isEmpty &&
+              _semesterCtrl.text.isEmpty &&
+              _startDate == null &&
+              _endDate == null;
+
+          if (isFormEmpty) {
+            if (context.mounted) Navigator.of(context).pop();
+          } else {
+            var shouldExit = await _onWillPop(context);
+            if (shouldExit) {
+              if (context.mounted) Navigator.of(context).pop();
+            }
+          }
         }
-
-        return _onWillPop();
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _semesterCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter Name (Ex. "First Semester")',
-                  labelText: 'Semester'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter the semester.";
-                }
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _semesterCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter Name (Ex. "First Semester")',
+                    labelText: 'Semester'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter the semester.";
+                  }
 
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: TextFormField(
-              controller: _acadYearCtrl,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  hintText: 'Enter A.Y. (Ex. "A.Y. 2023 - 2024")',
-                  labelText: 'Enter Academic Year'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter the Academic Year.";
-                }
-
-                return null;
-              },
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Opacity(
-              opacity: 0.5,
-              child: Divider(),
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      textStyle: const MaterialStatePropertyAll(
-                        TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primaryContainer),
-                      foregroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.onPrimaryContainer)),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState?.save();
-                      widget.term.academicYear = _acadYearCtrl.text;
-                      widget.term.semester = _semesterCtrl.text;
-                      context.read<TermProvider>().editTerm(widget.term);
-
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Changes saved.")));
-                        Navigator.of(context).pop();
-                      }
-                    }
-                  },
-                  child: const Text("Save"),
-                ),
+                  return null;
+                },
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                controller: _acadYearCtrl,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    hintText: 'Enter A.Y. (Ex. "A.Y. 2023 - 2024")',
+                    labelText: 'Academic Year'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter the Academic Year.";
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  children: [
+                    _datePicker(context, DatePickerType.start),
+                    _datePicker(context, DatePickerType.end)
+                  ],
+                )),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Opacity(
+                opacity: 0.5,
+                child: Divider(),
+              ),
+            ),
+            Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                        textStyle: const WidgetStatePropertyAll(
+                          TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.primaryContainer),
+                        foregroundColor: WidgetStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimaryContainer)),
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("Discard changes?"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Discard'),
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: const Text('Cancel'),
-                                )
-                              ],
-                            );
-                          });
+                      bool isDatesValid = _validateDates();
+                      if (_formKey.currentState!.validate() && isDatesValid) {
+                        _formKey.currentState?.save();
+
+                        Term newTerm = widget.term;
+
+                        newTerm
+                          ..academicYear = _acadYearCtrl.text
+                          ..semester = _semesterCtrl.text
+                          ..startDate = _startDate!
+                          ..endDate = _endDate!;
+
+                        context.read<TermProvider>().editTerm(widget.term);
+
+                        // Also update the dates of courses and events:
+                        if (_startDate!
+                                .isAtSameMomentAs(widget.term.startDate) ||
+                            _endDate!.isAtSameMomentAs(widget.term.endDate)) {
+                          context
+                              .read<SubjectProvider>()
+                              .updateCourseDate(widget.term.id!, _startDate!);
+
+                          context
+                              .read<DeadlineEventProvider>()
+                              .updateEventBounds(
+                                  widget.term.id!, _startDate!, _endDate!);
+                        }
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Changes saved.")));
+                          Navigator.of(context).pop();
+                        }
+                      }
                     },
-                    child: const Text("Discard"),
+                    child: const Text("Save"),
                   ),
-                )
+                ),
               ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Future<bool> _onWillPop() async {
+  Widget _datePicker(BuildContext context, DatePickerType dateType) {
+    bool shouldShowError = (dateType == DatePickerType.start
+        ? (_isStarDateInvalid)
+        : (_isEndDateInvalid));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              dateType == DatePickerType.start ? "Start Date" : "End Date",
+            ),
+            TextButton(
+              onPressed: dateType == DatePickerType.end && _startDate == null
+                  ? null
+                  : () => _pickDateModal(context, dateType),
+              child: Text((dateType == DatePickerType.start
+                  ? (_startDate == null
+                      ? "Select Date"
+                      : DateFormat("MMM d, yyyy").format(_startDate!))
+                  : (_endDate == null
+                      ? "Select Date"
+                      : DateFormat("MMM d, yyyy").format(_endDate!)))),
+            )
+          ],
+        ),
+        if (shouldShowError)
+          Text(
+            "Please select a start date.",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.error, fontSize: 12),
+          ),
+      ],
+    );
+  }
+
+  void _pickDateModal(BuildContext context, DatePickerType dateType) async {
+    DateTime? returnDate = await showDatePicker(
+      currentDate: dateType == DatePickerType.start
+          ? _startDate ?? DateTime.now()
+          : _endDate ?? _startDate!.add(Duration(days: 2)),
+      context: context,
+      firstDate: dateType == DatePickerType.end
+          ? _startDate!.add(Duration(days: 1))
+          : DateTime(1900),
+      lastDate: DateTime(9999),
+    );
+
+    if (returnDate != null) {
+      setState(() {
+        if (dateType == DatePickerType.start) {
+          _startDate = returnDate;
+        } else {
+          _endDate = returnDate;
+        }
+      });
+    }
+  }
+
+  bool _validateDates() {
+    _isStarDateInvalid = _startDate == null;
+    _isEndDateInvalid = _endDate == null;
+
+    setState(() {});
+    return !(_isStarDateInvalid && _isEndDateInvalid);
+  }
+
+  Future<bool> _onWillPop(BuildContext context) async {
     return (await showDialog(
             context: context,
             builder: (context) {

@@ -24,6 +24,10 @@ class TermProvider with ChangeNotifier {
     init();
   }
 
+  void load() {
+    return;
+  }
+
   void init() async {
     _terms = await isarService.getAllTerms();
     if (_terms.isNotEmpty) {
@@ -98,9 +102,5 @@ class TermProvider with ChangeNotifier {
     await isarService.wipeDB();
     _terms = [];
     notifyListeners();
-  }
-
-  Stream<List<Term>> listenToTerms() async* {
-    yield* isarService.listenToTerms();
   }
 }

@@ -1,13 +1,16 @@
-import 'package:course_planner/models/Subject.dart';
-import 'package:course_planner/providers/subject_provider.dart';
-import 'package:course_planner/providers/term_provider.dart';
-import 'package:course_planner/screens/classes_module/add_class.dart';
-import 'package:course_planner/screens/classes_module/search_class.dart';
-import 'package:course_planner/widgets/cards/current_term_selected.dart';
-import 'package:course_planner/widgets/cards/info_card.dart';
-import 'package:course_planner/widgets/cards/subject_card.dart';
-import 'package:course_planner/widgets/elements/Drawer.dart';
-import 'package:course_planner/widgets/elements/title_text.dart';
+import 'dart:io';
+
+import 'package:iskotrack/models/Subject.dart';
+import 'package:iskotrack/providers/subject_provider.dart';
+import 'package:iskotrack/providers/term_provider.dart';
+import 'package:iskotrack/screens/classes_module/add_class.dart';
+import 'package:iskotrack/screens/classes_module/scan_course_subm/scan_course.dart';
+import 'package:iskotrack/screens/classes_module/search_class.dart';
+import 'package:iskotrack/widgets/cards/current_term_selected.dart';
+import 'package:iskotrack/widgets/cards/info_card.dart';
+import 'package:iskotrack/widgets/cards/subject_card.dart';
+import 'package:iskotrack/widgets/elements/Drawer.dart';
+import 'package:iskotrack/widgets/elements/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,8 +25,8 @@ class Classes extends StatefulWidget {
 }
 
 class _ClassesState extends State<Classes> {
-  final _screenTitle = "Classes";
-  final _route = "/classes";
+  final _screenTitle = "Courses";
+  final _route = "/courses";
   late Term? currentTerm;
   late Term? _termSelectorValue;
   bool onCurrentTerm = true;
@@ -31,6 +34,10 @@ class _ClassesState extends State<Classes> {
 
   @override
   Widget build(BuildContext context) {
+    if (onCurrentTerm) {
+      currentTerm = context.watch<TermProvider>().currentTerm;
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -52,27 +59,92 @@ class _ClassesState extends State<Classes> {
         child: _buildClassesScreen(context),
       ),
       floatingActionButton: _showFab
-          ? FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddClass(
-                              terms: context.read<TermProvider>().terms,
-                            )));
-              },
-              label: const Text("Create Class"),
-              icon: const Icon(Icons.add_rounded),
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  heroTag: "scanqr",
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  onPressed: () async {
+                    bool isCancelled = false;
+
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Checking for internet connection"),
+                            content: IntrinsicHeight(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    isCancelled = true;
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel"))
+                            ],
+                          );
+                        });
+
+                    bool internet = await hasNetwork();
+
+                    if (context.mounted) Navigator.pop(context);
+
+                    if (isCancelled) return;
+
+                    if (!internet) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "Internet connection required for course sharing."),
+                          ),
+                        );
+                      }
+                      return;
+                    }
+
+                    if (context.mounted) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScanCourse(
+                                    term: currentTerm!,
+                                  )));
+                    }
+                  },
+                  child: Icon(Icons.qr_code_scanner,
+                      color: Theme.of(context).colorScheme.onTertiaryContainer),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddClass(
+                                  term: currentTerm!,
+                                )));
+                  },
+                  label: const Text("Create Class"),
+                  icon: const Icon(Icons.add_rounded),
+                ),
+              ],
             )
           : null,
     );
   }
 
   Widget _buildClassesScreen(BuildContext context) {
-    if (onCurrentTerm) {
-      currentTerm = context.watch<TermProvider>().currentTerm;
-    }
-
     if (currentTerm == null) {
       _showFab = false;
       return _noTermsYet();
@@ -100,7 +172,7 @@ class _ClassesState extends State<Classes> {
             ),
           ),
           InfoCard(
-            content: "No subjects yet. Create one via the Add button below.",
+            content: "No courses yet. Create one via the Add button below.",
           )
         ],
       );
@@ -132,11 +204,11 @@ class _ClassesState extends State<Classes> {
         ),
         Center(
           child: Text(
-            "${subjects.length} ${subjects.length == 1 ? "Subject" : "Subjects"}",
+            "${subjects.length} ${subjects.length == 1 ? "Course" : "Courses"}",
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.surfaceVariant),
+                color: Theme.of(context).colorScheme.onInverseSurface),
           ),
         ),
         const SizedBox(
@@ -153,7 +225,7 @@ class _ClassesState extends State<Classes> {
         TitleText(title: _screenTitle),
         InfoCard(
           content:
-              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a subject under that term on this page",
+              "Begin by adding a term on the terms page. Once a term is added, you can proceed to create a course under that term on this page. Courses that you've added on IskoTrack will appear here.",
         )
       ],
     );
@@ -269,9 +341,9 @@ class _ClassesState extends State<Classes> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
+                backgroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.primaryContainer),
-                foregroundColor: MaterialStatePropertyAll(
+                foregroundColor: WidgetStatePropertyAll(
                     Theme.of(context).colorScheme.onPrimaryContainer)),
             onPressed: () {
               Navigator.pop(context);
@@ -288,5 +360,14 @@ class _ClassesState extends State<Classes> {
         )
       ],
     );
+  }
+
+  Future<bool> hasNetwork() async {
+    try {
+      final result = await InternetAddress.lookup('example.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
   }
 }
